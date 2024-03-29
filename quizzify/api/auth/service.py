@@ -1,6 +1,5 @@
 import logging
 import os
-import uuid
 from urllib.parse import urlencode
 
 import bcrypt
@@ -129,9 +128,6 @@ async def register_user(
     password : str
         The hashed password for the new account.
     """
-    # Generate a unique user ID
-    user_id = uuid.uuid4()
-
     # Get the user's information from Spotify
     spotify_user_info = get_spotify_user_info()
     spotify_id = spotify_user_info["spotify_id"]
@@ -178,21 +174,20 @@ async def register_user(
     # Hash the password with the generated salt
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), salt)
 
-    # Add the user's information to the database
-    crud.create_user(
-        user_id=user_id,
-        username=username,
-        email=email,
-        hashed_pwd=str(hashed_password.decode("utf-8")),
-    )
     # Add the user's Spotify information to the database
     crud.create_spotify_user(
         spotify_id=spotify_id,
-        user_id=user_id,
         spotify_username=spotify_user_info["spotify_name"],
         spotify_email=spotify_user_info["spotify_email"],
         spotify_image_url=spotify_user_info["image_url"],
         spotify_uri=spotify_user_info["spotify_uri"],
+    )
+    # Add the user's information to the database
+    crud.create_user(
+        user_id=spotify_id,
+        username=username,
+        email=email,
+        hashed_pwd=str(hashed_password.decode("utf-8")),
     )
     return spotify_user_info
 
