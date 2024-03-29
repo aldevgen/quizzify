@@ -177,7 +177,6 @@ async def register_user(
     # Add the user's Spotify information to the database
     crud.create_spotify_user(
         spotify_id=spotify_id,
-        # user_id=user_id,
         spotify_username=spotify_user_info["spotify_name"],
         spotify_email=spotify_user_info["spotify_email"],
         spotify_image_url=spotify_user_info["image_url"],
