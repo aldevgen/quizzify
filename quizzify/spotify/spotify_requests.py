@@ -157,3 +157,32 @@ def spotify_get_album(
             status_code=response.status_code,
             detail="Failed to retrieve the album's information",
         )
+
+
+def spotify_get_user_id():
+    """Get the user's ID from Spotify.
+
+    Connect to https://api.spotify.com/v1/me for the user's information.
+
+    Returns
+    -------
+    str
+        The user's ID from Spotify.
+    """
+    headers = spotify_headers()
+    api_url = f"{SPOTIFY_BASE_URL}/me"
+    response = requests.get(
+        api_url,
+        headers=headers,
+        timeout=120,
+    )
+
+    if response.status_code == 200:
+        raw_user_info = response.json()
+        spotify_id = raw_user_info["id"]
+        return spotify_id
+    else:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail="Failed to retrieve Spotify user ID",
+        )

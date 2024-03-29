@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import Optional
-from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -12,7 +11,6 @@ class User(BaseModel):
     It contains the user's username, email, and password.
     """
 
-    id: Optional[UUID] = None
     username: str
     email: str
     password: str

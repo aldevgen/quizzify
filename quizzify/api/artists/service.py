@@ -3,7 +3,10 @@ import os
 from dotenv import load_dotenv
 
 from quizzify.databases import crud
-from quizzify.spotify.spotify_requests import spotify_get_user_top_artists
+from quizzify.spotify.spotify_requests import (
+    spotify_get_user_id,
+    spotify_get_user_top_artists,
+)
 from quizzify.utils.schemas import Artist, TimeRange
 
 # load environment variables
@@ -33,6 +36,8 @@ def get_top_artists(
     list
         A list of the user's top artists.
     """
+    # get user's Spotify ID
+    user_id = spotify_get_user_id()
     # get artists IDs from the database
     artists_ids = crud.get_artists_ids()
 
@@ -47,7 +52,10 @@ def get_top_artists(
         if current_artist_id not in artists_ids:
             # add current artist to the list of artists in the database
             artists_ids.append(current_artist_id)
-            crud.insert_artist(artist=Artist(**artist))
+            crud.insert_artist(
+                artist=Artist(**artist),
+                user_id=user_id,
+            )
 
     return user_top_artists
 

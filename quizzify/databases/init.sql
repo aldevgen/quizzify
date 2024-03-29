@@ -2,6 +2,51 @@
 -- The tables are only created if they do not already exist in the database.
 
 ----------------------------------------------------------------------------------------
+-------------------------------- Relation Spotify Users --------------------------------
+----------------------------------------------------------------------------------------
+
+--    column_name    |     data_type
+---------------------+-------------------
+-- spotify_id        | character varying
+-- spotify_username  | character varying
+-- spotify_email     | character varying
+-- spotify_image_url | character varying
+-- spotify_uri       | character varying
+
+DROP TABLE IF EXISTS spotify_users CASCADE;
+
+CREATE TABLE spotify_users (
+    spotify_id VARCHAR(50) PRIMARY KEY,
+    spotify_username VARCHAR(100),
+    spotify_email VARCHAR(150),
+    spotify_image_url VARCHAR(100),
+    spotify_uri VARCHAR(100)
+);
+
+----------------------------------------------------------------------------------------
+------------------------------------ Relation Users ------------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name |          data_type
+---------------+-----------------------------
+-- user_id     | character varying
+-- username    | character varying
+-- email       | character varying
+-- hashed_pwd  | bytea
+-- created_at  | timestamp without time zone
+
+DROP TABLE IF EXISTS users CASCADE;
+
+CREATE TABLE users (
+    user_id VARCHAR(50) PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    hashed_pwd BYTEA,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES spotify_users(spotify_id)
+);
+
+----------------------------------------------------------------------------------------
 ----------------------------------- Relation Artists -----------------------------------
 ----------------------------------------------------------------------------------------
 
@@ -20,7 +65,9 @@ CREATE TABLE artists (
     popularity INT,
     genres VARCHAR(50)[],
     followers INT,
-    image_url VARCHAR(150)
+    image_url VARCHAR(150),
+    user_id VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 ----------------------------------------------------------------------------------------
@@ -46,7 +93,9 @@ CREATE TABLE albums (
     total_tracks INT,
     image_url VARCHAR(150),
     artist_id VARCHAR(25),
-    FOREIGN KEY (artist_id) REFERENCES artists(id)
+    user_id VARCHAR(50),
+    FOREIGN KEY (artist_id) REFERENCES artists(id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 ----------------------------------------------------------------------------------------
@@ -73,56 +122,9 @@ CREATE TABLE songs (
     track_number INT,
     artist_id VARCHAR(25),
     album_id VARCHAR(25),
+    user_id VARCHAR(50),
     PRIMARY KEY (id, artist_id, album_id),
     FOREIGN KEY (artist_id) REFERENCES artists(id),
-    FOREIGN KEY (album_id) REFERENCES albums(id)
-);
-
-----------------------------------------------------------------------------------------
------------------------------------- Relation Users ------------------------------------
-----------------------------------------------------------------------------------------
-
--- column_name |          data_type
----------------+-----------------------------
--- hashed_pwd  | bytea
--- created_at  | timestamp without time zone
--- id          | character varying
--- username    | character varying
--- email       | character varying
-
-DROP TABLE IF EXISTS users CASCADE;
-
-CREATE TABLE users (
-    user_id VARCHAR(50) PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    hashed_pwd BYTEA,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-----------------------------------------------------------------------------------------
--------------------------------- Relation Spotify Users --------------------------------
-----------------------------------------------------------------------------------------
-
---    column_name    |     data_type
----------------------+-------------------
--- id                | character varying
--- spotify_username  | character varying
--- spotify_email     | character varying
--- spotify_image_url | character varying
--- spotify_uri       | character varying
--- user_id           | character varying, foreign key
-
-DROP TABLE IF EXISTS spotify_users;
-
-CREATE TABLE spotify_users (
-    spotify_id VARCHAR(50) PRIMARY KEY,
-    user_id VARCHAR(50) UNIQUE NOT NULL,
-    spotify_username VARCHAR(100),
-    spotify_email VARCHAR(150),
-    spotify_image_url VARCHAR(100),
-    spotify_uri VARCHAR(100),
+    FOREIGN KEY (album_id) REFERENCES albums(id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-

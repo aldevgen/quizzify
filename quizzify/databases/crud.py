@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_user(
-    user_id: UUID,
+    user_id: str,
     username: str,
     email: str,
     hashed_pwd: str,
@@ -23,7 +23,7 @@ def create_user(
 
     Parameters
     ----------
-    user_id : UUID
+    user_id : str
         The user's unique identifier.
     username : str
         The username for the new account.
@@ -44,7 +44,7 @@ def create_user(
             "(%(user_id)s, %(username)s, %(email)s, %(hashed_pwd)s );"
         ),
         vars={
-            "user_id": str(user_id),
+            "user_id": user_id,
             "username": username,
             "email": email,
             "hashed_pwd": hashed_pwd,
@@ -61,7 +61,6 @@ def create_user(
 
 def create_spotify_user(
     spotify_id: UUID,
-    user_id: UUID,
     spotify_username: str,
     spotify_email: str,
     spotify_image_url: str,
@@ -72,8 +71,6 @@ def create_spotify_user(
     Parameters
     ----------
     spotify_id : UUID
-        The user's unique identifier.
-    user_id : UUID
         The user's unique identifier.
     spotify_username : str
         The user's Spotify username.
@@ -91,17 +88,16 @@ def create_spotify_user(
     cursor.execute(
         query=(
             "INSERT INTO spotify_users "
-            "(spotify_id, user_id, spotify_username, spotify_email, spotify_image_url, "
+            "(spotify_id, spotify_username, spotify_email, spotify_image_url, "
             "spotify_uri) "
             "VALUES"
             "("
-            "%(spotify_id)s, %(user_id)s, %(spotify_username)s, %(spotify_email)s, "
+            "%(spotify_id)s, %(spotify_username)s, %(spotify_email)s, "
             "%(spotify_image_url)s, %(spotify_uri)s"
             ");"
         ),
         vars={
             "spotify_id": spotify_id,
-            "user_id": str(user_id),
             "spotify_username": spotify_username,
             "spotify_email": spotify_email,
             "spotify_image_url": spotify_image_url,
@@ -271,6 +267,7 @@ def get_artists_ids():
 
 def insert_artist(
     artist: Artist,
+    user_id: str,
 ):
     """Insert an artist into the database.
 
@@ -278,16 +275,18 @@ def insert_artist(
     ----------
     artist : Artist
         The artist to insert into the database.
+    user_id : str
+        The user's ID.
     """
     connection = connect_to_db()
     cursor = connection.cursor()
     cursor.execute(
         query=(
             "INSERT INTO artists "
-            "(id, name, popularity, genres, followers, image_url) "
+            "(id, name, popularity, genres, followers, image_url, user_id) "
             "VALUES"
             "(%(artist_id)s, %(artist_name)s, %(popularity)s, %(genres)s, "
-            "%(followers)s, %(artist_image)s);"
+            "%(followers)s, %(artist_image)s, %(user_id)s);"
         ),
         vars={
             "artist_id": artist.id,
@@ -296,6 +295,7 @@ def insert_artist(
             "genres": artist.genres,
             "followers": artist.followers,
             "artist_image": artist.image_url,
+            "user_id": user_id,
         },
     )
     connection.commit()
