@@ -1,7 +1,6 @@
-import os
-from typing import Annotated, Dict, List
+from typing import Dict, List
 
-from fastapi import APIRouter, Header
+from fastapi import APIRouter
 
 from quizzify.api.songs import service
 from quizzify.utils.schemas import TimeRange
@@ -22,7 +21,6 @@ router = APIRouter()
 async def get_top_songs(
     time_range: TimeRange,
     limit: int,
-    user_id: Annotated[str | None, Header()] = os.getenv("SPOTIFY_USER_ID"),
 ):
     """Return the user's top songs from Spotify.
 
@@ -32,8 +30,6 @@ async def get_top_songs(
         The time range for the top songs, by default "short_term"
     limit : int
         The number of songs to fetch (the maximum is set to 50 by the Spotify API).
-    user_id : str
-        The user's Spotify ID.
 
     Returns
     -------

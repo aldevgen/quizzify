@@ -7,7 +7,11 @@ from fastapi import HTTPException
 
 from quizzify.databases import crud
 from quizzify.spotify.spotify_headers import spotify_headers
-from quizzify.spotify.spotify_requests import spotify_get_album, spotify_get_artist
+from quizzify.spotify.spotify_requests import (
+    spotify_get_album,
+    spotify_get_artist,
+    spotify_get_user_id,
+)
 from quizzify.utils.schemas import Album, Artist, Song, TimeRange
 
 # load environment variables
@@ -55,6 +59,9 @@ def get_top_songs(
         artists_ids = crud.get_artists_ids()
         song_ids = crud.get_songs_ids()
 
+        # get user's Spotify ID
+        user_id = spotify_get_user_id()
+
         for song in range(len(raw_top_songs)):
             for artist in range(len(raw_top_songs[song]["artists"])):
                 # insert artist into database
@@ -65,6 +72,7 @@ def get_top_songs(
                     artist_info = spotify_get_artist(current_artist_id)
                     crud.insert_artist(
                         artist=Artist.model_validate(artist_info),
+                        user_id=user_id,
                     )
 
                 # get artist details
