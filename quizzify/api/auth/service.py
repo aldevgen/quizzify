@@ -134,7 +134,7 @@ async def register_user(
 
     # check if the Spotify account is already in registered
     if crud.get_user_by_spotify_id(spotify_id=spotify_id):
-        msg = "Spotify account already registered, please login."
+        msg = "Spotify ID already registered, please login."
         logger.error(msg)
         raise HTTPException(
             status_code=400,
@@ -224,4 +224,4 @@ async def login_user(
             detail="Password does not match.",
         )
 
-    return f"{username} logged in successfully."
+    return {f"User '{username}' logged in successfully."}

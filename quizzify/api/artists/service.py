@@ -1,5 +1,3 @@
-import os
-
 from dotenv import load_dotenv
 
 from quizzify.databases import crud
@@ -11,8 +9,6 @@ from quizzify.utils.schemas import Artist, TimeRange
 
 # load environment variables
 load_dotenv()
-# define base URL for Spotify API
-SPOTIFY_BASE_URL = os.environ.get("SPOTIFY_BASE_URL")
 
 
 def get_top_artists(
