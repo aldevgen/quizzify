@@ -237,9 +237,16 @@ def get_random_song():
     cursor = connection.cursor(cursor_factory=RealDictCursor)
     cursor.execute(
         query=(
-            "SELECT id, name, artist_id, album_id, popularity, duration_ms, "
-            "track_number FROM songs OFFSET floor("
-            "random() * (SELECT COUNT(*) FROM songs)) LIMIT 1;"
+            "SELECT songs.id as song_id, songs.name as song_name, "
+            "artists.id as artist_id, artists.name as artist_name, "
+            "albums.id as album_id, albums.name as album_name, "
+            "songs.popularity, "
+            "songs.duration_ms, songs.track_number "
+            "FROM songs "
+            "JOIN artists ON songs.artist_id = artists.id "
+            "JOIN albums ON songs.album_id = albums.id "
+            "OFFSET floor(random() * (SELECT COUNT(*) FROM songs)) "
+            "LIMIT 1;"
         )
     )
     random_song = cursor.fetchone()
