@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from fastapi import APIRouter, Header
+from fastapi import APIRouter
 
 from quizzify.api.artists import service
 from quizzify.utils.schemas import TimeRange
@@ -21,7 +21,6 @@ router = APIRouter()
 async def get_top_artists(
     time_range: TimeRange,
     limit: int,
-    user_id: str = Header(),
 ):
     """Return the user's top artists from Spotify.
 
@@ -32,8 +31,6 @@ async def get_top_artists(
         'medium_term' and 'long_term'.
     limit : int
         The number of artists to fetch (the maximum is set to 50 by the Spotify API).
-    user_id : str
-        The user's Spotify ID.
 
     Returns
     -------

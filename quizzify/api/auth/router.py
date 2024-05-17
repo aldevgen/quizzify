@@ -194,7 +194,7 @@ async def login_user(
     dict
         A dictionary containing the user's Spotify information.
     """
-    logger.info(f"Logging in to the account for the user {user.email}.")
+    logger.info(f"Logging in to the account for the user '{user.username}'.")
     user = await service.login_user(
         email=user.email,
         password=user.password,
