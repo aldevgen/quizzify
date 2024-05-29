@@ -1,10 +1,9 @@
 """Test main object."""
 
 import pytest
+from app.main import app
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from quizzify.main import app
 
 
 @pytest.fixture(scope="session")

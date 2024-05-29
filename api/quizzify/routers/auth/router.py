@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from fastapi import APIRouter, Request, status
 from fastapi.responses import RedirectResponse
 
-from quizzify.api.auth import service
+from quizzify.routers.auth import service
 from quizzify.utils import schemas
 
 # load environment variables
@@ -142,7 +142,7 @@ async def get_token():
 async def register_user(
     user: schemas.User,
 ):
-    """Create an account for the quiz app.
+    """Create an account for the quiz quizzify.
 
     Create a new account for quizzify. This will enable the user to log in to the
     application and access the quiz features.
@@ -178,7 +178,7 @@ async def register_user(
 async def login_user(
     user: schemas.User,
 ):
-    """Log in to the quiz app.
+    """Log in to the quiz quizzify.
 
     Log in to the quizzify application. The user will be able to connect to the
     account previously created by checking if the account exists and the password

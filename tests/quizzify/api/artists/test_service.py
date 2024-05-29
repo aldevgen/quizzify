@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from quizzify.api.artists import service
-from quizzify.utils.schemas import TimeRange
+from app.api.artists import service
+from app.utils.schemas import TimeRange
 
 
 # write tests for the artist service functions with the mocks for the database functions
