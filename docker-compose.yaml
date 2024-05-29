@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: quizzify-api
-    command: uvicorn quizzify.main:app --reload --host 0.0.0.0 --port 8000 --log-config quizzify/logging.conf
+    command: uvicorn quizzify.main:app --host 0.0.0.0 --port 8000 --log-config quizzify/logging.conf
     restart: always
     ports:
       - "8000:8000"
@@ -33,20 +33,16 @@ services:
       - .env
     volumes:
       # Mount the volume to persist the data
-      # - postgres-data:/var/lib/postgresql/data
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./quizzify/databases/init.sql:/docker-entrypoint-initdb.d/init.sql
       # Mount the init script to create the database as an entrypoint to the container
-      - ./app/quizzify/databases/:/docker-entrypoint-initdb.d/
-#      - ./app/quizzify/databases/init.sql:/docker-entrypoint-initdb.d/init.sql
-#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - quizzify-api
 
 # Volumes
 volumes:
   # PostgreSQL
-  postgres-data:
-      driver: local
+  postgres_data:
 
 # Networks
 networks:
