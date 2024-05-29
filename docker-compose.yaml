@@ -34,6 +34,7 @@ services:
     volumes:
       # Mount the volume to persist the data
       - ./quizzify/databases/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Mount the init script to create the database as an entrypoint to the container
       - postgres_data:/var/lib/postgresql/data
     networks:
       - quizzify-api
