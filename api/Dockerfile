@@ -2,18 +2,18 @@
 FROM python:3.11
 
 # Set the working directory to /app
-ENV WORKDIR=/app
+ENV WORKDIR=/quizzify
 WORKDIR $WORKDIR
 
 # Copy only the requirements file to the container
-COPY ./requirements.txt .
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Copy the entire source code to the container
 COPY quizzify/ quizzify/
-COPY .env $WORKDIR
+#COPY ../.env $WORKDIR
 
 # Set the working directory to /app/quizzify
 # WORKDIR $WORKDIR/quizzify
@@ -21,5 +21,5 @@ COPY .env $WORKDIR
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Run app.py when the container launches
-CMD uvicorn quizzify.main:app --host 0.0.0.0 --port 8000 --log--config logging.conf
+# Run quizzify.py when the container launches
+CMD uvicorn quizzify.main:app --host 0.0.0.0 --port 8000 --log-config quizzify/logging.conf

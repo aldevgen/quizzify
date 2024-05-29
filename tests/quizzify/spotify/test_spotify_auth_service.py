@@ -3,8 +3,7 @@ from datetime import datetime, timedelta
 from unittest.mock import patch
 
 import pytest
-
-from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
+from app.spotify.spotify_token_manager import SpotifyTokenManager
 
 
 @pytest.fixture

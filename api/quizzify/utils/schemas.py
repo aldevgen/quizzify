@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
-    """User schema for the quiz app.
+    """User schema for the quiz quizzify.
 
     This schema is used to create a new user in the quiz app or login into its account.
     It contains the user's username, email, and password.

@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from fastapi import APIRouter
 
-from quizzify.api.artists import service
+from quizzify.routers.artists import service
 from quizzify.utils.schemas import TimeRange
 
 # define router for artists endpoints
