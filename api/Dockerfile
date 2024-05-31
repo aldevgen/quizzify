@@ -1,7 +1,7 @@
 # Basic Python image with FastAPI and Uvicorn
 FROM python:3.11
 
-# Set the working directory to /app
+# Set the working directory to /quizzify
 ENV WORKDIR=/quizzify
 WORKDIR $WORKDIR
 
@@ -13,10 +13,6 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Copy the entire source code to the container
 COPY quizzify/ quizzify/
-#COPY ../.env $WORKDIR
-
-# Set the working directory to /app/quizzify
-# WORKDIR $WORKDIR/quizzify
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
