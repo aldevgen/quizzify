@@ -1,10 +1,11 @@
 import logging
 
 from dotenv import load_dotenv
+from psycopg2 import sql
 from psycopg2.extras import RealDictCursor
 
+from quizzify.db.query_executor import QueryExecutor
 from quizzify.db.session import connect_to_db
-from quizzify.utils.helpers import flatten_list
 from quizzify.utils.schemas import Artist
 
 load_dotenv()
@@ -19,13 +20,10 @@ def get_artists_ids():
     list
         A list of all the artists' IDs.
     """
-    connection = connect_to_db()
-    cursor = connection.cursor()
-    cursor.execute(query="SELECT id FROM artists;")
-    artists_ids = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return flatten_list(artists_ids)
+    query = sql.SQL("SELECT id FROM artists;")
+    with QueryExecutor() as executor:
+        artists_ids = executor.execute(query, fetch=True)
+    return artists_ids
 
 
 def get_random_artist():
