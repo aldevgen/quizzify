@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 
-from quizzify.databases import crud
+from quizzify.crud import artists as crud
 from quizzify.spotify.spotify_requests import (
     spotify_get_user_id,
     spotify_get_user_top_artists,
