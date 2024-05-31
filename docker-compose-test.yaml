@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  # Quizzify API
+  quizzify-api:
+    build:
+      context: api
+      dockerfile: Dockerfile-test
+    command: pytest --cov=quizzify --cov-report=term-missing -vvv /quizzify/quizzify/tests
+    container_name: quizzify-api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - quizzify-api
+
+  ## -----------------------------------------------------------------------------------
+  ## ------------------------------------- Database ------------------------------------
+  ## -----------------------------------------------------------------------------------
+
+  # PostgreSQL
+  db:
+    image: postgres:16
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      # Mount the volume to persist the data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/seeds-test.sql:/docker-entrypoint-initdb.d/seeds.sql
+      # Mount the init script to create the database as an entrypoint to the container
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - quizzify-api
+
+# Volumes
+volumes:
+  # PostgreSQL
+  postgres_data:
+
+# Networks
+networks:
+  quizzify-api:
+    driver: bridge
