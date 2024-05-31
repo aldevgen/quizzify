@@ -5,7 +5,9 @@ import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
-from quizzify.databases import crud
+from quizzify.crud import albums as crud_albums
+from quizzify.crud import artists as crud_artists
+from quizzify.crud import songs as crud_songs
 from quizzify.spotify.spotify_headers import spotify_headers
 from quizzify.spotify.spotify_requests import (
     spotify_get_album,
@@ -55,9 +57,9 @@ def get_top_songs(
         top_songs = []
 
         # get artists and songs IDs from the database
-        albums_ids = crud.get_albums_ids()
-        artists_ids = crud.get_artists_ids()
-        song_ids = crud.get_songs_ids()
+        albums_ids = crud_albums.get_albums_ids()
+        artists_ids = crud_artists.get_artists_ids()
+        song_ids = crud_songs.get_songs_ids()
 
         # get user's Spotify ID
         user_id = spotify_get_user_id()
@@ -70,7 +72,7 @@ def get_top_songs(
                     # add artist ID to the list of artists already known
                     artists_ids.append(current_artist_id)
                     artist_info = spotify_get_artist(current_artist_id)
-                    crud.insert_artist(
+                    crud_artists.insert_artist(
                         artist=Artist.model_validate(artist_info),
                         user_id=user_id,
                     )
@@ -90,7 +92,7 @@ def get_top_songs(
                     # get album details
                     album_info = spotify_get_album(current_album_id)
                     # insert album info
-                    crud.insert_album(
+                    crud_albums.insert_album(
                         album=Album.model_validate(album_info),
                         artist_id=current_artist_id,
                     )
@@ -111,7 +113,7 @@ def get_top_songs(
                     # insert song into database if it is not already there
                     if current_song_id not in song_ids:
                         song_ids.append(current_song_id)
-                        crud.insert_song(song=Song.model_validate(song_info))
+                        crud_songs.insert_song(song=Song.model_validate(song_info))
 
                     # create a dictionary with the song, artist and album details
                     current_song = {
@@ -137,5 +139,5 @@ def get_random_song():
     list
         A list of random songs.
     """
-    random_song = crud.get_random_song()
+    random_song = crud_songs.get_random_song()
     return random_song
