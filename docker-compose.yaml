@@ -4,10 +4,9 @@ services:
   # Quizzify API
   quizzify-api:
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: api
+      dockerfile: Dockerfile
     container_name: quizzify-api
-    command: uvicorn quizzify.main:app --host 0.0.0.0 --port 8000 --log-config quizzify/logging.conf
     restart: always
     ports:
       - "8000:8000"
