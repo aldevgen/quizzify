@@ -2,8 +2,9 @@ import logging
 from uuid import UUID
 
 from dotenv import load_dotenv
+from psycopg2 import sql
 
-from quizzify.db.session import connect_to_db
+from quizzify.db.query_executor import QueryExecutor
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -31,36 +32,26 @@ def create_spotify_user(
     spotify_uri : str
         The user's Spotify URI.
     """
-    # Connect to the PostgreSQL database
-    connection = connect_to_db()
-    # Create a cursor object
-    cursor = connection.cursor()
-    cursor.execute(
-        query=(
-            "INSERT INTO spotify_users "
-            "(spotify_id, spotify_username, spotify_email, spotify_image_url, "
-            "spotify_uri) "
-            "VALUES"
-            "("
-            "%(spotify_id)s, %(spotify_username)s, %(spotify_email)s, "
-            "%(spotify_image_url)s, %(spotify_uri)s"
-            ");"
-        ),
-        vars={
-            "spotify_id": spotify_id,
-            "spotify_username": spotify_username,
-            "spotify_email": spotify_email,
-            "spotify_image_url": spotify_image_url,
-            "spotify_uri": spotify_uri,
-        },
+    query = sql.SQL(
+        "INSERT INTO spotify_users "
+        "(spotify_id, spotify_username, spotify_email, spotify_image_url, "
+        "spotify_uri) "
+        "VALUES"
+        "("
+        "%(spotify_id)s, %(spotify_username)s, %(spotify_email)s, "
+        "%(spotify_image_url)s, %(spotify_uri)s"
+        ");"
     )
-    # Make the changes to the database persistent
-    connection.commit()
+    variables = {
+        "spotify_id": spotify_id,
+        "spotify_username": spotify_username,
+        "spotify_email": spotify_email,
+        "spotify_image_url": spotify_image_url,
+        "spotify_uri": spotify_uri,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables, fetch=False)
     logger.info(f"Spotify user {spotify_username} successfully created.")
-
-    # Close communication with the database
-    cursor.close()
-    connection.close()
 
 
 def create_user(
@@ -83,31 +74,21 @@ def create_user(
     hashed_pwd : str
         The hashed password for the new account.
     """
-    # Connect to your PostgreSQL database
-    connection = connect_to_db()
-    # Create a cursor object
-    cursor = connection.cursor()
-    cursor.execute(
-        query=(
-            "INSERT INTO users "
-            "(user_id, username, email, hashed_pwd) "
-            "VALUES"
-            "(%(user_id)s, %(username)s, %(email)s, %(hashed_pwd)s );"
-        ),
-        vars={
-            "user_id": user_id,
-            "username": username,
-            "email": email,
-            "hashed_pwd": hashed_pwd,
-        },
+    query = sql.SQL(
+        "INSERT INTO users "
+        "(user_id, username, email, hashed_pwd) "
+        "VALUES"
+        "(%(user_id)s, %(username)s, %(email)s, %(hashed_pwd)s );"
     )
-    # Make the changes to the database persistent
-    connection.commit()
+    variables = {
+        "user_id": user_id,
+        "username": username,
+        "email": email,
+        "hashed_pwd": hashed_pwd,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables, fetch=False)
     logger.info(f"User {username} successfully created.")
-
-    # Close communication with the database
-    cursor.close()
-    connection.close()
 
 
 def get_user_by_email(
@@ -125,18 +106,12 @@ def get_user_by_email(
     tuple
         The user's email and hashed password.
     """
-    # Connect to your PostgreSQL database
-    connection = connect_to_db()
-    # Create a cursor object
-    cursor = connection.cursor()
-    cursor.execute(
-        query="SELECT username, email, hashed_pwd FROM users WHERE email = %(email)s;",
-        vars={"email": email},
+    query = sql.SQL(
+        "SELECT username, email, hashed_pwd FROM users WHERE email = %(email)s;"
     )
-    user_email = cursor.fetchone()
-    # Close communication with the database
-    cursor.close()
-    connection.close()
+    variables = {"email": email}
+    with QueryExecutor() as executor:
+        user_email = executor.execute(query, variables, fetch=True)
     return user_email
 
 
@@ -155,18 +130,12 @@ def get_user_by_spotify_id(
     str
         The user's Spotify ID.
     """
-    # Connect to your PostgreSQL database
-    connection = connect_to_db()
-    # Create a cursor object
-    cursor = connection.cursor()
-    cursor.execute(
-        query="SELECT spotify_id FROM spotify_users WHERE spotify_id = %(spotify_id)s;",
-        vars={"spotify_id": spotify_id},
+    query = sql.SQL(
+        "SELECT spotify_id FROM spotify_users WHERE spotify_id = %(spotify_id)s;"
     )
-    user_email = cursor.fetchone()
-    # Close communication with the database
-    cursor.close()
-    connection.close()
+    variables = {"spotify_id": spotify_id}
+    with QueryExecutor() as executor:
+        user_email = executor.execute(query, variables, fetch=True)
     return user_email
 
 
@@ -185,16 +154,8 @@ def get_user_by_username(
     str
         The user's username.
     """
-    # Connect to your PostgreSQL database
-    connection = connect_to_db()
-    # Create a cursor object
-    cursor = connection.cursor()
-    cursor.execute(
-        query="SELECT username FROM users WHERE username = %(username)s;",
-        vars={"username": username},
-    )
-    user_email = cursor.fetchone()
-    # Close communication with the database
-    cursor.close()
-    connection.close()
+    query = sql.SQL("SELECT username FROM users WHERE username = %(username)s;")
+    variables = {"username": username}
+    with QueryExecutor() as executor:
+        user_email = executor.execute(query, variables, fetch=True)
     return user_email
