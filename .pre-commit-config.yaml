@@ -82,7 +82,7 @@ repos:
     rev: 3.0.7
     hooks:
       - id: sqlfluff-lint
-        name: sqlfluff-lint
+        name: SQLFluff linter
         # Set `--processes 0` to use maximum parallelism
         entry: sqlfluff lint --processes 0
         language: python
@@ -91,7 +91,7 @@ repos:
         require_serial: true
         additional_dependencies: [ ]
       - id: sqlfluff-fix
-        name: sqlfluff-fix
+        name: SQLFluff fix
         # Set a couple of default flags:
         #  - `--show-lint-violations` shows issues to not require running `sqlfluff lint`
         #  - `--processes 0` to use maximum parallelism
