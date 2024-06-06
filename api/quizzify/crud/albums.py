@@ -22,7 +22,8 @@ def get_albums_ids():
     query = sql.SQL("SELECT id FROM albums;")
     with QueryExecutor() as executor:
         albums_ids = executor.execute(query, fetch=True)
-    return flatten_list(albums_ids)
+    albums_ids = [album["id"] for album in albums_ids]
+    return albums_ids
 
 
 def get_random_album():
@@ -40,7 +41,7 @@ def get_random_album():
         "artists.id as artist_id, artists.name as artist_name "
         "FROM albums "
         "JOIN artists ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM artists))"
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums))"
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:

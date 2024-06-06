@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from psycopg2 import sql
 
 from quizzify.db.query_executor import QueryExecutor
-from quizzify.utils.helpers import flatten_list
 from quizzify.utils.schemas import Song
 
 load_dotenv()
@@ -22,7 +21,8 @@ def get_songs_ids():
     query = sql.SQL("SELECT id FROM songs;")
     with QueryExecutor() as executor:
         songs_ids = executor.execute(query, fetch=True)
-    return flatten_list(songs_ids)
+    songs_ids = [song_id["id"] for song_id in songs_ids]
+    return songs_ids
 
 
 def get_random_song():
