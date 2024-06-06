@@ -17,7 +17,7 @@ class TestCrudAlbums(unittest.TestCase):
 
     def test_get_random_album(self):
         # Given
-        expected_result = ["I Don't Speak The Language"]
+        expected_result = ["I Don't Speak The Language", "Il ballo della vita"]
 
         # When
         result = crud_albums.get_random_album()
