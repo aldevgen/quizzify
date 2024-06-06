@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from psycopg2 import sql
 
 from quizzify.db.query_executor import QueryExecutor
-from quizzify.utils.helpers import flatten_list
 from quizzify.utils.schemas import Artist
 
 load_dotenv()
@@ -23,7 +22,8 @@ def get_artists_ids() -> List[str]:
     query = sql.SQL("SELECT id FROM artists;")
     with QueryExecutor() as executor:
         artists_ids = executor.execute(query, fetch=True)
-    return flatten_list(artists_ids)
+    artists_ids = [artist["id"] for artist in artists_ids]
+    return artists_ids
 
 
 def get_random_artist() -> Dict:
