@@ -1,6 +1,6 @@
-from psycopg2.extras import RealDictCursor
+from psycopg2 import sql
 
-from quizzify.db.session import connect_to_db
+from quizzify.db.query_executor import QueryExecutor
 
 
 def get_random_artist_song():
@@ -11,19 +11,15 @@ def get_random_artist_song():
     dict
         A random song and its artist.
     """
-    connection = connect_to_db()
-    cursor = connection.cursor(cursor_factory=RealDictCursor)
-    cursor.execute(
-        query=(
-            "SELECT songs.name AS song_name, artists.name AS artist_name "
-            "FROM songs "
-            "INNER JOIN artists "
-            "ON songs.artist_id = artists.id "
-            "OFFSET floor(random() * (SELECT COUNT(*) FROM songs))"
-            "LIMIT 1;"
-        )
+    query = sql.SQL(
+        "SELECT songs.name AS song_name, artists.name AS artist_name "
+        "FROM top_songs as songs "
+        "INNER JOIN top_artists as artists "
+        "ON songs.artist_id = artists.id "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_songs))"
+        "LIMIT 1;"
     )
-    random_artist_song = cursor.fetchone()
-    cursor.close()
-    connection.close()
+    with QueryExecutor() as executor:
+        cursor = executor.execute(query, fetch=True)
+        random_artist_song = cursor.fetchone()
     return random_artist_song

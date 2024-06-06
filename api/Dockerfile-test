@@ -1,0 +1,22 @@
+# Basic Python image with FastAPI and Uvicorn
+FROM python:3.11
+
+# Set the working directory to /quizzify
+ENV WORKDIR=/api
+WORKDIR $WORKDIR
+
+# Copy the requirements files to the container
+COPY requirements.txt .
+COPY requirements-dev.txt .
+
+# Install any needed packages specified in requirements.txt and requirements-dev.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt -r requirements-dev.txt
+
+# Copy the entire source code to the container
+COPY quizzify/ quizzify/
+
+# Copy the tests files to the container
+COPY tests/ tests/
+
+# Run quizzify.py when the container launches
+CMD pytest --cov=quizzify --cov-report=term-missing -vvv $WORKDIR/tests

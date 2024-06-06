@@ -1,10 +1,9 @@
 import logging
 
 from dotenv import load_dotenv
-from psycopg2.extras import RealDictCursor
+from psycopg2 import sql
 
-from quizzify.db.session import connect_to_db
-from quizzify.utils.helpers import flatten_list
+from quizzify.db.query_executor import QueryExecutor
 from quizzify.utils.schemas import Song
 
 load_dotenv()
@@ -19,13 +18,11 @@ def get_songs_ids():
     list
         A list of all the songs' IDs.
     """
-    connection = connect_to_db()
-    cursor = connection.cursor()
-    cursor.execute(query="SELECT id FROM songs;")
-    songs_ids = cursor.fetchall()
-    cursor.close()
-    connection.close()
-    return flatten_list(songs_ids)
+    query = sql.SQL("SELECT id FROM top_songs;")
+    with QueryExecutor() as executor:
+        songs_ids = executor.execute(query, fetch=True)
+    songs_ids = [song_id["id"] for song_id in songs_ids]
+    return songs_ids
 
 
 def get_random_song():
@@ -36,25 +33,20 @@ def get_random_song():
     dict
         A random song.
     """
-    connection = connect_to_db()
-    cursor = connection.cursor(cursor_factory=RealDictCursor)
-    cursor.execute(
-        query=(
-            "SELECT songs.id as song_id, songs.name as song_name, "
-            "artists.id as artist_id, artists.name as artist_name, "
-            "albums.id as album_id, albums.name as album_name, "
-            "songs.popularity, "
-            "songs.duration_ms, songs.track_number "
-            "FROM songs "
-            "JOIN artists ON songs.artist_id = artists.id "
-            "JOIN albums ON songs.album_id = albums.id "
-            "OFFSET floor(random() * (SELECT COUNT(*) FROM songs)) "
-            "LIMIT 1;"
-        )
+    query = sql.SQL(
+        "SELECT songs.id as song_id, songs.name as song_name, "
+        "artists.id as artist_id, artists.name as artist_name, "
+        "albums.id as album_id, albums.name as album_name, "
+        "songs.popularity, "
+        "songs.duration_ms, songs.track_number "
+        "FROM top_songs as songs "
+        "JOIN top_artists as artists ON songs.artist_id = artists.id "
+        "JOIN top_albums as albums ON songs.album_id = albums.id "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_songs))"
+        "LIMIT 1;"
     )
-    random_song = cursor.fetchone()
-    cursor.close()
-    connection.close()
+    with QueryExecutor() as executor:
+        random_song = executor.execute(query, fetch=True)
     return random_song
 
 
@@ -68,26 +60,21 @@ def insert_song(
     song : Song
         The song to insert into the database.
     """
-    connection = connect_to_db()
-    cursor = connection.cursor()
-    cursor.execute(
-        query=(
-            "INSERT INTO songs "
-            "(id, name, artist_id, album_id, popularity, duration_ms, track_number) "
-            "VALUES"
-            "(%(song_id)s, %(song_name)s, %(artist_id)s, %(album_id)s, %(popularity)s, "
-            "%(duration_ms)s, %(track_number)s);"
-        ),
-        vars={
-            "song_id": song.id,
-            "song_name": song.name,
-            "artist_id": song.artist_id,
-            "album_id": song.album_id,
-            "popularity": song.popularity,
-            "duration_ms": song.duration_ms,
-            "track_number": song.track_number,
-        },
+    query = sql.SQL(
+        "INSERT INTO top_songs "
+        "(id, name, artist_id, album_id, popularity, duration_ms, track_number) "
+        "VALUES"
+        "(%(song_id)s, %(song_name)s, %(artist_id)s, %(album_id)s, %(popularity)s, "
+        "%(duration_ms)s, %(track_number)s);"
     )
-    connection.commit()
-    cursor.close()
-    connection.close()
+    variables = {
+        "song_id": song.id,
+        "song_name": song.name,
+        "artist_id": song.artist_id,
+        "album_id": song.album_id,
+        "popularity": song.popularity,
+        "duration_ms": song.duration_ms,
+        "track_number": song.track_number,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables=variables)

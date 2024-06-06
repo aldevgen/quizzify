@@ -1,8 +1,8 @@
 # Basic Python image with FastAPI and Uvicorn
 FROM python:3.11
 
-# Set the working directory to /quizzify
-ENV WORKDIR=/quizzify
+# Set the working directory to /api
+ENV WORKDIR=/api
 WORKDIR $WORKDIR
 
 # Copy only the requirements file to the container
