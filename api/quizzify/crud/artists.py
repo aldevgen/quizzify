@@ -19,7 +19,7 @@ def get_artists_ids() -> List[str]:
     list
         A list of all the artists' IDs.
     """
-    query = sql.SQL("SELECT id FROM artists;")
+    query = sql.SQL("SELECT id FROM top_artists;")
     with QueryExecutor() as executor:
         artists_ids = executor.execute(query, fetch=True)
     artists_ids = [artist["id"] for artist in artists_ids]
@@ -35,8 +35,8 @@ def get_random_artist() -> Dict:
         A random artist.
     """
     query = sql.SQL(
-        "SELECT id, name, popularity, image_url FROM artists "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM artists)) "
+        "SELECT id, name, popularity, image_url FROM top_artists "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_artists)) "
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
@@ -58,7 +58,7 @@ def insert_artist(
         The user's ID.
     """
     query = sql.SQL(
-        "INSERT INTO artists "
+        "INSERT INTO top_artists "
         "(id, name, popularity, genres, followers, image_url, user_id) "
         "VALUES "
         "(%(artist_id)s, %(artist_name)s, %(popularity)s, %(genres)s, "

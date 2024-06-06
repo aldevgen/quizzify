@@ -18,7 +18,7 @@ def get_songs_ids():
     list
         A list of all the songs' IDs.
     """
-    query = sql.SQL("SELECT id FROM songs;")
+    query = sql.SQL("SELECT id FROM top_songs;")
     with QueryExecutor() as executor:
         songs_ids = executor.execute(query, fetch=True)
     songs_ids = [song_id["id"] for song_id in songs_ids]
@@ -39,10 +39,10 @@ def get_random_song():
         "albums.id as album_id, albums.name as album_name, "
         "songs.popularity, "
         "songs.duration_ms, songs.track_number "
-        "FROM songs "
-        "JOIN artists ON songs.artist_id = artists.id "
-        "JOIN albums ON songs.album_id = albums.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM songs))"
+        "FROM top_songs as songs "
+        "JOIN top_artists as artists ON songs.artist_id = artists.id "
+        "JOIN top_albums as albums ON songs.album_id = albums.id "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_songs))"
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
@@ -61,7 +61,7 @@ def insert_song(
         The song to insert into the database.
     """
     query = sql.SQL(
-        "INSERT INTO songs "
+        "INSERT INTO top_songs "
         "(id, name, artist_id, album_id, popularity, duration_ms, track_number) "
         "VALUES"
         "(%(song_id)s, %(song_name)s, %(artist_id)s, %(album_id)s, %(popularity)s, "

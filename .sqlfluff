@@ -1,5 +1,6 @@
 [sqlfluff]
 dialect = postgres
+max_line_length = 88
 
 [sqlfluff:indentation]
 tab_space_size = 2
