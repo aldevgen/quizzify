@@ -86,6 +86,7 @@ repos:
         # Set `--processes 0` to use maximum parallelism
         entry: sqlfluff lint --processes 0
         language: python
+        files: \.(sql)$
         description: "Lints sql files with `SQLFluff`"
         types: [ sql ]
         require_serial: true
@@ -98,6 +99,7 @@ repos:
         # By default, this hook applies all rules.
         entry: sqlfluff fix --show-lint-violations --processes 0
         language: python
+        files: \.(sql)$
         description: "Fixes sql lint errors with `SQLFluff`"
         types: [ sql ]
         require_serial: true
