@@ -41,7 +41,7 @@ def get_random_album():
         "artists.id as artist_id, artists.name as artist_name "
         "FROM albums "
         "JOIN artists ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM artists))"
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums))"
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
