@@ -6,7 +6,6 @@ services:
     build:
       context: api
       dockerfile: Dockerfile-test
-    command: pytest --cov=quizzify --cov-report=term-missing -vvv /quizzify/quizzify/tests
     container_name: quizzify-api
     restart: always
     ports:
@@ -34,6 +33,7 @@ services:
     volumes:
       # Mount the volume to persist the data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Mount the seeds file to populate the database with test data
       - ./db/seeds-test.sql:/docker-entrypoint-initdb.d/seeds.sql
       # Mount the init script to create the database as an entrypoint to the container
       - postgres_data:/var/lib/postgresql/data
