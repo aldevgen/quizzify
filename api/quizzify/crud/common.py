@@ -13,10 +13,10 @@ def get_random_artist_song():
     """
     query = sql.SQL(
         "SELECT songs.name AS song_name, artists.name AS artist_name "
-        "FROM songs "
-        "INNER JOIN artists "
+        "FROM top_songs as songs "
+        "INNER JOIN top_artists as artists "
         "ON songs.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM songs))"
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_songs))"
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
