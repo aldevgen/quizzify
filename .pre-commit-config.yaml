@@ -25,6 +25,7 @@ repos:
         name: Trims trailing whitespace
         description: trims trailing whitespace.
         files: \.(py|sh|rst|yml|yaml)$
+
   # black
   - repo: https://github.com/psf/black
     rev: 24.1.1
@@ -32,6 +33,7 @@ repos:
       - id: black
         name: Black code formatter
         description: code formatter
+
   # isort
   - repo: https://github.com/PyCQA/isort
     rev: 5.13.2
@@ -40,6 +42,7 @@ repos:
         name: Sort module imports in .py files
         description: Sort module imports in .py files
         args: [ "--profile", "black", "--filter-files" ]
+
   # ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
@@ -47,9 +50,12 @@ repos:
     hooks:
       # Run the linter.
       - id: ruff
+        name: Ruff linter
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format
+        name: Ruff formatter
+
   # flake8
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
@@ -62,6 +68,7 @@ repos:
         language_version: python3
         types_or: [ python ]
         stages: [ commit ]
+
   # mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0
@@ -69,6 +76,33 @@ repos:
       - id: mypy
         name: Data typing
         args: [ '--ignore-missing-imports' ]
+
+  # sqlfluff
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.0.7
+    hooks:
+      - id: sqlfluff-lint
+        name: SQLFluff linter
+        # Set `--processes 0` to use maximum parallelism
+        entry: sqlfluff lint --processes 0
+        language: python
+        description: "Lints sql files with `SQLFluff`"
+        types: [ sql ]
+        require_serial: true
+        additional_dependencies: [ ]
+      - id: sqlfluff-fix
+        name: SQLFluff fix
+        # Set a couple of default flags:
+        #  - `--show-lint-violations` shows issues to not require running `sqlfluff lint`
+        #  - `--processes 0` to use maximum parallelism
+        # By default, this hook applies all rules.
+        entry: sqlfluff fix --show-lint-violations --processes 0
+        language: python
+        description: "Fixes sql lint errors with `SQLFluff`"
+        types: [ sql ]
+        require_serial: true
+        additional_dependencies: [ ]
+
   # pydocstyle
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.3.0
@@ -76,6 +110,7 @@ repos:
       - id: pydocstyle
         name: Documentation
         args: [ --convention=numpy, --add-ignore=D100 ]
+
   # bandit
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.7
@@ -83,6 +118,7 @@ repos:
       - id: bandit
         name: Security checker
         args: ['--exclude', 'tests/*']
+
   # commitizen
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
