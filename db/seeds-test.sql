@@ -33,7 +33,7 @@ VALUES
 );
 
 INSERT
-INTO artists
+INTO top_artists
 (
   id,
   name,
@@ -73,7 +73,7 @@ VALUES
 );
 
 INSERT
-INTO albums
+INTO top_albums
 (
   id,
   name,
@@ -97,7 +97,7 @@ VALUES
 );
 
 INSERT
-INTO songs
+INTO top_songs
 (
   id,
   name,

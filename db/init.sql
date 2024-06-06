@@ -16,11 +16,11 @@
 DROP TABLE IF EXISTS spotify_users CASCADE;
 
 CREATE TABLE spotify_users (
-    spotify_id VARCHAR(50) PRIMARY KEY,
-    spotify_username VARCHAR(100),
-    spotify_email VARCHAR(150),
-    spotify_image_url VARCHAR(100),
-    spotify_uri VARCHAR(100)
+  spotify_id VARCHAR(50) PRIMARY KEY,
+  spotify_username VARCHAR(100),
+  spotify_email VARCHAR(150),
+  spotify_image_url VARCHAR(100),
+  spotify_uri VARCHAR(100)
 );
 
 ----------------------------------------------------------------------------------------
@@ -38,16 +38,16 @@ CREATE TABLE spotify_users (
 DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE users (
-    user_id VARCHAR(50) PRIMARY KEY,
-    username VARCHAR(100) UNIQUE NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    hashed_pwd BYTEA,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES spotify_users(spotify_id)
+  user_id VARCHAR(50) PRIMARY KEY,
+  username VARCHAR(100) UNIQUE NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  hashed_pwd BYTEA,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES spotify_users (spotify_id)
 );
 
 ----------------------------------------------------------------------------------------
------------------------------------ Relation Artists -----------------------------------
+--------------------------------- Relation Top Artists ---------------------------------
 ----------------------------------------------------------------------------------------
 
 -- column_name |     data_type
@@ -57,21 +57,21 @@ CREATE TABLE users (
 -- popularity  | integer
 -- image_url   | character varying
 
-DROP TABLE IF EXISTS artists CASCADE ;
+DROP TABLE IF EXISTS top_artists CASCADE;
 
-CREATE TABLE artists (
-    id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(100),
-    popularity INT,
-    genres VARCHAR(50)[],
-    followers INT,
-    image_url VARCHAR(150),
-    user_id VARCHAR(50),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+CREATE TABLE top_artists (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(100),
+  popularity INT,
+  genres VARCHAR(50) [],
+  followers INT,
+  image_url VARCHAR(150),
+  user_id VARCHAR(50),
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 ----------------------------------------------------------------------------------------
------------------------------------ Relation Albums ------------------------------------
+--------------------------------- Relation Top Albums ----------------------------------
 ----------------------------------------------------------------------------------------
 
 -- column_name  |     data_type
@@ -83,23 +83,23 @@ CREATE TABLE artists (
 -- release_year | date
 -- total_tracks | integer
 
-DROP TABLE IF EXISTS albums CASCADE;
+DROP TABLE IF EXISTS top_albums CASCADE;
 
-CREATE TABLE albums (
-    id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(200),
-    popularity INT,
-    release_year VARCHAR(4),
-    total_tracks INT,
-    image_url VARCHAR(150),
-    artist_id VARCHAR(25),
-    user_id VARCHAR(50),
-    FOREIGN KEY (artist_id) REFERENCES artists(id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+CREATE TABLE top_albums (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(200),
+  popularity INT,
+  release_year VARCHAR(4),
+  total_tracks INT,
+  image_url VARCHAR(150),
+  artist_id VARCHAR(25),
+  user_id VARCHAR(50),
+  FOREIGN KEY (artist_id) REFERENCES top_artists (id),
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
 
 ----------------------------------------------------------------------------------------
------------------------------------- Relation Songs ------------------------------------
+---------------------------------- Relation Top Songs ----------------------------------
 ----------------------------------------------------------------------------------------
 
 -- column_name  |     data_type
@@ -112,19 +112,19 @@ CREATE TABLE albums (
 -- duration_ms  | integer
 -- track_number | integer
 
-DROP TABLE IF EXISTS songs;
+DROP TABLE IF EXISTS top_songs;
 
-CREATE TABLE songs (
-    id VARCHAR(50),
-    name VARCHAR(200),
-    popularity INT,
-    duration_ms INT,
-    track_number INT,
-    artist_id VARCHAR(25),
-    album_id VARCHAR(25),
-    user_id VARCHAR(50),
-    PRIMARY KEY (id, artist_id, album_id),
-    FOREIGN KEY (artist_id) REFERENCES artists(id),
-    FOREIGN KEY (album_id) REFERENCES albums(id),
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+CREATE TABLE top_songs (
+  id VARCHAR(50),
+  name VARCHAR(200),
+  popularity INT,
+  duration_ms INT,
+  track_number INT,
+  artist_id VARCHAR(25),
+  album_id VARCHAR(25),
+  user_id VARCHAR(50),
+  PRIMARY KEY (id, artist_id, album_id),
+  FOREIGN KEY (artist_id) REFERENCES top_artists (id),
+  FOREIGN KEY (album_id) REFERENCES top_albums (id),
+  FOREIGN KEY (user_id) REFERENCES users (user_id)
 );
