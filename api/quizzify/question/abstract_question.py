@@ -1,29 +1,40 @@
+import random
 from abc import ABC, abstractmethod
+from typing import List
 
 
 class AbstractQuestion(ABC):
     """Abstract class for questions."""
 
-    def __init__(self):
-        """Abstract class for questions."""
-        pass
+    def __init__(self) -> None:
+        """Abstract question constructor."""
+        self.correct_answer = None
+        self.incorrect_answers: List[str] = []
 
     @abstractmethod
-    def get_question(self):
+    def display_question(self):
         """Abstract method to get a question."""
         pass
 
-    @abstractmethod
     def get_correct_answer(self):
         """Abstract method to get the correct answer."""
-        pass
+        return self.correct_answer
 
-    @abstractmethod
-    def get_incorrect_answers(self):
+    def get_incorrect_answers(self) -> List:
         """Abstract method to get the incorrect answers."""
-        pass
+        return self.incorrect_answers
 
-    @abstractmethod
-    def get_all_answers(self):
+    def get_all_answers(self) -> List:
         """Abstract method to get all answers."""
-        pass
+        all_answers = [self.correct_answer] + self.get_incorrect_answers()
+        random.shuffle(all_answers)
+        return all_answers
+
+    def get_question(self):
+        """Get a song question."""
+        return {
+            "question": self.display_question(),
+            "correct_answer": self.get_correct_answer(),
+            "incorrect_answers": self.get_incorrect_answers(),
+            "all_answers": self.get_all_answers(),
+        }
