@@ -19,7 +19,7 @@ def get_artists_ids() -> List[str]:
     list
         A list of all the artists' IDs.
     """
-    query = sql.SQL("SELECT id FROM top_artists;")
+    query = sql.SQL("SELECT id FROM artists;")
     with QueryExecutor() as executor:
         artists_ids = executor.execute(query, fetch=True)
     artists_ids = [artist["id"] for artist in artists_ids]
@@ -27,16 +27,16 @@ def get_artists_ids() -> List[str]:
 
 
 def get_random_artist() -> Dict:
-    """Get a random artist from the database.
+    """Get a random album from the database.
 
     Returns
     -------
     dict
-        A random artist.
+        A random album.
     """
     query = sql.SQL(
-        "SELECT id, name, popularity, image_url FROM top_artists "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_artists)) "
+        "SELECT id, name, popularity, genres, image_url FROM artists "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM artists)) "
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
@@ -46,7 +46,6 @@ def get_random_artist() -> Dict:
 
 def insert_artist(
     artist: Artist,
-    user_id: str,
 ):
     """Insert an artist into the database.
 
@@ -54,15 +53,13 @@ def insert_artist(
     ----------
     artist : Artist
         The artist to insert into the database.
-    user_id : str
-        The user's ID.
     """
     query = sql.SQL(
-        "INSERT INTO top_artists "
-        "(id, name, popularity, genres, followers, image_url, user_id) "
+        "INSERT INTO artists "
+        "(id, name, popularity, genres, followers, image_url) "
         "VALUES "
         "(%(artist_id)s, %(artist_name)s, %(popularity)s, %(genres)s, "
-        "%(followers)s, %(artist_image)s, %(user_id)s);"
+        "%(followers)s, %(artist_image)s);"
     )
     variables = {
         "artist_id": artist.id,
@@ -71,7 +68,33 @@ def insert_artist(
         "genres": artist.genres,
         "followers": artist.followers,
         "artist_image": artist.image_url,
-        "user_id": user_id,
     }
     with QueryExecutor() as executor:
         executor.execute(query=query, variables=variables)
+
+
+def insert_artist_user(
+    artist_id: str,
+    user_id: str,
+):
+    """Insert user as having listened to an artist.
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+    user_id : str
+        The user's ID.
+    """
+    query = sql.SQL(
+        "INSERT INTO top_artists "
+        "(artist_id, user_id) "
+        "VALUES "
+        "(%(artist_id)s, %(user_id)s);"
+    )
+    variables = {
+        "artist_id": artist_id,
+        "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables)

@@ -1,5 +1,5 @@
 INSERT
-INTO spotify_users (
+INTO users_spotify (
   spotify_id,
   spotify_username,
   spotify_email,
@@ -15,7 +15,7 @@ VALUES (
 );
 
 INSERT
-INTO users
+INTO users_quizzify
 (
   user_id,
   username,
@@ -33,15 +33,14 @@ VALUES
 );
 
 INSERT
-INTO top_artists
+INTO artists
 (
   id,
   name,
   popularity,
   genres,
   followers,
-  image_url,
-  user_id
+  image_url
 )
 VALUES
 (
@@ -50,8 +49,7 @@ VALUES
   79,
   ARRAY['indie rock italiano', 'italian pop'],
   9133398,
-  'https://i.scdn.co/image/ab6761610000e5eb46d0db8a86fda630ec12401f',
-  'abc123def456'
+  'https://i.scdn.co/image/ab6761610000e5eb46d0db8a86fda630ec12401f'
 ),
 (
   '6XyY86QOPPrYVGvF9ch6wz',
@@ -59,8 +57,7 @@ VALUES
   83,
   ARRAY['alternative metal', 'nu metal', 'post-grunge', 'rap metal', 'rock'],
   25451916,
-  'https://i.scdn.co/image/ab6761610000e5eb84a0dd74f21e8acce6a9fd49',
-  'abc123def456'
+  'https://i.scdn.co/image/ab6761610000e5eb84a0dd74f21e8acce6a9fd49'
 ),
 (
   '3bmFPbLMiLxtR9tFrTcKcP',
@@ -68,21 +65,40 @@ VALUES
   55,
   ARRAY['new wave pop'],
   47936,
-  'https://i.scdn.co/image/ab6761610000e5eb5dcabf363571181dba3ecf66',
+  'https://i.scdn.co/image/ab6761610000e5eb5dcabf363571181dba3ecf66'
+);
+
+INSERT
+INTO top_artists
+(
+  artist_id,
+  user_id
+)
+VALUES
+(
+  '0lAWpj5szCSwM4rUMHYmrr',
+  'abc123def456'
+),
+(
+  '6XyY86QOPPrYVGvF9ch6wz',
+  'abc123def456'
+),
+(
+  '3bmFPbLMiLxtR9tFrTcKcP',
   'abc123def456'
 );
 
 INSERT
-INTO top_albums
+INTO albums
 (
   id,
   name,
   popularity,
   release_year,
+  release_decade,
   total_tracks,
   image_url,
-  artist_id,
-  user_id
+  artist_id
 )
 VALUES
 (
@@ -90,14 +106,54 @@ VALUES
   'I Don''t Speak The Language',
   61,
   '1983',
+  '1980',
   9,
   'https://i.scdn.co/image/ab67616d0000b2739824c6e084b02d24b2e22e94',
-  '3bmFPbLMiLxtR9tFrTcKcP',
-  'abc123def456'
+  '3bmFPbLMiLxtR9tFrTcKcP'
+),
+(
+  '0sNOF9WDwhWunNAHPD3Baj',
+  'Hybrid Theory',
+  82,
+  '2000',
+  '2000',
+  12,
+  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
+  '6XyY86QOPPrYVGvF9ch6wz'
+),
+(
+  '2ZUwFxlDV6dP8y2fMs59fN',
+  'Teatro d''ira: Vol. I',
+  79,
+  '2021',
+  '2020',
+  10,
+  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
+  '0lAWpj5szCSwM4rUMHYmrr'
 );
 
 INSERT
 INTO top_songs
+(
+  song_id,
+  user_id
+)
+VALUES
+(
+  '1mCsF9Tw4AkIZOjvZbZZdT',
+  'abc123def456'
+),
+(
+  '6hQ5vU4jWvz1bXjXj3t7yT',
+  'abc123def456'
+),
+(
+  '2gMXnyrvIjhVBUZwvLZDMP',
+  'abc123def456'
+);
+
+INSERT
+INTO songs
 (
   id,
   name,
@@ -116,4 +172,42 @@ VALUES
   72,
   184480,
   1
+),
+(
+  '6hQ5vU4jWvz1bXjXj3t7yT',
+  'In the End',
+  '6XyY86QOPPrYVGvF9ch6wz',
+  '0sNOF9WDwhWunNAHPD3Baj',
+  85,
+  216933,
+  1
+),
+(
+  '2gMXnyrvIjhVBUZwvLZDMP',
+  'Beggin''',
+  '0lAWpj5szCSwM4rUMHYmrr',
+  '2ZUwFxlDV6dP8y2fMs59fN',
+  89,
+  211560,
+  1
+);
+
+INSERT
+INTO top_albums
+(
+  album_id,
+  user_id
+)
+VALUES
+(
+  '2coqGqbnSCAy740mClWesA',
+  'abc123def456'
+),
+(
+  '0sNOF9WDwhWunNAHPD3Baj',
+  'abc123def456'
+),
+(
+  '2ZUwFxlDV6dP8y2fMs59fN',
+  'abc123def456'
 );
