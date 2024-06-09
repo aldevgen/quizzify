@@ -30,6 +30,7 @@ class QueryExecutor:
         query: str,
         variables: Optional[Dict[str, Any]] = None,
         fetch: bool = False,
+        one: bool = False,
     ):
         """Execute a query on the database.
 
@@ -41,6 +42,8 @@ class QueryExecutor:
             The variables to pass to the query, by default None.
         fetch : bool, optional
             Whether to fetch the results of the query, by default False.
+        one : bool, optional
+            Whether to fetch one result or all results, by default False.
 
         Returns
         -------
@@ -53,7 +56,10 @@ class QueryExecutor:
             if variables
             else f"Executed query: {query}"
         )
-        if fetch:
+        if fetch and one:
+            return self.cursor.fetchone()
+        elif fetch:
             return self.cursor.fetchall()
+
         self.connection.commit()
         return None
