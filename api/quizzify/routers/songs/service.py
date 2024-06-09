@@ -74,8 +74,11 @@ def get_top_songs(
                     artist_info = spotify_get_artist(current_artist_id)
                     crud_artists.insert_artist(
                         artist=Artist.model_validate(artist_info),
-                        user_id=user_id,
                     )
+                crud_artists.insert_artist_user(
+                    artist_id=current_artist_id,
+                    user_id=user_id,
+                )
 
                 # get artist details
                 artists_info = [
@@ -96,6 +99,10 @@ def get_top_songs(
                         album=Album.model_validate(album_info),
                         artist_id=current_artist_id,
                     )
+                    crud_albums.insert_album_user(
+                        album_id=current_album_id,
+                        user_id=user_id,
+                    )
 
                     # insert song info into the database if it is not already there
                     current_song_id = raw_top_songs[song]["id"]
@@ -114,6 +121,12 @@ def get_top_songs(
                     if current_song_id not in song_ids:
                         song_ids.append(current_song_id)
                         crud_songs.insert_song(song=Song.model_validate(song_info))
+
+                    # insert song into user's top songs
+                    crud_songs.insert_song_user(
+                        song_id=current_song_id,
+                        user_id=user_id,
+                    )
 
                     # create a dictionary with the song, artist and album details
                     current_song = {

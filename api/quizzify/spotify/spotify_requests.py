@@ -141,13 +141,13 @@ def spotify_get_album(
 
     if response.status_code == 200:
         raw_album_info = response.json()
-        # songs_name = [track["name"] for track in raw_album_info["tracks"]["items"]]
         best_image = get_highest_resolution_image(images=raw_album_info["images"])
         album_info = {
             "id": raw_album_info["id"],
             "name": raw_album_info["name"],
             "popularity": raw_album_info.get("popularity"),
             "release_year": raw_album_info["release_date"][:4],
+            "release_decade": raw_album_info["release_date"][:4][:-1] + "0",
             "total_tracks": raw_album_info["total_tracks"],
             "image_url": best_image["url"] if best_image else None,
         }

@@ -50,8 +50,11 @@ def get_top_artists(
             artists_ids.append(current_artist_id)
             crud.insert_artist(
                 artist=Artist(**artist),
-                user_id=user_id,
             )
+        crud.insert_artist_user(
+            artist_id=current_artist_id,
+            user_id=user_id,
+        )
 
     return user_top_artists
 

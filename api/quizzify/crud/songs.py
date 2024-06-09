@@ -46,7 +46,7 @@ def get_random_song():
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
-        random_song = executor.execute(query, fetch=True)
+        random_song = executor.execute(query, fetch=True, one=True)
     return random_song
 
 
