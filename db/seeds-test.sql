@@ -123,33 +123,13 @@ VALUES
 ),
 (
   '2ZUwFxlDV6dP8y2fMs59fN',
-  'Teatro d''ira: Vol. I',
+  'Il ballo della vita',
   79,
   '2021',
   '2020',
   10,
   'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
   '0lAWpj5szCSwM4rUMHYmrr'
-);
-
-INSERT
-INTO top_songs
-(
-  song_id,
-  user_id
-)
-VALUES
-(
-  '1mCsF9Tw4AkIZOjvZbZZdT',
-  'abc123def456'
-),
-(
-  '6hQ5vU4jWvz1bXjXj3t7yT',
-  'abc123def456'
-),
-(
-  '2gMXnyrvIjhVBUZwvLZDMP',
-  'abc123def456'
 );
 
 INSERT
@@ -190,6 +170,26 @@ VALUES
   89,
   211560,
   1
+);
+
+INSERT
+INTO top_songs
+(
+  song_id,
+  user_id
+)
+VALUES
+(
+  '1mCsF9Tw4AkIZOjvZbZZdT',
+  'abc123def456'
+),
+(
+  '6hQ5vU4jWvz1bXjXj3t7yT',
+  'abc123def456'
+),
+(
+  '2gMXnyrvIjhVBUZwvLZDMP',
+  'abc123def456'
 );
 
 INSERT
