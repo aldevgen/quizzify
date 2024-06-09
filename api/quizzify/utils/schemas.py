@@ -43,6 +43,7 @@ class Album(BaseModel):
     image_url: Optional[str] = None
     popularity: Optional[int] = None
     release_year: Optional[str] = None
+    release_decade: Optional[str] = None
     total_tracks: Optional[int] = None
     artist_id: Optional[str] = None
 

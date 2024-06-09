@@ -18,7 +18,7 @@ def get_albums_ids():
     list
         A list of all the albums' IDs.
     """
-    query = sql.SQL("SELECT id FROM top_albums;")
+    query = sql.SQL("SELECT id FROM albums;")
     with QueryExecutor() as executor:
         albums_ids = executor.execute(query, fetch=True)
     albums_ids = [album["id"] for album in albums_ids]
@@ -38,9 +38,9 @@ def get_random_album():
         "albums.popularity, albums.release_year, albums.total_tracks, "
         "albums.image_url, "
         "artists.id as artist_id, artists.name as artist_name "
-        "FROM top_albums as albums "
-        "JOIN top_artists as artists ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM top_albums))"
+        "FROM albums "
+        "JOIN artists ON albums.artist_id = artists.id "
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums))"
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
@@ -62,20 +62,50 @@ def insert_album(
         The artist's ID.
     """
     query = sql.SQL(
-        "INSERT INTO top_albums "
-        "(id, name, popularity, release_year, total_tracks, image_url, artist_id) "
+        "INSERT INTO albums "
+        "(id, name, popularity, release_year, release_decade, total_tracks, image_url, "
+        "artist_id) "
         "VALUES "
         "(%(album_id)s, %(album_name)s, %(popularity)s, %(album_release_year)s, "
-        "%(total_tracks)s, %(album_image)s, %(artist_id)s );"
+        "%(album_release_decade)s, %(total_tracks)s, %(album_image)s, %(artist_id)s "
+        ");"
     )
     variables = {
         "album_id": album.id,
         "album_name": album.name,
         "popularity": album.popularity,
         "album_release_year": album.release_year,
+        "album_release_decade": album.release_decade,
         "total_tracks": album.total_tracks,
         "album_image": album.image_url,
         "artist_id": artist_id,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables)
+
+
+def insert_album_user(
+    album_id: str,
+    user_id: str,
+):
+    """Insert user as having listened to an album.
+
+    Parameters
+    ----------
+    album_id : str
+        The album's ID.
+    user_id : str
+        The user's ID.
+    """
+    query = sql.SQL(
+        "INSERT INTO top_albums "
+        "(album_id, user_id) "
+        "VALUES "
+        "(%(album_id)s, %(user_id)s);"
+    )
+    variables = {
+        "album_id": album_id,
+        "user_id": user_id,
     }
     with QueryExecutor() as executor:
         executor.execute(query, variables)

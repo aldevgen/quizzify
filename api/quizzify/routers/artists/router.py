@@ -49,7 +49,6 @@ async def get_top_artists(
 
 @router.get(
     path="/random",
-    # response_model=List[Dict],
     summary="Return random artists from Spotify",
     description="Return random artists from the database.",
 )

@@ -13,9 +13,9 @@
 -- spotify_image_url | character varying
 -- spotify_uri       | character varying
 
-DROP TABLE IF EXISTS spotify_users CASCADE;
+DROP TABLE IF EXISTS users_spotify CASCADE;
 
-CREATE TABLE spotify_users (
+CREATE TABLE users_spotify (
   spotify_id VARCHAR(50) PRIMARY KEY,
   spotify_username VARCHAR(100),
   spotify_email VARCHAR(150),
@@ -35,15 +35,39 @@ CREATE TABLE spotify_users (
 -- hashed_pwd  | bytea
 -- created_at  | timestamp without time zone
 
-DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS users_quizzify CASCADE;
 
-CREATE TABLE users (
+CREATE TABLE users_quizzify (
   user_id VARCHAR(50) PRIMARY KEY,
   username VARCHAR(100) UNIQUE NOT NULL,
   email VARCHAR(150) UNIQUE NOT NULL,
   hashed_pwd BYTEA,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES spotify_users (spotify_id)
+  FOREIGN KEY (user_id) REFERENCES users_spotify (spotify_id)
+);
+
+----------------------------------------------------------------------------------------
+----------------------------------- Relation Artists -----------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name |     data_type
+---------------+-------------------
+-- id          | character varying
+-- name        | character varying
+-- popularity  | integer
+-- genres      | character varying []
+-- followers   | integer
+-- image_url   | character varying
+
+DROP TABLE IF EXISTS artists CASCADE;
+
+CREATE TABLE artists (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(100),
+  popularity INT,
+  genres VARCHAR(50) [],
+  followers INT,
+  image_url VARCHAR(150)
 );
 
 ----------------------------------------------------------------------------------------
@@ -52,7 +76,7 @@ CREATE TABLE users (
 
 -- column_name |     data_type
 ---------------+-------------------
--- id          | character varying
+-- artist_id   | character varying
 -- name        | character varying
 -- popularity  | integer
 -- image_url   | character varying
@@ -60,14 +84,39 @@ CREATE TABLE users (
 DROP TABLE IF EXISTS top_artists CASCADE;
 
 CREATE TABLE top_artists (
-  id VARCHAR(50) PRIMARY KEY,
-  name VARCHAR(100),
-  popularity INT,
-  genres VARCHAR(50) [],
-  followers INT,
-  image_url VARCHAR(150),
+  artist_id VARCHAR(50),
   user_id VARCHAR(50),
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  FOREIGN KEY (artist_id) REFERENCES artists (id),
+  FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
+);
+
+----------------------------------------------------------------------------------------
+----------------------------------- Relation Albums ------------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name    |     data_type
+------------------+-------------------
+-- id             | character varying
+-- name           | character varying
+-- popularity     | integer
+-- release_year   | date
+-- release_decade | date
+-- total_tracks   | integer
+-- image_url      | character varying
+-- artist_id      | character varying, foreign key
+
+DROP TABLE IF EXISTS albums CASCADE;
+
+CREATE TABLE albums (
+  id VARCHAR(50) PRIMARY KEY,
+  name VARCHAR(200),
+  popularity INT,
+  release_year VARCHAR(4),
+  release_decade VARCHAR(4),
+  total_tracks INT,
+  image_url VARCHAR(150),
+  artist_id VARCHAR(25),
+  FOREIGN KEY (artist_id) REFERENCES artists (id)
 );
 
 ----------------------------------------------------------------------------------------
@@ -76,26 +125,45 @@ CREATE TABLE top_artists (
 
 -- column_name  |     data_type
 ----------------+-------------------
--- id           | character varying
--- name         | character varying
--- artist_id    | character varying, foreign key
--- popularity   | integer
--- release_year | date
--- total_tracks | integer
+-- album_id     | character varying
+-- user_id      | character varying
 
 DROP TABLE IF EXISTS top_albums CASCADE;
 
 CREATE TABLE top_albums (
+  album_id VARCHAR(50),
+  user_id VARCHAR(50),
+  FOREIGN KEY (album_id) REFERENCES albums (id),
+  FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
+);
+
+
+----------------------------------------------------------------------------------------
+------------------------------------ Relation Songs ------------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name  |     data_type
+----------------+-------------------
+-- id           | character varying
+-- name         | character varying
+-- popularity   | integer
+-- duration_ms  | integer
+-- track_number | integer
+-- artist_id    | character varying, foreign key
+-- album_id     | character varying, foreign key
+
+DROP TABLE IF EXISTS songs;
+
+CREATE TABLE songs (
   id VARCHAR(50) PRIMARY KEY,
   name VARCHAR(200),
   popularity INT,
-  release_year VARCHAR(4),
-  total_tracks INT,
-  image_url VARCHAR(150),
+  duration_ms INT,
+  track_number INT,
   artist_id VARCHAR(25),
-  user_id VARCHAR(50),
-  FOREIGN KEY (artist_id) REFERENCES top_artists (id),
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  album_id VARCHAR(25),
+  FOREIGN KEY (artist_id) REFERENCES artists (id),
+  FOREIGN KEY (album_id) REFERENCES albums (id)
 );
 
 ----------------------------------------------------------------------------------------
@@ -104,27 +172,14 @@ CREATE TABLE top_albums (
 
 -- column_name  |     data_type
 ----------------+-------------------
--- id           | character varying
--- name         | character varying
--- artist_id    | character varying, foreign key
--- album_id     | character varying, foreign key
--- popularity   | integer
--- duration_ms  | integer
--- track_number | integer
+-- song_id      | character varying
+-- user_id      | character varying, foreign key
 
 DROP TABLE IF EXISTS top_songs;
 
 CREATE TABLE top_songs (
-  id VARCHAR(50),
-  name VARCHAR(200),
-  popularity INT,
-  duration_ms INT,
-  track_number INT,
-  artist_id VARCHAR(25),
-  album_id VARCHAR(25),
+  song_id VARCHAR(50),
   user_id VARCHAR(50),
-  PRIMARY KEY (id, artist_id, album_id),
-  FOREIGN KEY (artist_id) REFERENCES top_artists (id),
-  FOREIGN KEY (album_id) REFERENCES top_albums (id),
-  FOREIGN KEY (user_id) REFERENCES users (user_id)
+  FOREIGN KEY (song_id) REFERENCES songs (id),
+  FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
 );

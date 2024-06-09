@@ -34,7 +34,7 @@ def encode_str_to_base64(
     Returns
     -------
     str
-        The encoded string.
+        The encoded string in base 64.
     """
     string_bytes = string_to_encode.encode("ascii")
     base64_bytes = base64.b64encode(string_bytes)

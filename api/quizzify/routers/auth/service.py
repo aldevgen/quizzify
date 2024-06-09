@@ -160,7 +160,7 @@ async def register_user(
         )
 
     # check if the email is already in use
-    if crud.get_user_by_email(email=email):
+    if crud.get_user_email(email=email):
         msg = "Email already in use. Please enter a different email address."
         logger.error(msg)
         raise HTTPException(
