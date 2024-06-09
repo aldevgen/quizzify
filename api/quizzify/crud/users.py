@@ -33,7 +33,7 @@ def create_spotify_user(
         The user's Spotify URI.
     """
     query = sql.SQL(
-        "INSERT INTO spotify_users "
+        "INSERT INTO users_spotify "
         "(spotify_id, spotify_username, spotify_email, spotify_image_url, "
         "spotify_uri) "
         "VALUES"
@@ -75,7 +75,7 @@ def create_user(
         The hashed password for the new account.
     """
     query = sql.SQL(
-        "INSERT INTO users "
+        "INSERT INTO users_quizzify "
         "(user_id, username, email, hashed_pwd) "
         "VALUES"
         "(%(user_id)s, %(username)s, %(email)s, %(hashed_pwd)s );"
@@ -91,7 +91,7 @@ def create_user(
     logger.info(f"User {username} successfully created.")
 
 
-def get_user_by_email(
+def get_user_email(
     email: str,
 ):
     """Check if the email is already in use.
@@ -104,15 +104,45 @@ def get_user_by_email(
     Returns
     -------
     tuple
+        The user's information.
+    """
+    query = sql.SQL("SELECT email FROM users_quizzify WHERE email = %(email)s;")
+    variables = {"email": email}
+    with QueryExecutor() as executor:
+        user_info = executor.execute(query, variables, fetch=True, one=False)
+    return user_info
+
+
+def get_user_by_email(
+    email: str,
+):
+    """Check if the email corresponds to a user.
+
+    Parameters
+    ----------
+    email : str
+        The user's email.
+
+    Returns
+    -------
+    tuple
         The user's email and hashed password.
     """
     query = sql.SQL(
-        "SELECT username, email, hashed_pwd FROM users WHERE email = %(email)s;"
+        "SELECT username, email, hashed_pwd "
+        "FROM users_quizzify "
+        "WHERE email = %(email)s;"
     )
     variables = {"email": email}
     with QueryExecutor() as executor:
-        user_email = executor.execute(query, variables, fetch=True)
-    return user_email
+        user_info = executor.execute(query, variables, fetch=True, one=True)
+        if user_info is not None:
+            user_name = user_info["username"]
+            user_email = user_info["email"]
+            user_pwd = user_info["hashed_pwd"]
+            return user_name, user_email, user_pwd
+        else:
+            return None, None, None
 
 
 def get_user_by_spotify_id(
@@ -131,7 +161,7 @@ def get_user_by_spotify_id(
         The user's Spotify ID.
     """
     query = sql.SQL(
-        "SELECT spotify_id FROM spotify_users WHERE spotify_id = %(spotify_id)s;"
+        "SELECT spotify_id FROM users_spotify WHERE spotify_id = %(spotify_id)s;"
     )
     variables = {"spotify_id": spotify_id}
     with QueryExecutor() as executor:
@@ -154,7 +184,9 @@ def get_user_by_username(
     str
         The user's username.
     """
-    query = sql.SQL("SELECT username FROM users WHERE username = %(username)s;")
+    query = sql.SQL(
+        "SELECT username FROM users_quizzify WHERE username = %(username)s;"
+    )
     variables = {"username": username}
     with QueryExecutor() as executor:
         user_email = executor.execute(query, variables, fetch=True)
