@@ -23,3 +23,7 @@ class QuestionAlbumDecade(AbstractQuestion):
     def display_question(self):
         """Get an album question."""
         return f"In which decade was the album '{self.album_name}' released?"
+
+    def set_incorrect_answers(self):
+        """Set incorrect answers for the album question."""
+        pass

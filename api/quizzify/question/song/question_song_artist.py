@@ -7,13 +7,17 @@ class QuestionSongArtist(AbstractQuestion):
 
     def __init__(
         self,
+        artist_id,
         artist_name,
+        song_id,
         song_name,
         answer,
     ) -> None:
         """Song question constructor."""
         super().__init__()
+        self.artist_id = artist_id
         self.artist_name = artist_name
+        self.song_id = song_id
         self.song_name = song_name
         self.correct_answer = answer
         self.question_type = SongQuestionType.SONG_ARTIST
@@ -22,14 +26,6 @@ class QuestionSongArtist(AbstractQuestion):
         """Get a song question."""
         return f"Which artist sings '{self.song_name}'?"
 
-    def get_correct_answer(self):
-        """Get the correct answer of the song question."""
-        return self.correct_answer
-
-    def get_incorrect_answers(self):
-        """Get the incorrect answers of the song question."""
-        return [self.correct_answer]
-
-    def get_all_answers(self):
-        """Get all answers of the song question."""
-        return [self.correct_answer]
+    def set_incorrect_answers(self):
+        """Set incorrect answers for the song question."""
+        pass

@@ -23,3 +23,7 @@ class QuestionSongAlbum(AbstractQuestion):
     def display_question(self):
         """Get a song question."""
         return f"In which album is the song '{self.song_name}' in?"
+
+    def set_incorrect_answers(self):
+        """Set incorrect answers for the song question."""
+        pass

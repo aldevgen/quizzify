@@ -22,7 +22,13 @@ class AbstractQuestion(ABC):
 
     def get_incorrect_answers(self) -> List:
         """Abstract method to get the incorrect answers."""
+        self.set_incorrect_answers()
         return self.incorrect_answers
+
+    @abstractmethod
+    def set_incorrect_answers(self):
+        """Set the incorrect answers."""
+        pass
 
     def get_all_answers(self) -> List:
         """Abstract method to get all answers."""
