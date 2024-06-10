@@ -1,11 +1,14 @@
 from dotenv import load_dotenv
 
+from quizzify.crud import albums as crud_albums
 from quizzify.crud import artists as crud
 from quizzify.spotify.spotify_requests import (
+    spotify_get_album,
+    spotify_get_artist_albums,
     spotify_get_user_id,
     spotify_get_user_top_artists,
 )
-from quizzify.utils.schemas import Artist, TimeRange
+from quizzify.utils.schemas import Album, Artist, TimeRange
 
 # load environment variables
 load_dotenv()
@@ -45,13 +48,26 @@ def get_top_artists(
 
     for artist in user_top_artists:
         current_artist_id = artist["id"]
+        # check if artist is already in the database
         if current_artist_id not in artists_ids:
             # add current artist to the list of artists in the database
             artists_ids.append(current_artist_id)
             crud.insert_artist(
                 artist=Artist(**artist),
             )
-        crud.insert_artist_user(
+            # fetch artist's albums from Spotify
+            artist_albums_ids = spotify_get_artist_albums(
+                artist_id=current_artist_id,
+            )
+            for album_id in artist_albums_ids:
+                album_info = spotify_get_album(
+                    album_id=album_id,
+                )
+                crud_albums.insert_album(
+                    album=Album.model_validate(album_info),
+                    artist_id=current_artist_id,
+                )
+        crud.insert_top_artist_user(
             artist_id=current_artist_id,
             user_id=user_id,
         )

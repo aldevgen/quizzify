@@ -75,7 +75,7 @@ def get_top_songs(
                     crud_artists.insert_artist(
                         artist=Artist.model_validate(artist_info),
                     )
-                crud_artists.insert_artist_user(
+                crud_artists.insert_top_artist_user(
                     artist_id=current_artist_id,
                     user_id=user_id,
                 )
