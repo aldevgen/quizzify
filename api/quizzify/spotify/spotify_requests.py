@@ -186,3 +186,80 @@ def spotify_get_user_id():
             status_code=response.status_code,
             detail="Failed to retrieve Spotify user ID",
         )
+
+
+def spotify_get_artist_albums_ids(artist_id: str):
+    """Get the artist's albums IDs from Spotify.
+
+    Parameters
+    ----------
+    artist_id : str
+        The Spotify ID for the artist.
+
+    Returns
+    -------
+    list
+        A list of the artist's albums IDs.
+    """
+    headers = spotify_headers()
+    api_url = f"{SPOTIFY_BASE_URL}/artists/{artist_id}/albums"
+    payload = {
+        "limit": 10,
+        "include_groups": "album,single",
+    }
+    response = requests.get(
+        api_url,
+        headers=headers,
+        params=payload,
+        timeout=120,
+    )
+
+    if response.status_code == 200:
+        raw_artist_albums_ids = response.json()["items"]
+        artist_albums_ids = [album["id"] for album in raw_artist_albums_ids]
+        return artist_albums_ids
+    else:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=f"Failed to retrieve artist '{artist_id}' albums",
+        )
+
+
+def spotify_get_related_artists(artist_id: str):
+    """Get the related artists for an artist from Spotify.
+
+    Parameters
+    ----------
+    artist_id : str
+        The Spotify ID for the artist.
+
+    Returns
+    -------
+    list
+        A list of the related artists.
+    """
+    headers = spotify_headers()
+    api_url = f"{SPOTIFY_BASE_URL}/artists/{artist_id}/related-artists"
+    response = requests.get(
+        api_url,
+        headers=headers,
+        timeout=120,
+    )
+
+    if response.status_code == 200:
+        raw_related_artists = response.json()["artists"]
+        related_artists = []
+        for raw_artist in raw_related_artists:
+            current_artist = {
+                "id": raw_artist["id"],
+                "name": raw_artist["name"],
+                "popularity": raw_artist["popularity"],
+                "genres": raw_artist["genres"],
+            }
+            related_artists.append(current_artist)
+        return related_artists
+    else:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=f"Failed to retrieve related artists for '{artist_id}'",
+        )
