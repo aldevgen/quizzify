@@ -34,7 +34,11 @@ class QuestionAlbumArtist(AbstractQuestion):
         return f"Which artist wrote the {self.album_name} album?"
 
     def set_incorrect_answers(self):
-        """Set incorrect answers for the album question."""
+        """Set incorrect answers for the album artist question.
+
+        This method uses the Spotify API to get related artists to the artist of the
+        album. Then it randomly selects 3 of these artists to be the incorrect answers.
+        """
         related_artists = spotify_get_related_artists(artist_id=self.artist_id)
         related_artist_names = [artist["name"] for artist in related_artists]
         self.incorrect_answers = random.sample(related_artist_names, k=3)
