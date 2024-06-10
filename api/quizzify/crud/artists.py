@@ -35,12 +35,18 @@ def get_random_artist() -> Dict:
         A random album.
     """
     query = sql.SQL(
-        "SELECT id, name, popularity, genres, image_url FROM artists "
+        "SELECT "
+        "albums.id as album_id, albums.name as album_name, "
+        "artists.id as artist_id, artists.name as artist_name, "
+        "artists.popularity, artists.genres, artists.image_url "
+        "FROM artists "
+        "LEFT JOIN albums "
+        "ON albums.artist_id = artists.id "
         "OFFSET floor(random() * (SELECT COUNT(*) FROM artists)) "
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
-        random_artist = executor.execute(query, fetch=True)
+        random_artist = executor.execute(query, fetch=True, one=True)
     return random_artist
 
 
@@ -73,7 +79,7 @@ def insert_artist(
         executor.execute(query=query, variables=variables)
 
 
-def insert_artist_user(
+def insert_top_artist_user(
     artist_id: str,
     user_id: str,
 ):

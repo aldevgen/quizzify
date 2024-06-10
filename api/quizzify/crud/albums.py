@@ -34,17 +34,17 @@ def get_random_album():
         A random album.
     """
     query = sql.SQL(
-        "SELECT albums.id as album_id, albums.name as album_name, "
-        "albums.popularity, albums.release_year, albums.total_tracks, "
+        "SELECT albums.id as album_id, albums.name as album_name, albums.popularity, "
+        "albums.release_year, albums.release_decade, albums.total_tracks, "
         "albums.image_url, "
         "artists.id as artist_id, artists.name as artist_name "
         "FROM albums "
         "JOIN artists ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums))"
+        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums)) "
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:
-        random_album = executor.execute(query, fetch=True)
+        random_album = executor.execute(query, fetch=True, one=True)
     return random_album
 
 
