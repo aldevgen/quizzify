@@ -20,7 +20,7 @@ class QuestionSongAlbum(AbstractQuestion):
         self.correct_answer = answer
         self.question_type = SongQuestionType.SONG_ALBUM
 
-    def display_question(self):
+    def display_question(self) -> str:
         """Get a song question."""
         return f"In which album is the song '{self.song_name}' in?"
 
