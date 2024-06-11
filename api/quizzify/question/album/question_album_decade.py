@@ -34,9 +34,19 @@ class QuestionAlbumDecade(AbstractQuestion):
         self.all_decades.remove(self.correct_answer)
 
     def display_question(self) -> str:
-        """Get an album question."""
+        """Output the album question.
+
+        Returns
+        -------
+        str
+            The album question formatted as a string.
+        """
         return f"In which decade was the album '{self.album_name}' released?"
 
-    def set_incorrect_answers(self):
-        """Set incorrect answers for the album question."""
+    def set_incorrect_answers(self) -> None:
+        """Set incorrect answers for the album question.
+
+        This method randomly selects 3 decades to be the incorrect answers from
+        the list of all decades, excluding the correct answer.
+        """
         self.incorrect_answers = random.sample(self.all_decades, k=3)

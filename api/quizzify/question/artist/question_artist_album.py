@@ -13,9 +13,9 @@ class QuestionArtistAlbum(AbstractQuestion):
         self.album_name = album_name
         self.correct_answer = answer
 
-    def display_question(self):
+    def display_question(self) -> str:
         """Get an artist question."""
-        return f"Which album is from the artist '{self.artist_name}'?"
+        return f"Which album is from the artist {self.artist_name}?"
 
     def set_incorrect_answers(self):
         """Set incorrect answers for the artist question."""
