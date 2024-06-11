@@ -8,7 +8,7 @@ class AbstractQuestion(ABC):
 
     def __init__(self) -> None:
         """Abstract question constructor."""
-        self.correct_answer = None
+        self.correct_answer: str
         self.incorrect_answers: List[str] = []
 
     @abstractmethod
