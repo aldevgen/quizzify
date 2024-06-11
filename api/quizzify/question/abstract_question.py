@@ -22,7 +22,8 @@ class AbstractQuestion(ABC):
 
     def get_incorrect_answers(self) -> List:
         """Abstract method to get the incorrect answers."""
-        self.set_incorrect_answers()
+        if not self.incorrect_answers:
+            self.set_incorrect_answers()
         return self.incorrect_answers
 
     @abstractmethod
@@ -32,7 +33,9 @@ class AbstractQuestion(ABC):
 
     def get_all_answers(self) -> List:
         """Abstract method to get all answers."""
-        all_answers = [self.correct_answer] + self.get_incorrect_answers()
+        if not self.incorrect_answers:
+            self.set_incorrect_answers()
+        all_answers = [self.correct_answer] + self.incorrect_answers
         random.shuffle(all_answers)
         return all_answers
 
