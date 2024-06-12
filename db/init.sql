@@ -71,6 +71,25 @@ CREATE TABLE artists (
 );
 
 ----------------------------------------------------------------------------------------
+------------------------------- Relation Related Artists -------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name        |     data_type
+----------------------+-------------------
+-- artist_id          | character varying
+-- related_artist_id  | character varying
+
+
+DROP TABLE IF EXISTS related_artists CASCADE;
+
+CREATE TABLE related_artists (
+  artist_id VARCHAR(50),
+  related_artist_id VARCHAR(50),
+  FOREIGN KEY (artist_id) REFERENCES artists (id),
+  FOREIGN KEY (related_artist_id) REFERENCES artists (id)
+);
+
+----------------------------------------------------------------------------------------
 --------------------------------- Relation Top Artists ---------------------------------
 ----------------------------------------------------------------------------------------
 
