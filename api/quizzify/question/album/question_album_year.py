@@ -1,8 +1,6 @@
-import random
-from datetime import datetime
-
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.question_types import AlbumQuestionType
+from quizzify.utils.helpers import generate_random_years
 
 
 class QuestionAlbumYear(AbstractQuestion):
@@ -28,13 +26,14 @@ class QuestionAlbumYear(AbstractQuestion):
         return f"In which year was the album '{self.album_name}' released?"
 
     def set_incorrect_answers(self):
-        """Set incorrect answers for the album question."""
+        """Set incorrect answers for the album question.
+
+        This method generates 3 random years around the correct answer within the
+        range limit of more or less 20 years.
+        """
         range_limit = 20
-        year = int(self.correct_answer)
-        current_year = datetime.now().year
-        max_year = min(current_year, year + range_limit)
-        min_year = year - range_limit
-        incorrect_answers = [
-            str(random.randint(min_year, max_year)) for _ in range(0, 3)
-        ]
-        self.incorrect_answers = incorrect_answers
+        self.incorrect_answers = generate_random_years(
+            year=int(self.correct_answer),
+            range_limit=range_limit,
+            num_years=3,
+        )

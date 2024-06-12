@@ -1,8 +1,14 @@
+import logging
+import random
+
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.artist.question_artist_album import QuestionArtistAlbum
 from quizzify.question.factory.question_factory_interface import (
     QuestionFactoryInterface,
 )
+from quizzify.question.question_types import ArtistQuestionType
+
+logger = logging.getLogger(__name__)
 
 
 class ArtistQuestionFactory(QuestionFactoryInterface):
@@ -31,10 +37,13 @@ class ArtistQuestionFactory(QuestionFactoryInterface):
             The created artist question.
 
         """
-        album_name = kwargs.get("album_name")
-        artist_name = kwargs.get("artist_name")
+        question_types = ArtistQuestionType.get_items()
+        chosen_question = random.choice(question_types)
+        logger.info(f"Creating question {chosen_question.upper()} type.")
+
         return QuestionArtistAlbum(
-            album_name=album_name,
-            artist_name=artist_name,
-            answer=album_name,
+            artist_id=kwargs.get("artist_id"),
+            album_name=kwargs.get("album_name"),
+            artist_name=kwargs.get("artist_name"),
+            answer=kwargs.get("album_name"),
         )

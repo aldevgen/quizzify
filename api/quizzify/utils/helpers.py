@@ -1,5 +1,6 @@
 import base64
 import secrets
+from datetime import datetime
 from typing import Dict, List, Optional
 
 from email_validator import EmailNotValidError, validate_email
@@ -112,3 +113,37 @@ def get_highest_resolution_image(images: List[Dict]) -> Optional[Dict[str, str]]
             highest_resolution_image = image
 
     return highest_resolution_image
+
+
+def generate_random_years(
+    year: int,
+    range_limit: int,
+    num_years: int,
+) -> List[str]:
+    """Generate a list of random years within a range.
+
+    The maximum year is defined by the minimum between the current year and the
+    year plus the range limit. The minimum year is defined by the year minus the
+    range limit. Random years are generated within this range.
+
+    Parameters
+    ----------
+    year : int
+        The year to generate random years around.
+    range_limit : int
+        The range limit to generate random years.
+    num_years : int
+        The number of random years to generate.
+
+    Returns
+    -------
+    random_years : list
+        A list of random years.
+    """
+    current_year = datetime.now().year
+    min_year = year - range_limit
+    max_year = min(current_year, year + range_limit)
+    random_years = [
+        str(secrets.randbelow(max_year - min_year) + min_year) for _ in range(num_years)
+    ]
+    return random_years
