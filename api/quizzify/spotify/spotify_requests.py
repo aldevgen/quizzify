@@ -204,7 +204,7 @@ def spotify_get_artist_albums_ids(artist_id: str):
     headers = spotify_headers()
     api_url = f"{SPOTIFY_BASE_URL}/artists/{artist_id}/albums"
     payload = {
-        "limit": 10,
+        "limit": 5,
         "include_groups": "album,single",
     }
     response = requests.get(
@@ -250,11 +250,14 @@ def spotify_get_related_artists(artist_id: str):
         raw_related_artists = response.json()["artists"]
         related_artists = []
         for raw_artist in raw_related_artists:
+            best_image = get_highest_resolution_image(images=raw_artist["images"])
             current_artist = {
                 "id": raw_artist["id"],
                 "name": raw_artist["name"],
                 "popularity": raw_artist["popularity"],
                 "genres": raw_artist["genres"],
+                "followers": raw_artist["followers"]["total"],
+                "image_url": best_image["url"] if best_image else None,
             }
             related_artists.append(current_artist)
         return related_artists
