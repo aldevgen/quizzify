@@ -6,6 +6,7 @@ from quizzify.crud import artists as crud_artists
 from quizzify.crud import songs as crud_songs
 from quizzify.question.factory.question_factory import QuestionFactory
 from quizzify.question.question_types import QuestionType
+from quizzify.spotify.spotify_requests import spotify_get_user_id
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +27,12 @@ def create_question():
     factory_type = random.choice(question_types)
     logger.info(f"Creating question {factory_type.upper()} type.")
 
+    # get the user's Spotify ID
+    user_id = spotify_get_user_id()
     # create a question based on the chosen question type
     question = None
     if factory_type == QuestionType.ALBUM.value:
-        album_info = crud_albums.get_random_album()
+        album_info = crud_albums.get_random_album(user_id=user_id)
         question = qf.create_question(
             factory_type=factory_type,
             album_id=album_info["album_id"],
@@ -40,9 +43,7 @@ def create_question():
             release_decade=album_info["release_decade"],
         )
     elif factory_type == QuestionType.ARTIST.value:
-        artist_info = crud_artists.get_random_artist(
-            user_id="31fg2ntukyb3ep4pt6a7tk2fapsq"
-        )
+        artist_info = crud_artists.get_random_artist(user_id=user_id)
         question = qf.create_question(
             factory_type=factory_type,
             artist_id=artist_info["artist_id"],
@@ -52,7 +53,7 @@ def create_question():
             genres=artist_info["genres"],
         )
     elif factory_type == QuestionType.SONG.value:
-        song_info = crud_songs.get_random_song()
+        song_info = crud_songs.get_random_song(user_id=user_id)
         question = qf.create_question(
             factory_type=factory_type,
             album_id=song_info["album_id"],
