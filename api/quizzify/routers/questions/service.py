@@ -40,9 +40,9 @@ def create_question():
             release_decade=album_info["release_decade"],
         )
     elif factory_type == QuestionType.ARTIST.value:
-        artist_info = crud_artists.get_random_artist()
-        print(f"\nArtist info: {artist_info}\n")
-        print(f"\nArtist ID: {artist_info['artist_id']}\n")
+        artist_info = crud_artists.get_random_artist(
+            user_id="31fg2ntukyb3ep4pt6a7tk2fapsq"
+        )
         question = qf.create_question(
             factory_type=factory_type,
             artist_id=artist_info["artist_id"],
@@ -53,11 +53,11 @@ def create_question():
         )
     elif factory_type == QuestionType.SONG.value:
         song_info = crud_songs.get_random_song()
-        # print(f"\nSong info: {song_info}\n")
         question = qf.create_question(
             factory_type=factory_type,
             album_id=song_info["album_id"],
             album_name=song_info["album_name"],
+            artist_id=song_info["artist_id"],
             artist_name=song_info["artist_name"],
             song_id=song_info["song_id"],
             song_name=song_info["song_name"],

@@ -56,7 +56,7 @@ def get_top_songs(
         raw_top_songs = response.json()["items"]
         top_songs = []
 
-        # get artists and songs IDs from the database
+        # get albums, artists and songs IDs from the database
         albums_ids = crud_albums.get_albums_ids()
         artists_ids = crud_artists.get_artists_ids()
         song_ids = crud_songs.get_songs_ids()
@@ -112,7 +112,6 @@ def get_top_songs(
                         "name": raw_top_songs[song]["name"],
                         "popularity": raw_top_songs[song]["popularity"],
                         "duration_ms": raw_top_songs[song]["duration_ms"],
-                        # "preview_url": raw_top_songs[song]["preview_url"],
                         "track_number": raw_top_songs[song]["track_number"],
                         "album_id": raw_top_songs[song]["album"]["id"],
                         "artist_id": raw_top_songs[song]["artists"][artist]["id"],

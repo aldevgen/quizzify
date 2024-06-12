@@ -4,7 +4,8 @@ from quizzify.crud import albums as crud_albums
 from quizzify.crud import artists as crud
 from quizzify.spotify.spotify_requests import (
     spotify_get_album,
-    spotify_get_artist_albums,
+    spotify_get_artist_albums_ids,
+    spotify_get_related_artists,
     spotify_get_user_id,
     spotify_get_user_top_artists,
 )
@@ -46,8 +47,12 @@ def get_top_artists(
         limit=limit,
     )
 
+    # get albums IDs from the database
+    albums_ids = crud_albums.get_albums_ids()
+
     for artist in user_top_artists:
         current_artist_id = artist["id"]
+
         # check if artist is already in the database
         if current_artist_id not in artists_ids:
             # add current artist to the list of artists in the database
@@ -56,21 +61,60 @@ def get_top_artists(
                 artist=Artist(**artist),
             )
             # fetch artist's albums from Spotify
-            artist_albums_ids = spotify_get_artist_albums(
+            artist_albums_ids = spotify_get_artist_albums_ids(
                 artist_id=current_artist_id,
             )
             for album_id in artist_albums_ids:
-                album_info = spotify_get_album(
-                    album_id=album_id,
-                )
-                crud_albums.insert_album(
-                    album=Album.model_validate(album_info),
-                    artist_id=current_artist_id,
-                )
+                if album_id not in albums_ids:
+                    album_info = spotify_get_album(
+                        album_id=album_id,
+                    )
+                    crud_albums.insert_album(
+                        album=Album.model_validate(album_info),
+                        artist_id=current_artist_id,
+                    )
+                    albums_ids.append(album_id)
+
+        # insert artist as top artist for the user
         crud.insert_top_artist_user(
             artist_id=current_artist_id,
             user_id=user_id,
         )
+
+        # fetch related artists from Spotify
+        related_artists = spotify_get_related_artists(
+            artist_id=current_artist_id,
+        )
+
+        for related_artist in related_artists:
+            # check if related artist is already in the database
+            if related_artist["id"] not in artists_ids:
+                # add related artist to the list of artists in the database
+                artists_ids.append(related_artist["id"])
+                crud.insert_artist(
+                    artist=Artist(**related_artist),
+                )
+                # fetch related artist's albums from Spotify
+                related_artist_albums_ids = spotify_get_artist_albums_ids(
+                    artist_id=related_artist["id"],
+                )
+
+                for album_id in related_artist_albums_ids:
+                    if album_id not in albums_ids:
+                        albums_ids.append(album_id)
+                        album_info = spotify_get_album(
+                            album_id=album_id,
+                        )
+                        crud_albums.insert_album(
+                            album=Album.model_validate(album_info),
+                            artist_id=related_artist["id"],
+                        )
+                        albums_ids.append(album_id)
+            # insert related artist into the database
+            crud.insert_related_artist_user(
+                artist_id=current_artist_id,
+                related_artist_id=related_artist["id"],
+            )
 
     return user_top_artists
 
