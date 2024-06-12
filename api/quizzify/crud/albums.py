@@ -48,6 +48,41 @@ def get_random_album():
     return random_album
 
 
+def get_random_album_by_artist_id(artist_id: str):
+    """Get a random album from the database by artist ID.
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+
+    Returns
+    -------
+    dict
+        A random album.
+    """
+    query = sql.SQL(
+        "SELECT albums.name as album_name "
+        "FROM artists "
+        "JOIN albums "
+        "ON albums.artist_id = artists.id "
+        "WHERE artists.id = %(artist_id)s "
+        "OFFSET floor(random() * ("
+        "SELECT COUNT(*) "
+        "FROM albums "
+        "WHERE artist_id = %(artist_id)s)) "
+        "LIMIT 1;"
+    )
+    variables = {
+        "artist_id": artist_id,
+    }
+    with QueryExecutor() as executor:
+        random_album = executor.execute(
+            query, variables=variables, fetch=True, one=True
+        )
+    return random_album
+
+
 def insert_album(
     album: Album,
     artist_id: str,

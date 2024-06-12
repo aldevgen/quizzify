@@ -26,8 +26,13 @@ def get_artists_ids() -> List[str]:
     return artists_ids
 
 
-def get_random_artist() -> Dict:
+def get_random_artist(user_id: str) -> Dict:
     """Get a random album from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
 
     Returns
     -------
@@ -40,13 +45,53 @@ def get_random_artist() -> Dict:
         "artists.id as artist_id, artists.name as artist_name, "
         "artists.popularity, artists.genres, artists.image_url "
         "FROM artists "
+        "LEFT JOIN top_artists "
+        "ON artists.id = top_artists.artist_id "
         "LEFT JOIN albums "
         "ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM artists)) "
+        "WHERE top_artists.user_id = %(user_id)s "
+        "OFFSET floor(random() * ("
+        "SELECT COUNT(*) FROM top_artists WHERE user_id = %(user_id)s)"
+        ") "
         "LIMIT 1;"
     )
+    variables = {
+        "user_id": user_id,
+    }
     with QueryExecutor() as executor:
-        random_artist = executor.execute(query, fetch=True, one=True)
+        random_artist = executor.execute(
+            query, variables=variables, fetch=True, one=True
+        )
+    return random_artist
+
+
+def get_random_related_artist(
+    artist_id: str,
+    nb_artists: int = 3,
+) -> Dict:
+    """Get a random album from the database.
+
+    Returns
+    -------
+    dict
+        A random album.
+    """
+    query = sql.SQL(
+        "SELECT related_artist_id "
+        "FROM related_artists "
+        "WHERE artist_id = %(artist_id)s "
+        "OFFSET floor(random() * ( "
+        "SELECT COUNT(*) FROM related_artists "
+        "WHERE artist_id = %(artist_id)s "
+        ")) "
+        "LIMIT %(nb_artists)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+        "nb_artists": nb_artists,
+    }
+    with QueryExecutor() as executor:
+        random_artist = executor.execute(query, variables=variables, fetch=True)
     return random_artist
 
 
@@ -101,6 +146,33 @@ def insert_top_artist_user(
     variables = {
         "artist_id": artist_id,
         "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables)
+
+
+def insert_related_artist_user(
+    artist_id: str,
+    related_artist_id: str,
+):
+    """Insert an artist as related to a listened artist.
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+    related_artist_id : str
+        The related artist's ID.
+    """
+    query = sql.SQL(
+        "INSERT INTO related_artists "
+        "(artist_id, related_artist_id) "
+        "VALUES "
+        "(%(artist_id)s, %(related_artist_id)s);"
+    )
+    variables = {
+        "artist_id": artist_id,
+        "related_artist_id": related_artist_id,
     }
     with QueryExecutor() as executor:
         executor.execute(query, variables)
