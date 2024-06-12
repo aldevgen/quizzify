@@ -24,13 +24,14 @@ class TestCrudArtists(unittest.TestCase):
 
     def test_get_random_artist(self):
         # Given
+        user_id = "abc123def456"
         expected_result = ["Måneskin", "Linkin Park", "Matthew Wilder"]
 
         # When
-        result = crud_artists.get_random_artist()
+        result = crud_artists.get_random_artist(user_id=user_id)
 
         # Then
-        self.assertIn(result[0]["name"], expected_result)
+        self.assertIn(result["artist_name"], expected_result)
 
     def test_insert_artist(self):
         # Given

@@ -32,7 +32,7 @@ class TestCrudAlbums(unittest.TestCase):
         result = crud_albums.get_random_album()
 
         # Then
-        self.assertIn(result[0]["album_name"], expected_result)
+        self.assertIn(result["album_name"], expected_result)
 
     def test_insert_album(self):
         # Given
