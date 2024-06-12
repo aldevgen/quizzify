@@ -25,8 +25,13 @@ def get_albums_ids():
     return albums_ids
 
 
-def get_random_album():
+def get_random_album(user_id: str):
     """Get a random album from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
 
     Returns
     -------
@@ -34,17 +39,38 @@ def get_random_album():
         A random album.
     """
     query = sql.SQL(
-        "SELECT albums.id as album_id, albums.name as album_name, albums.popularity, "
-        "albums.release_year, albums.release_decade, albums.total_tracks, "
+        "SELECT "
+        "albums.id as album_id, "
+        "albums.name as album_name, "
+        "albums.popularity, "
+        "albums.release_year, "
+        "albums.release_decade, "
+        "albums.total_tracks, "
         "albums.image_url, "
-        "artists.id as artist_id, artists.name as artist_name "
-        "FROM albums "
-        "JOIN artists ON albums.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM albums)) "
+        "artists.id as artist_id, "
+        "artists.name as artist_name "
+        "FROM top_albums "
+        "LEFT JOIN albums "
+        "ON albums.id = top_albums.album_id "
+        "LEFT JOIN artists "
+        "ON artists.id = albums.artist_id "
+        "WHERE top_albums.user_id = %(user_id)s "
+        "OFFSET floor(random() * ("
+        "SELECT COUNT(*) FROM top_albums "
+        "WHERE user_id = %(user_id)s"
+        ")) "
         "LIMIT 1;"
     )
+    variables = {
+        "user_id": user_id,
+    }
     with QueryExecutor() as executor:
-        random_album = executor.execute(query, fetch=True, one=True)
+        random_album = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+            one=True,
+        )
     return random_album
 
 
