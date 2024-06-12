@@ -37,5 +37,5 @@ class AlbumQuestionType(ExtendedEnum):
 class ArtistQuestionType(ExtendedEnum):
     """Artist question type class."""
 
-    ARTIST_GENRE = "artist_genre"
+    # ARTIST_GENRE = "artist_genre"
     ARTIST_ALBUM = "artist_album"

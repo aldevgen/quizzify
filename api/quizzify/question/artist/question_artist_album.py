@@ -21,10 +21,11 @@ class QuestionArtistAlbum(AbstractQuestion):
         return f"Which album is from the artist {self.artist_name}?"
 
     def set_incorrect_answers(self):
-        """Set incorrect answers for the artist album question."""
-        # TODO: verify that the incorrect answers are not the same as the correct answer
-        # TODO: verify that the incorrect answers are not the same as each other
-        # TODO: verify that the incorrect answers are not from the same artist
+        """Set incorrect answers for the artist album question.
+
+        This method gets a list of random artists related to the current artist
+        and then gets a random album from these artists.
+        """
         artist_ids = crud_artists.get_random_related_artist(self.artist_id)
         album_names = [
             crud_albums.get_random_album_by_artist_id(
