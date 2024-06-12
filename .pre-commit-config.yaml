@@ -48,13 +48,9 @@ repos:
     # Ruff version.
     rev: v0.2.2
     hooks:
-      # Run the linter.
-      - id: ruff
-        name: Ruff linter
-        args: [ --fix ]
-      # Run the formatter.
+      # Ruff formatter
       - id: ruff-format
-        name: Ruff formatter
+        name: Ruff
 
   # flake8
   - repo: https://github.com/PyCQA/flake8
@@ -81,26 +77,15 @@ repos:
   - repo: https://github.com/sqlfluff/sqlfluff
     rev: 3.0.7
     hooks:
-      - id: sqlfluff-lint
-        name: SQLFluff linter
-        # Set `--processes 0` to use maximum parallelism
-        entry: sqlfluff lint --processes 0
-        language: python
-        files: \.(sql)$
-        description: "Lints sql files with `SQLFluff`"
-        types: [ sql ]
-        require_serial: true
-        additional_dependencies: [ ]
       - id: sqlfluff-fix
-        name: SQLFluff fix
+        name: SQLFluff
         # Set a couple of default flags:
         #  - `--show-lint-violations` shows issues to not require running `sqlfluff lint`
         #  - `--processes 0` to use maximum parallelism
-        # By default, this hook applies all rules.
         entry: sqlfluff fix --show-lint-violations --processes 0
         language: python
         files: \.(sql)$
-        description: "Fixes sql lint errors with `SQLFluff`"
+        description: "Fixes sql lint errors with SQLFluff"
         types: [ sql ]
         require_serial: true
         additional_dependencies: [ ]
