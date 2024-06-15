@@ -1,11 +1,19 @@
 import logging
+import os
 from typing import Any, Dict, Optional
 
+import psycopg2
+from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
 
-from quizzify.db.session import connect_to_db
-
 logger = logging.getLogger(__name__)
+load_dotenv()
+
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
+POSTGRES_DB = os.environ.get("POSTGRES_DB")
 
 
 class QueryExecutor:
@@ -13,7 +21,7 @@ class QueryExecutor:
 
     def __init__(self):
         """Initialize the QueryExecutor class."""
-        self.connection = connect_to_db()
+        self.connection = self.connect_to_db()
 
     def __enter__(self):
         """Make a database connection and return the cursor."""
@@ -24,6 +32,25 @@ class QueryExecutor:
         """Close the cursor and the connection to the database."""
         self.cursor.close()
         self.connection.close()
+
+    @staticmethod
+    def connect_to_db():
+        """
+        Connect to the PostgreSQL database.
+
+        Returns
+        -------
+        connection : psycopg2.extensions.connection
+            The connection to the PostgreSQL database.
+        """
+        connection = psycopg2.connect(
+            dbname=POSTGRES_DB,
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            host=POSTGRES_HOST,
+            port=POSTGRES_PORT,
+        )
+        return connection
 
     def execute(
         self,
