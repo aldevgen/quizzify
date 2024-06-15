@@ -16,7 +16,7 @@ def get_random_artist_song():
         "FROM songs as songs "
         "LEFT JOIN artists as artists "
         "ON songs.artist_id = artists.id "
-        "OFFSET floor(random() * (SELECT COUNT(*) FROM songs)) "
+        "ORDER BY RANDOM() "
         "LIMIT 1;"
     )
     with QueryExecutor() as executor:

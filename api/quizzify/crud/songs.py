@@ -51,11 +51,7 @@ def get_random_song(user_id: str):
         "ON songs.artist_id = artists.id "
         "LEFT JOIN albums ON songs.album_id = albums.id "
         "WHERE user_id = %(user_id)s "
-        "OFFSET floor(random() * ("
-        "SELECT COUNT(*) "
-        "FROM top_songs "
-        "WHERE user_id = %(user_id)s"
-        ")) "
+        "ORDER BY RANDOM() "
         "LIMIT 1;"
     )
     variables = {

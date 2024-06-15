@@ -50,9 +50,7 @@ def get_random_artist(user_id: str) -> Dict:
         "LEFT JOIN albums "
         "ON albums.artist_id = artists.id "
         "WHERE top_artists.user_id = %(user_id)s "
-        "OFFSET floor(random() * ("
-        "SELECT COUNT(*) FROM top_artists WHERE user_id = %(user_id)s)"
-        ") "
+        "ORDER BY RANDOM() "
         "LIMIT 1;"
     )
     variables = {
@@ -80,10 +78,7 @@ def get_random_related_artist(
         "SELECT related_artist_id "
         "FROM related_artists "
         "WHERE artist_id = %(artist_id)s "
-        "OFFSET floor(random() * ( "
-        "SELECT COUNT(*) FROM related_artists "
-        "WHERE artist_id = %(artist_id)s "
-        ")) "
+        "ORDER BY RANDOM() "
         "LIMIT %(nb_artists)s;"
     )
     variables = {

@@ -55,10 +55,7 @@ def get_random_album(user_id: str):
         "LEFT JOIN artists "
         "ON artists.id = albums.artist_id "
         "WHERE top_albums.user_id = %(user_id)s "
-        "OFFSET floor(random() * ("
-        "SELECT COUNT(*) FROM top_albums "
-        "WHERE user_id = %(user_id)s"
-        ")) "
+        "ORDER BY RANDOM() "
         "LIMIT 1;"
     )
     variables = {
@@ -74,8 +71,8 @@ def get_random_album(user_id: str):
     return random_album
 
 
-def get_random_album_by_artist_id(artist_id: str):
-    """Get a random album from the database by artist ID.
+def get_artists_albums_ids(artist_id: str):
+    """Get all the albums from the database by artist ID.
 
     Parameters
     ----------
@@ -84,8 +81,81 @@ def get_random_album_by_artist_id(artist_id: str):
 
     Returns
     -------
-    dict
-        A random album.
+    list
+        A list of all the artist's albums.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "albums.id as album_id "
+        "FROM albums "
+        "LEFT JOIN artists "
+        "ON artists.id = albums.artist_id "
+        "WHERE artist_id = %(artist_id)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+    }
+    with QueryExecutor() as executor:
+        raw_albums = executor.execute(query, variables=variables, fetch=True)
+        albums = [album["album_id"] for album in raw_albums]
+    return albums
+
+
+def get_artists_albums(artist_id: str):
+    """Get all the albums from the database by artist ID.
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+
+    Returns
+    -------
+    list
+        A list of all the artist's albums.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "albums.id as album_id, "
+        "albums.name as album_name, "
+        "artists.id as artist_id, "
+        "artists.name as artist_name "
+        "FROM albums "
+        "LEFT JOIN artists "
+        "ON artists.id = albums.artist_id "
+        "WHERE artist_id = %(artist_id)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+    }
+    with QueryExecutor() as executor:
+        albums = executor.execute(query, variables=variables, fetch=True)
+    return albums
+
+
+def get_random_album_name_by_artist_id(
+    artist_id: str,
+    exclude_album_id: str,
+    limit: int = 3,
+) -> list:
+    """Get a random album from the database by artist ID.
+
+    This method fetches random albums from the database by artist ID by excluding the
+    current album.
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+    exclude_album_id : str
+        The album's ID to exclude.
+    limit : int, optional
+        The number of albums to return, by default 3.
+
+    Returns
+    -------
+    list
+        A list containing the names of the random albums.
     """
     query = sql.SQL(
         "SELECT albums.name as album_name "
@@ -93,20 +163,23 @@ def get_random_album_by_artist_id(artist_id: str):
         "JOIN albums "
         "ON albums.artist_id = artists.id "
         "WHERE artists.id = %(artist_id)s "
-        "OFFSET floor(random() * ("
-        "SELECT COUNT(*) "
-        "FROM albums "
-        "WHERE artist_id = %(artist_id)s)) "
-        "LIMIT 1;"
+        "AND albums.id != %(album_id)s "
+        "ORDER BY RANDOM() "
+        "LIMIT %(limit)s;"
     )
     variables = {
         "artist_id": artist_id,
+        "album_id": exclude_album_id,
+        "limit": limit,
     }
     with QueryExecutor() as executor:
-        random_album = executor.execute(
-            query, variables=variables, fetch=True, one=True
+        raw_random_albums = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
         )
-    return random_album
+        random_albums = [album["album_name"] for album in raw_random_albums]
+    return random_albums
 
 
 def insert_album(
