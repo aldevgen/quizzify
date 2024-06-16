@@ -17,6 +17,7 @@ class QuestionAlbumDecade(AbstractQuestion):
     ) -> None:
         """Album question constructor."""
         super().__init__()
+        self.incorrect_answers = []
         self.album_name: str = album_name
         self.artist_name: str = artist_name
         self.release_decade: str = release_decade

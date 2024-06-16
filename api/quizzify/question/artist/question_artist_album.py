@@ -10,6 +10,7 @@ class QuestionArtistAlbum(AbstractQuestion):
     def __init__(self, artist_id, artist_name, album_name, answer) -> None:
         """Artist question constructor."""
         super().__init__()
+        self.incorrect_answers = []
         self.question_type = ArtistQuestionType.ARTIST_ALBUM
         self.artist_id = artist_id
         self.artist_name = artist_name

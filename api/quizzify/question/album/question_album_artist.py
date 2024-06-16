@@ -1,8 +1,12 @@
+import logging
 import random
 
+from quizzify.crud import artists as crud_artists
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.question_types import AlbumQuestionType
 from quizzify.spotify.spotify_requests import spotify_get_related_artists
+
+logger = logging.getLogger(__name__)
 
 
 class QuestionAlbumArtist(AbstractQuestion):
@@ -20,6 +24,7 @@ class QuestionAlbumArtist(AbstractQuestion):
     ) -> None:
         """Album question constructor."""
         super().__init__()
+        self.incorrect_answers = []
         self.album_id = album_id
         self.album_name = album_name
         self.artist_id = artist_id
