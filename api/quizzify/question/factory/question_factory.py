@@ -45,4 +45,7 @@ class QuestionFactory:
         else:
             raise ValueError("Unvalid factory type")
 
-        return factory.create_question(**kwargs)
+        question = factory.create_question(**kwargs)
+        logger.info(f"Question created: {question.display_question()}")
+        logger.info(f"Correct answer: {question.correct_answer}")
+        return question

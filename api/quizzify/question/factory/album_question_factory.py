@@ -1,7 +1,6 @@
 import logging
 import random
 
-from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.album.question_album_artist import QuestionAlbumArtist
 from quizzify.question.album.question_album_decade import QuestionAlbumDecade
 from quizzify.question.album.question_album_year import QuestionAlbumYear
@@ -24,7 +23,7 @@ class AlbumQuestionFactory(QuestionFactoryInterface):
     """
 
     @staticmethod
-    def create_question(**kwargs) -> AbstractQuestion:
+    def create_question(**kwargs):
         """
         Create a question based on the album question type.
 
@@ -40,15 +39,11 @@ class AlbumQuestionFactory(QuestionFactoryInterface):
         question = None
 
         if chosen_question == AlbumQuestionType.ALBUM_YEAR.value:
-            album_name = kwargs.get("album_name")
-            artist_name = kwargs.get("artist_name")
-            song_name = kwargs.get("song_name")
-            album_year = kwargs.get("album_year")
             question = QuestionAlbumYear(
-                album_name=album_name,
-                artist_name=artist_name,
-                song_name=song_name,
-                answer=album_year,
+                album_name=kwargs.get("album_name"),
+                artist_name=kwargs.get("artist_name"),
+                song_name=kwargs.get("song_name"),
+                answer=kwargs.get("album_year"),
             )
         elif chosen_question == AlbumQuestionType.ALBUM_ARTIST.value:
             question = QuestionAlbumArtist(
@@ -61,13 +56,10 @@ class AlbumQuestionFactory(QuestionFactoryInterface):
                 answer=kwargs.get("artist_name"),
             )
         elif chosen_question == AlbumQuestionType.ALBUM_DECADE.value:
-            album_name = kwargs.get("album_name")
-            artist_name = kwargs.get("artist_name")
-            release_decade = kwargs.get("release_decade")
             question = QuestionAlbumDecade(
-                album_name=album_name,
-                artist_name=artist_name,
-                release_decade=release_decade,
-                answer=release_decade,
+                album_name=kwargs.get("album_name"),
+                artist_name=kwargs.get("artist_name"),
+                release_decade=kwargs.get("release_decade"),
+                answer=kwargs.get("release_decade"),
             )
         return question
