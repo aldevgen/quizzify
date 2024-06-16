@@ -37,19 +37,21 @@ class QuestionSongArtist(AbstractQuestion):
 
     def set_incorrect_answers(self):
         """Set incorrect answers for the song question."""
-        related_artists = crud_artists.get_random_related_artist(
+        related_artists = crud_artists.get_random_related_artist_ids(
             artist_id=self.artist_id,
             nb_artists=3,
         )
         if related_artists:
-            logger.info("Fetching related artists from DB.")
+            logger.info(f"Fetching {self.artist_name}'s related artists from DB.")
             related_artist_names = [
                 crud_artists.get_artist_name(artist_id=artist_id["related_artist_id"])
                 for artist_id in related_artists
             ]
             self.incorrect_answers = related_artist_names
         else:
-            logger.info("Fetching related artists from Spotify API.")
+            logger.info(
+                f"Fetching {self.artist_name}'s related artists from Spotify API."
+            )
             related_artists = spotify_get_related_artists(artist_id=self.artist_id)
             related_artist_names = [artist["name"] for artist in related_artists]
             self.incorrect_answers = random.sample(related_artist_names, k=3)
