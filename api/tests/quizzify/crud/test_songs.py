@@ -22,6 +22,7 @@ class TestCrudSong(unittest.TestCase):
 
     def test_get_random_song(self):
         # Given
+        user_id = "abc123def456"
         expected_song_name = [
             "Break My Stride",
             "Beggin'",
@@ -38,7 +39,7 @@ class TestCrudSong(unittest.TestCase):
             "Linkin Park",
         ]
         # When
-        result = crud_songs.get_random_song()
+        result = crud_songs.get_random_song(user_id=user_id)
 
         # Then
         self.assertIn(member=result["song_name"], container=expected_song_name)

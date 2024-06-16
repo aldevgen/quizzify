@@ -22,6 +22,7 @@ class TestCrudAlbums(unittest.TestCase):
 
     def test_get_random_album(self):
         # Given
+        user_id = "abc123def456"
         expected_result = [
             "I Don't Speak The Language",
             "Il ballo della vita",
@@ -29,7 +30,7 @@ class TestCrudAlbums(unittest.TestCase):
         ]
 
         # When
-        result = crud_albums.get_random_album()
+        result = crud_albums.get_random_album(user_id=user_id)
 
         # Then
         self.assertIn(result["album_name"], expected_result)
