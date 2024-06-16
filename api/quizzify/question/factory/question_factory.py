@@ -1,8 +1,12 @@
+import logging
+
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.factory.album_question_factory import AlbumQuestionFactory
 from quizzify.question.factory.artist_question_factory import ArtistQuestionFactory
 from quizzify.question.factory.song_question_factory import SongQuestionFactory
 from quizzify.question.question_types import QuestionType
+
+logger = logging.getLogger(__name__)
 
 
 class QuestionFactory:

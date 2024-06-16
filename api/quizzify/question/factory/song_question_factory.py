@@ -1,7 +1,6 @@
 import logging
 import random
 
-from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.factory.question_factory_interface import (
     QuestionFactoryInterface,
 )
@@ -23,7 +22,7 @@ class SongQuestionFactory(QuestionFactoryInterface):
     """
 
     @staticmethod
-    def create_question(**kwargs) -> AbstractQuestion:
+    def create_question(**kwargs):
         """
         Create a question based on the song question type.
 
@@ -42,27 +41,23 @@ class SongQuestionFactory(QuestionFactoryInterface):
         logger.info(f"Creating question {chosen_question.upper()} type.")
 
         if chosen_question == SongQuestionType.SONG_ARTIST.value:
-            artist_id = kwargs.get("artist_id")
-            artist_name = kwargs.get("artist_name")
-            song_id = kwargs.get("song_id")
-            song_name = kwargs.get("song_name")
             return QuestionSongArtist(
-                artist_id=artist_id,
-                artist_name=artist_name,
-                song_id=song_id,
-                song_name=song_name,
-                answer=artist_name,
+                artist_id=kwargs.get("artist_id"),
+                artist_name=kwargs.get("artist_name"),
+                song_id=kwargs.get("song_id"),
+                song_name=kwargs.get("song_name"),
+                answer=kwargs.get("artist_name"),
             )
 
         elif chosen_question == SongQuestionType.SONG_ALBUM.value:
-            song_name = kwargs.get("song_name")
-            album_name = kwargs.get("album_name")
-            artist_name = kwargs.get("artist_name")
             return QuestionSongAlbum(
-                song_name=song_name,
-                artist_name=artist_name,
-                album_name=album_name,
-                answer=album_name,
+                album_id=kwargs.get("album_id"),
+                album_name=kwargs.get("album_name"),
+                artist_id=kwargs.get("artist_id"),
+                artist_name=kwargs.get("artist_name"),
+                song_id=kwargs.get("song_id"),
+                song_name=kwargs.get("song_name"),
+                answer=kwargs.get("album_name"),
             )
 
         else:
