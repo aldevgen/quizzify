@@ -218,7 +218,7 @@ def insert_album(
         executor.execute(query, variables)
 
 
-def insert_album_user(
+def insert_top_album_user(
     album_id: str,
     user_id: str,
 ):
