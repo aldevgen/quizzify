@@ -143,7 +143,7 @@ def get_top_songs(
         )
 
 
-def get_random_song():
+def get_random_song(user_id: str):
     """Get random songs from the database.
 
     Returns
@@ -151,5 +151,5 @@ def get_random_song():
     list
         A list of random songs.
     """
-    random_song = crud_songs.get_random_song()
+    random_song = crud_songs.get_random_song(user_id=user_id)
     return random_song

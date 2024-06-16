@@ -119,7 +119,7 @@ def get_top_artists(
     return user_top_artists
 
 
-def get_random_artist():
+def get_random_artist(user_id: str):
     """Get random artists from the database.
 
     Returns
@@ -127,5 +127,5 @@ def get_random_artist():
     list
         A list of random artists.
     """
-    random_artist = crud.get_random_artist()
+    random_artist = crud.get_random_artist(user_id=user_id)
     return random_artist

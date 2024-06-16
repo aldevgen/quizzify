@@ -63,5 +63,4 @@ def create_question():
             song_id=song_info["song_id"],
             song_name=song_info["song_name"],
         )
-
     return question.get_question()
