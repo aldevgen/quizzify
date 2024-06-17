@@ -37,6 +37,8 @@ services:
       - ./db/seeds.sql:/docker-entrypoint-initdb.d/seeds.sql
       # Mount the init script to create the database as an entrypoint to the container
       - postgres_data:/var/lib/postgresql/data
+      # Mount .pgpass file to avoid password prompt
+      - ./db/.pgpass:/root/.pgpass
     networks:
       - quizzify-api
 
