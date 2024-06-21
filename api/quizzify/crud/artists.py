@@ -76,7 +76,7 @@ def get_artist_name(artist_id: str) -> str:
     str
         The artist's name.
     """
-    query = sql.SQL("SELECT name " "FROM artists " "WHERE id = %(artist_id)s;")
+    query = sql.SQL("SELECT name FROM artists WHERE id = %(artist_id)s;")
     variables = {
         "artist_id": artist_id,
     }
@@ -88,6 +88,37 @@ def get_artist_name(artist_id: str) -> str:
             one=True,
         )
     return artist_name["name"]
+
+
+def get_random_related_artist(
+    artist_id: str,
+    nb_artists: int = 3,
+):
+    """Get a random album from the database.
+
+    Returns
+    -------
+    dict
+        A random album.
+    """
+    query = sql.SQL(
+        "SELECT related_artist_id "
+        "FROM related_artists "
+        "WHERE artist_id = %(artist_id)s "
+        "ORDER BY RANDOM() "
+        "LIMIT %(nb_artists)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+        "nb_artists": nb_artists,
+    }
+    with QueryExecutor() as executor:
+        random_artists = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+        )
+    return random_artists
 
 
 def get_random_related_artist_ids(

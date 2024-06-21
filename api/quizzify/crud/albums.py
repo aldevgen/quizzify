@@ -185,8 +185,8 @@ def get_random_album_name_by_artist_id_exclude_album(
 def get_random_album_name_by_artist_id(
     artist_id: str,
     limit: int = 1,
-) -> list:
-    """Get one random album from the database by artist ID.
+):
+    """Get one or multiple random albums from the database by artist ID.
 
     Parameters
     ----------
@@ -209,13 +209,22 @@ def get_random_album_name_by_artist_id(
         "limit": limit,
     }
     with QueryExecutor() as executor:
-        raw_random_albums = executor.execute(
-            query,
-            variables=variables,
-            fetch=True,
-        )
-        random_albums = [album["album_name"] for album in raw_random_albums]
-    return random_albums
+        if limit == 1:
+            raw_random_album = executor.execute(
+                query,
+                variables=variables,
+                fetch=True,
+                one=True,
+            )
+            return raw_random_album["album_name"]
+        else:
+            raw_random_albums = executor.execute(
+                query,
+                variables=variables,
+                fetch=True,
+            )
+            random_albums = [album["album_name"] for album in raw_random_albums]
+            return random_albums
 
 
 def insert_album(

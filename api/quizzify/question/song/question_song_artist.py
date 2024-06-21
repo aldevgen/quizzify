@@ -44,7 +44,7 @@ class QuestionSongArtist(AbstractQuestion):
         if related_artists:
             logger.info(f"Fetching {self.artist_name}'s related artists from DB.")
             related_artist_names = [
-                crud_artists.get_artist_name(artist_id=artist_id["related_artist_id"])
+                crud_artists.get_artist_name(artist_id=artist_id)
                 for artist_id in related_artists
             ]
             self.incorrect_answers = related_artist_names
@@ -52,10 +52,6 @@ class QuestionSongArtist(AbstractQuestion):
             logger.info(
                 f"Fetching {self.artist_name}'s related artists from Spotify API."
             )
-            related_artists = spotify_get_related_artists(artist_id=self.artist_id)
-            related_artist_names = [artist["name"] for artist in related_artists]
-            self.incorrect_answers = random.sample(related_artist_names, k=3)
-
             # fetch related artists from Spotify
             related_artists = spotify_get_related_artists(
                 artist_id=self.artist_id,
@@ -77,3 +73,6 @@ class QuestionSongArtist(AbstractQuestion):
                         related_artist_id=related_artist_id,
                         artist_id=self.artist_id,
                     )
+
+            related_artist_names = [artist["name"] for artist in related_artists]
+            self.incorrect_answers = random.sample(related_artist_names, k=3)

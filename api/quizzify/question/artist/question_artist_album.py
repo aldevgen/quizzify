@@ -29,9 +29,10 @@ class QuestionArtistAlbum(AbstractQuestion):
         """
         artist_ids = crud_artists.get_random_related_artist(self.artist_id)
         album_names = [
-            crud_albums.get_random_album_by_artist_id(
-                artist_id=artist_id["related_artist_id"]
-            )["album_name"]
+            crud_albums.get_random_album_name_by_artist_id(
+                artist_id=artist_id["related_artist_id"],
+                limit=1,
+            )
             for artist_id in artist_ids
         ]
         self.incorrect_answers = album_names
