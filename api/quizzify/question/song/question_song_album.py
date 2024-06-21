@@ -104,7 +104,6 @@ class QuestionSongAlbum(AbstractQuestion):
                         )
                         crud_albums.insert_album(
                             album=Album.model_validate(album_info),
-                            artist_id=self.artist_id,
                         )
 
                 # artist's albums in the database
@@ -159,7 +158,6 @@ class QuestionSongAlbum(AbstractQuestion):
                                     )
                                     crud_albums.insert_album(
                                         album=Album.model_validate(album_info),
-                                        artist_id=related_artist_id,
                                     )
                             related_random_album_name = (
                                 crud_albums.get_random_album_name_by_artist_id(

@@ -121,6 +121,10 @@ def get_top_songs(
                     # insert album info
                     crud_albums.insert_album(
                         album=Album.model_validate(album_info),
+                    )
+                    # insert album into artist's albums
+                    crud_albums.insert_album_artist(
+                        album_id=current_album_id,
                         artist_id=current_artist_id,
                     )
                     # insert user

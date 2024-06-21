@@ -71,6 +71,9 @@ def get_top_artists(
                     )
                     crud_albums.insert_album(
                         album=Album.model_validate(album_info),
+                    )
+                    crud_albums.insert_album_artist(
+                        album_id=album_id,
                         artist_id=current_artist_id,
                     )
                     albums_ids.append(album_id)
@@ -94,22 +97,21 @@ def get_top_artists(
                 crud.insert_artist(
                     artist=Artist(**related_artist),
                 )
-                # fetch related artist's albums from Spotify
-                related_artist_albums_ids = spotify_get_artist_albums_ids(
-                    artist_id=related_artist["id"],
-                )
-
-                for album_id in related_artist_albums_ids:
-                    if album_id not in albums_ids:
-                        albums_ids.append(album_id)
-                        album_info = spotify_get_album(
-                            album_id=album_id,
-                        )
-                        crud_albums.insert_album(
-                            album=Album.model_validate(album_info),
-                            artist_id=related_artist["id"],
-                        )
-                        albums_ids.append(album_id)
+                # # fetch related artist's albums from Spotify
+                # related_artist_albums_ids = spotify_get_artist_albums_ids(
+                #     artist_id=related_artist["id"],
+                # )
+                #
+                # for album_id in related_artist_albums_ids:
+                #     if album_id not in albums_ids:
+                #         albums_ids.append(album_id)
+                #         album_info = spotify_get_album(
+                #             album_id=album_id,
+                #         )
+                #         crud_albums.insert_album(
+                #             album=Album.model_validate(album_info),
+                #         )
+                #         albums_ids.append(album_id)
             # insert related artist into the database
             crud.insert_related_artist_user(
                 artist_id=current_artist_id,

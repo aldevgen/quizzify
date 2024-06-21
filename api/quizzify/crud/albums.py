@@ -229,7 +229,6 @@ def get_random_album_name_by_artist_id(
 
 def insert_album(
     album: Album,
-    artist_id: str,
 ):
     """Insert an album into the database.
 
@@ -242,11 +241,13 @@ def insert_album(
     """
     query = sql.SQL(
         "INSERT INTO albums "
-        "(id, name, popularity, release_year, release_decade, total_tracks, image_url, "
-        "artist_id) "
+        "("
+        "id, name, popularity, release_year, release_decade, total_tracks, image_url "
+        ") "
         "VALUES "
-        "(%(album_id)s, %(album_name)s, %(popularity)s, %(album_release_year)s, "
-        "%(album_release_decade)s, %(total_tracks)s, %(album_image)s, %(artist_id)s "
+        "("
+        "%(album_id)s, %(album_name)s, %(popularity)s, %(album_release_year)s, "
+        "%(album_release_decade)s, %(total_tracks)s, %(album_image)s "
         ");"
     )
     variables = {
@@ -257,6 +258,32 @@ def insert_album(
         "album_release_decade": album.release_decade,
         "total_tracks": album.total_tracks,
         "album_image": album.image_url,
+    }
+    with QueryExecutor() as executor:
+        executor.execute(query, variables)
+
+
+def insert_album_artist(
+    album_id: str,
+    artist_id: str,
+):
+    """Insert an album's artist into the database.
+
+    Parameters
+    ----------
+    album_id : str
+        The album's ID.
+    artist_id : str
+        The artist's ID.
+    """
+    query = sql.SQL(
+        "INSERT INTO albums_artists "
+        "(album_id, artist_id) "
+        "VALUES "
+        "(%(album_id)s, %(artist_id)s);"
+    )
+    variables = {
+        "album_id": album_id,
         "artist_id": artist_id,
     }
     with QueryExecutor() as executor:
