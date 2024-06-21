@@ -75,6 +75,15 @@ You can now access the API at http://localhost:8000.
 
 TBD
 
+```mermaid
+erDiagram
+    Artist {
+    string id
+    string name
+    }
+```
+
+
 ## Contributors :woman_technologist:
 
 <a href="https://github.com/alannadevgen/quizzify/graphs/contributors">
