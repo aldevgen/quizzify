@@ -24,7 +24,18 @@ SPOTIFY_BASE_URL = os.environ.get("SPOTIFY_BASE_URL")
 logger = logging.getLogger(__name__)
 
 
-def get_top_songs(
+def get_top_songs():
+    """Get the user's top songs from the database.
+
+    Returns
+    -------
+    list
+        A list of the user's top songs.
+    """
+    return crud_songs.get_top_songs()
+
+
+def insert_top_songs(
     time_range: TimeRange,
     limit: int,
 ):
