@@ -34,7 +34,7 @@ services:
       # Mount the volume to persist the data
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       # Mount the seeds file to populate the database
-      - ./db/seeds.sql:/docker-entrypoint-initdb.d/seeds.sql
+      - ./db/seeds/seeds.sql:/docker-entrypoint-initdb.d/seeds.sql
       # Mount the init script to create the database as an entrypoint to the container
       - postgres_data:/var/lib/postgresql/data
       # Mount .pgpass file to avoid password prompt

@@ -180,8 +180,6 @@ pyrightconfig.json
 # logs
 quizzify.log
 # seeds
-db/seeds.sql
-db/seeds-*.sql
-db/*-seeds.sql
+db/seeds/*.sql
 # postgres
 .pgpass
