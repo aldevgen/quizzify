@@ -40,20 +40,20 @@ def get_random_album(user_id: str):
     """
     query = sql.SQL(
         "SELECT "
+        "artists.id as artist_id, "
+        "artists.name as artist_name, "
         "albums.id as album_id, "
         "albums.name as album_name, "
         "albums.popularity, "
         "albums.release_year, "
         "albums.release_decade, "
         "albums.total_tracks, "
-        "albums.image_url, "
-        "artists.id as artist_id, "
-        "artists.name as artist_name "
+        "albums.image_url "
         "FROM top_albums "
         "LEFT JOIN albums "
         "ON albums.id = top_albums.album_id "
-        "LEFT JOIN artists "
-        "ON artists.id = albums.artist_id "
+        "LEFT JOIN albums_artists ON albums_artists.album_id = albums.id "
+        "LEFT JOIN artists ON albums_artists.artist_id = artists.id "
         "WHERE top_albums.user_id = %(user_id)s "
         "ORDER BY RANDOM() "
         "LIMIT 1;"
@@ -85,12 +85,7 @@ def get_artists_albums_ids(artist_id: str):
         A list of all the artist's albums.
     """
     query = sql.SQL(
-        "SELECT "
-        "albums.id as album_id "
-        "FROM albums "
-        "LEFT JOIN artists "
-        "ON artists.id = albums.artist_id "
-        "WHERE artist_id = %(artist_id)s;"
+        "SELECT album_id FROM albums_artists WHERE artist_id = %(artist_id)s;"
     )
     variables = {
         "artist_id": artist_id,
@@ -121,8 +116,10 @@ def get_artists_albums(artist_id: str):
         "artists.id as artist_id, "
         "artists.name as artist_name "
         "FROM albums "
+        "LEFT JOIN albums_artists "
+        "ON albums_artists.album_id = albums.id "
         "LEFT JOIN artists "
-        "ON artists.id = albums.artist_id "
+        "ON albums_artists.artist_id = artists.id "
         "WHERE artist_id = %(artist_id)s;"
     )
     variables = {
@@ -160,8 +157,10 @@ def get_random_album_name_by_artist_id_exclude_album(
     query = sql.SQL(
         "SELECT albums.name as album_name "
         "FROM artists "
+        "LEFT JOIN albums_artists "
+        "ON albums_artists.artist_id = artists.id "
         "JOIN albums "
-        "ON albums.artist_id = artists.id "
+        "ON albums_artists.album_id = albums.id  "
         "WHERE artists.id = %(artist_id)s "
         "AND albums.id != %(album_id)s "
         "ORDER BY RANDOM() "
@@ -198,8 +197,10 @@ def get_random_album_name_by_artist_id(
     query = sql.SQL(
         "SELECT albums.name as album_name "
         "FROM artists "
+        "LEFT JOIN albums_artists "
+        "ON albums_artists.artist_id = artists.id "
         "JOIN albums "
-        "ON albums.artist_id = artists.id "
+        "ON albums_artists.artist_id = artists.id "
         "WHERE artists.id = %(artist_id)s "
         "ORDER BY RANDOM() "
         "LIMIT %(limit)s;"
@@ -216,7 +217,7 @@ def get_random_album_name_by_artist_id(
                 fetch=True,
                 one=True,
             )
-            return raw_random_album["album_name"]
+            return raw_random_album["album_name"] if raw_random_album else None
         else:
             raw_random_albums = executor.execute(
                 query,
@@ -236,8 +237,6 @@ def insert_album(
     ----------
     album : Album
         The album to insert into the database.
-    artist_id : str
-        The artist's ID.
     """
     query = sql.SQL(
         "INSERT INTO albums "

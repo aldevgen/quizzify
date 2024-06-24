@@ -41,10 +41,8 @@ def get_random_artist(user_id: str) -> Dict:
     """
     query = sql.SQL(
         "SELECT "
-        "albums.id as album_id, "
-        "albums.name as album_name, "
-        "artists.id as artist_id, "
-        "artists.name as artist_name, "
+        "artists.id, "
+        "artists.name, "
         "artists.popularity, "
         "artists.genres, "
         "artists.image_url "
@@ -53,8 +51,6 @@ def get_random_artist(user_id: str) -> Dict:
         "ON albums_artists.artist_id = top_artists.artist_id "
         "LEFT JOIN artists "
         "ON artists.id = top_artists.artist_id "
-        "LEFT JOIN albums "
-        "ON albums_artists.artist_id = artists.id "
         "WHERE top_artists.user_id = %(user_id)s "
         "ORDER BY RANDOM() "
         "LIMIT 1;"
@@ -64,7 +60,56 @@ def get_random_artist(user_id: str) -> Dict:
     }
     with QueryExecutor() as executor:
         random_artist = executor.execute(
-            query, variables=variables, fetch=True, one=True
+            query,
+            variables=variables,
+            fetch=True,
+            one=True,
+        )
+    return random_artist
+
+
+def get_random_artist_album(user_id: str) -> Dict:
+    """Get a random album from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
+
+    Returns
+    -------
+    dict
+        A random album.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "artists.id as artist_id, "
+        "artists.name as artist_name, "
+        "artists.popularity, "
+        "artists.genres, "
+        "artists.image_url, "
+        "albums.id as album_id, "
+        "albums.name as album_name "
+        "FROM top_artists "
+        "LEFT JOIN albums_artists "
+        "ON albums_artists.artist_id = top_artists.artist_id "
+        "LEFT JOIN artists "
+        "ON artists.id = top_artists.artist_id "
+        "LEFT JOIN albums "
+        "ON albums.id = albums_artists.album_id "
+        "WHERE top_artists.user_id = %(user_id)s "
+        "ORDER BY RANDOM() "
+        "LIMIT 1;"
+    )
+    variables = {
+        "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        random_artist = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+            one=True,
         )
     return random_artist
 
