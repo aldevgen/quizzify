@@ -46,7 +46,7 @@ class QuestionSongAlbum(AbstractQuestion):
         str
             The string corresponding to the question about the song's album.
         """
-        return f"In which album is the song '{self.song_name}' from {self.artist_name}?"
+        return f"In which album does {self.artist_name} sing '{self.song_name}'?"
 
     def set_incorrect_answers(self):
         """Set incorrect answers for any song album question.
@@ -92,9 +92,7 @@ class QuestionSongAlbum(AbstractQuestion):
                     f"Artist {self.artist_name} has {nb_spotify_artist_albums} "
                     f"albums (Spotify API)."
                 )
-                albums_ids = crud_albums.get_artists_albums_ids(
-                    artist_id=self.artist_id,
-                )
+                albums_ids = crud_albums.get_albums_ids()
                 # insert new albums in the DB
                 for album_id in artist_albums_ids:
                     if album_id not in albums_ids:
@@ -104,6 +102,10 @@ class QuestionSongAlbum(AbstractQuestion):
                         )
                         crud_albums.insert_album(
                             album=Album.model_validate(album_info),
+                        )
+                        crud_albums.insert_album_artist(
+                            album_id=album_id,
+                            artist_id=self.artist_id,
                         )
 
                 # artist's albums in the database
@@ -140,30 +142,30 @@ class QuestionSongAlbum(AbstractQuestion):
                             related_albums_name.append(related_album)
                         else:
                             # if no related albums, fetch random albums from Spotify API
-                            related_artist_albums_ids = (
-                                crud_albums.get_artists_albums_ids(
-                                    artist_id=related_artist_id,
-                                )
-                            )
+                            related_albums_ids = crud_albums.get_albums_ids()
                             spotify_related_artist_albums_ids = (
                                 spotify_get_artist_albums_ids(
                                     artist_id=related_artist_id,
                                 )
                             )
                             for album_id in spotify_related_artist_albums_ids:
-                                if album_id not in related_artist_albums_ids:
-                                    related_artist_albums_ids.append(album_id)
+                                if album_id not in related_albums_ids:
+                                    related_albums_ids.append(album_id)
                                     album_info = spotify_get_album(
                                         album_id=album_id,
                                     )
                                     crud_albums.insert_album(
                                         album=Album.model_validate(album_info),
                                     )
+                                    crud_albums.insert_album_artist(
+                                        album_id=album_id,
+                                        artist_id=related_artist_id,
+                                    )
                             related_random_album_name = (
                                 crud_albums.get_random_album_name_by_artist_id(
                                     artist_id=related_artist_id,
                                     limit=1,
                                 )
-                            )[0]
+                            )
                             related_albums_name.append(related_random_album_name)
                         self.incorrect_answers = albums_name + related_albums_name
