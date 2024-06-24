@@ -43,7 +43,7 @@ def create_question():
             release_decade=album_info["release_decade"],
         )
     elif factory_type == QuestionType.ARTIST.value:
-        artist_info = crud_artists.get_random_artist(user_id=user_id)
+        artist_info = crud_artists.get_random_artist_album(user_id=user_id)
         question = qf.create_question(
             factory_type=factory_type,
             artist_id=artist_info["artist_id"],
