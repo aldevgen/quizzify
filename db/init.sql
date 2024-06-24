@@ -115,14 +115,13 @@ CREATE TABLE top_artists (
 
 -- column_name    |     data_type
 ------------------+-------------------
--- id             | character varying
+-- id             | character varying, primary key
 -- name           | character varying
 -- popularity     | integer
 -- release_year   | date
 -- release_decade | date
 -- total_tracks   | integer
 -- image_url      | character varying
--- artist_id      | character varying, foreign key
 
 DROP TABLE IF EXISTS albums CASCADE;
 
@@ -133,9 +132,7 @@ CREATE TABLE albums (
   release_year VARCHAR(4),
   release_decade VARCHAR(4),
   total_tracks INT,
-  image_url VARCHAR(150),
-  artist_id VARCHAR(25),
-  FOREIGN KEY (artist_id) REFERENCES artists (id)
+  image_url VARCHAR(150)
 );
 
 ----------------------------------------------------------------------------------------
