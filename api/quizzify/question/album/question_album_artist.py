@@ -5,6 +5,7 @@ from quizzify.crud import artists as crud_artists
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.question_types import AlbumQuestionType
 from quizzify.spotify.spotify_requests import spotify_get_related_artists
+from quizzify.utils.schemas import Artist
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +45,39 @@ class QuestionAlbumArtist(AbstractQuestion):
         This method uses the Spotify API to get related artists to the artist of the
         album. Then it randomly selects 3 of these artists to be the incorrect answers.
         """
-        related_artists = spotify_get_related_artists(artist_id=self.artist_id)
-        related_artist_names = [artist["name"] for artist in related_artists]
-        self.incorrect_answers = random.sample(related_artist_names, k=3)
+        related_artists = crud_artists.get_random_related_artist(
+            artist_id=self.artist_id,
+            nb_artists=3,
+        )
+        if related_artists:
+            logger.info("Fetching related artists from the database.")
+            self.incorrect_answers = [
+                crud_artists.get_artist_name(artist_id=artist["related_artist_id"])
+                for artist in related_artists
+            ]
+        else:
+            logger.info(
+                f"No related artists found in the database, "
+                f"fetching {self.artist_name}'s related artists from Spotify API."
+            )
+            related_artists = spotify_get_related_artists(artist_id=self.artist_id)
+            artists_ids = crud_artists.get_artists_ids()
+            # insert data in the database if not present
+            for related_artist in related_artists:
+                # check if related artist is already in the database
+                related_artist_id = related_artist["id"]
+                if related_artist_id not in artists_ids:
+                    # add related artist to the list of artists in the database
+                    artists_ids.append(related_artist_id)
+                    crud_artists.insert_artist(
+                        artist=Artist.model_validate(related_artist),
+                    )
+                    # insert artist as top artist for the user
+                    crud_artists.insert_related_artist_user(
+                        related_artist_id=related_artist_id,
+                        artist_id=self.artist_id,
+                    )
+
+            related_artists = random.sample(related_artists, k=3)
+            related_artist_names = [artist["name"] for artist in related_artists]
+            self.incorrect_answers = related_artist_names

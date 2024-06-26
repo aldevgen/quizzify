@@ -50,7 +50,8 @@ class QuestionSongArtist(AbstractQuestion):
             self.incorrect_answers = related_artist_names
         else:
             logger.info(
-                f"Fetching {self.artist_name}'s related artists from Spotify API."
+                f"No related artists found in the database, "
+                f"fetching {self.artist_name}'s related artists from Spotify API."
             )
             # fetch related artists from Spotify
             related_artists = spotify_get_related_artists(
@@ -74,5 +75,6 @@ class QuestionSongArtist(AbstractQuestion):
                         artist_id=self.artist_id,
                     )
 
+            related_artists = random.sample(related_artists, k=3)
             related_artist_names = [artist["name"] for artist in related_artists]
-            self.incorrect_answers = random.sample(related_artist_names, k=3)
+            self.incorrect_answers = related_artist_names
