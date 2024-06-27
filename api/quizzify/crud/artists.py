@@ -141,7 +141,7 @@ def get_artist_name(artist_id: str) -> str:
     return artist_name["name"]
 
 
-def get_random_related_artist(
+def get_random_related_artists(
     artist_id: str,
     nb_artists: int = 3,
 ):
@@ -176,12 +176,12 @@ def get_random_related_artist_ids(
     artist_id: str,
     nb_artists: int = 3,
 ) -> List:
-    """Get a random album from the database.
+    """Get a list of random artists IDs related to a given artist.
 
     Returns
     -------
-    dict
-        A random album.
+    list
+        A list of random artists IDs related to a give artist.
     """
     query = sql.SQL(
         "SELECT related_artist_id "
@@ -201,6 +201,41 @@ def get_random_related_artist_ids(
             fetch=True,
         )
     random_artist_ids = [artist["related_artist_id"] for artist in random_artist]
+    return random_artist_ids
+
+
+def get_random_related_artists_name(
+    artist_id: str,
+    nb_artists: int = 3,
+) -> List:
+    """Fetch a list of random artists names related to a given artist.
+
+    Returns
+    -------
+    list
+        A list of random artists names related to a give artist.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "artists.name as artist_name "
+        "from related_artists "
+        "JOIN artists "
+        "ON artists.id = related_artists.related_artist_id "
+        "WHERE artist_id = %(artist_id)s "
+        "ORDER BY RANDOM() "
+        "LIMIT %(nb_artists)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+        "nb_artists": nb_artists,
+    }
+    with QueryExecutor() as executor:
+        random_artist = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+        )
+    random_artist_ids = [artist["artist_name"] for artist in random_artist]
     return random_artist_ids
 
 
