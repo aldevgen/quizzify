@@ -74,8 +74,9 @@ class TestCrudAlbums(unittest.TestCase):
             "release_year": "2018",
             "release_decade": "2010",
             "total_tracks": 12,
-            "image_url": "https://i.scdn.co/image/"
-            "ab67616d0000b273dbc892b8194e35ca3524e767",
+            "image_url": (
+                "https://i.scdn.co/image/ab67616d0000b273dbc892b8194e35ca3524e767"
+            ),
         }
 
         # When

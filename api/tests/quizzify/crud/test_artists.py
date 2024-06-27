@@ -29,8 +29,9 @@ class TestCrudArtists(unittest.TestCase):
             "artist_name": "Måneskin",
             "popularity": 79,
             "genres": ["indie rock italiano", "italian pop"],
-            "image_url": "https://i.scdn.co/image/"
-            "ab6761610000e5eb46d0db8a86fda630ec12401f",
+            "image_url": (
+                "https://i.scdn.co/image/ab6761610000e5eb46d0db8a86fda630ec12401f"
+            ),
         }
 
         # When
