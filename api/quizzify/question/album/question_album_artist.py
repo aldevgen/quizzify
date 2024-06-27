@@ -45,16 +45,15 @@ class QuestionAlbumArtist(AbstractQuestion):
         This method uses the Spotify API to get related artists to the artist of the
         album. Then it randomly selects 3 of these artists to be the incorrect answers.
         """
-        related_artists = crud_artists.get_random_related_artist(
+        related_artists = crud_artists.get_random_related_artists_name(
             artist_id=self.artist_id,
             nb_artists=3,
         )
         if related_artists:
-            logger.info("Fetching related artists from the database.")
-            self.incorrect_answers = [
-                crud_artists.get_artist_name(artist_id=artist["related_artist_id"])
-                for artist in related_artists
-            ]
+            logger.info(
+                f"Fetching {self.artist_name}'s related artists from the database."
+            )
+            self.incorrect_answers = related_artists
         else:
             logger.info(
                 f"No related artists found in the database, "

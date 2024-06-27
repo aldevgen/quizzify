@@ -27,7 +27,7 @@ class QuestionArtistAlbum(AbstractQuestion):
         This method gets a list of random artists related to the current artist
         and then gets a random album from these artists.
         """
-        artist_ids = crud_artists.get_random_related_artist(self.artist_id)
+        artist_ids = crud_artists.get_random_related_artists(self.artist_id)
         album_names = [
             crud_albums.get_random_album_name_by_artist_id(
                 artist_id=artist_id["related_artist_id"],
