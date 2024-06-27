@@ -97,8 +97,7 @@ INTO albums
   release_year,
   release_decade,
   total_tracks,
-  image_url,
-  artist_id
+  image_url
 )
 VALUES
 (
@@ -108,8 +107,7 @@ VALUES
   '1983',
   '1980',
   9,
-  'https://i.scdn.co/image/ab67616d0000b2739824c6e084b02d24b2e22e94',
-  '3bmFPbLMiLxtR9tFrTcKcP'
+  'https://i.scdn.co/image/ab67616d0000b2739824c6e084b02d24b2e22e94'
 ),
 (
   '0sNOF9WDwhWunNAHPD3Baj',
@@ -118,8 +116,7 @@ VALUES
   '2000',
   '2000',
   12,
-  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
-  '6XyY86QOPPrYVGvF9ch6wz'
+  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3'
 ),
 (
   '2ZUwFxlDV6dP8y2fMs59fN',
@@ -128,8 +125,7 @@ VALUES
   '2021',
   '2020',
   10,
-  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
-  '0lAWpj5szCSwM4rUMHYmrr'
+  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3'
 );
 
 INSERT

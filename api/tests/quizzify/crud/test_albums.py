@@ -51,10 +51,9 @@ class TestCrudAlbums(unittest.TestCase):
             total_tracks=12,
             image_url="https://i.scdn.co/image/fake_image",
         )
-        artist_id = "0lAWpj5szCSwM4rUMHYmrr"
 
         # When
-        crud_albums.insert_album(album, artist_id)
+        crud_albums.insert_album(album)
 
         # Then - check if the album was inserted
         result = crud_albums.get_albums_ids()

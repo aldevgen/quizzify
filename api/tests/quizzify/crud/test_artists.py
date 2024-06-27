@@ -31,7 +31,7 @@ class TestCrudArtists(unittest.TestCase):
         result = crud_artists.get_random_artist(user_id=user_id)
 
         # Then
-        self.assertIn(result["artist_name"], expected_result)
+        self.assertIn(result["name"], expected_result)
 
     def test_insert_artist(self):
         # Given
