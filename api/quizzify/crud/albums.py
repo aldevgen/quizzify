@@ -200,7 +200,7 @@ def get_random_album_name_by_artist_id(
         "LEFT JOIN albums_artists "
         "ON albums_artists.artist_id = artists.id "
         "JOIN albums "
-        "ON albums_artists.artist_id = artists.id "
+        "ON albums_artists.album_id = albums.id "
         "WHERE artists.id = %(artist_id)s "
         "ORDER BY RANDOM() "
         "LIMIT %(limit)s;"
