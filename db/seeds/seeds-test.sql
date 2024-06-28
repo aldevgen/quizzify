@@ -153,6 +153,14 @@ INSERT INTO top_albums (album_id, user_id) VALUES (
 ------------------------------------- TOP ARTIST ---------------------------------------
 ----------------------------------------------------------------------------------------
 
-INSERT INTO public.top_artists (artist_id, user_id) VALUES (
+INSERT INTO top_artists (artist_id, user_id) VALUES (
   '0lAWpj5szCSwM4rUMHYmrr', 'abc123def456'
+);
+
+----------------------------------------------------------------------------------------
+------------------------------------- TOP SONG ---------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO top_songs (song_id, user_id) VALUES (
+  '5aWhs651KYM26HYM16kRdk', 'abc123def456'
 );
