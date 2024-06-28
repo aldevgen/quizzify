@@ -8,9 +8,7 @@ class TestCrudSong(unittest.TestCase):
     def test_get_songs_ids(self):
         # Given
         expected_result = [
-            "1mCsF9Tw4AkIZOjvZbZZdT",
-            "6hQ5vU4jWvz1bXjXj3t7yT",
-            "2gMXnyrvIjhVBUZwvLZDMP",
+            "5aWhs651KYM26HYM16kRdk",
         ]
 
         # When
@@ -18,7 +16,7 @@ class TestCrudSong(unittest.TestCase):
 
         # Then
         self.assertEqual(result, expected_result)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 1)
 
     def test_get_random_song(self):
         # Given

@@ -12,6 +12,7 @@ class TestCrudAlbums(unittest.TestCase):
             "7KF1Ain9mYYlg5M46g0i4A",
             "44a7Wk3Jh2JGVhjcFYWozj",
             "2qJw6w5XwQO0PQlSWPu7Tw",
+            "72ZfMxLCPG8mlWC0TXfZQi",
         ]
         # Given
 
@@ -20,7 +21,7 @@ class TestCrudAlbums(unittest.TestCase):
 
         # Then
         self.assertEqual(result, expected_result)
-        self.assertEqual(len(result), 5)
+        self.assertEqual(len(result), 6)
 
     def test_get_artists_albums_ids(self):
         # Given
@@ -101,6 +102,7 @@ class TestCrudAlbums(unittest.TestCase):
             "7KF1Ain9mYYlg5M46g0i4A",
             "44a7Wk3Jh2JGVhjcFYWozj",
             "2qJw6w5XwQO0PQlSWPu7Tw",
+            "72ZfMxLCPG8mlWC0TXfZQi",
             "1uROBP2G4MP0O4w1v5Cpbg",
         ]
         album = Album(
@@ -122,4 +124,4 @@ class TestCrudAlbums(unittest.TestCase):
 
         self.assertIn(album.id, result)
         self.assertEqual(result, expected_result)
-        self.assertEqual(len(result), 6)
+        self.assertEqual(len(result), 7)
