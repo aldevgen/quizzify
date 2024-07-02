@@ -123,6 +123,9 @@ INSERT INTO albums_artists (artist_id, album_id) VALUES (
 ),
 (
   '0lAWpj5szCSwM4rUMHYmrr', '2qJw6w5XwQO0PQlSWPu7Tw'
+),
+(
+  '0C0XlULifJtAgn6ZNCW2eu', '72ZfMxLCPG8mlWC0TXfZQi'
 );
 
 ----------------------------------------------------------------------------------------

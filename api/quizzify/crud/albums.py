@@ -25,6 +25,32 @@ def get_albums_ids():
     return albums_ids
 
 
+def get_top_albums_id(album_id: str):
+    """Get the top albums' IDs from the database.
+
+    This method is only used for testing purposes. It enables the test to check if the
+    insert_top_album_user() method works as expected.
+
+    Parameters
+    ----------
+    album_id : str
+        The album's ID.
+
+    Returns
+    -------
+    list
+        A list of the top albums' IDs.
+    """
+    query = sql.SQL("SELECT album_id FROM top_albums WHERE album_id = %(album_id)s;")
+    variables = {
+        "album_id": album_id,
+    }
+    with QueryExecutor() as executor:
+        albums_ids = executor.execute(query, fetch=True, variables=variables)
+    albums_ids = [album["album_id"] for album in albums_ids]
+    return albums_ids
+
+
 def get_random_album(user_id: str):
     """Get a random album from the database.
 
