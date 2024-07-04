@@ -97,7 +97,32 @@ def insert_song(
         executor.execute(query, variables=variables)
 
 
-def insert_song_user(
+def get_top_songs_ids(user_id: str):
+    """Get the top songs' IDs for a user.
+
+    This method is only used for testing purposes.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
+
+    Returns
+    -------
+    list
+        The top songs' IDs for the given user.
+    """
+    query = sql.SQL("SELECT song_id FROM top_songs WHERE user_id = %(user_id)s;")
+    variables = {
+        "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        top_songs_ids = executor.execute(query, variables=variables, fetch=True)
+    top_songs_ids = [song_id["song_id"] for song_id in top_songs_ids]
+    return top_songs_ids
+
+
+def insert_top_song_user(
     song_id: str,
     user_id: str,
 ):

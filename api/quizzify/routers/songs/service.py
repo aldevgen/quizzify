@@ -151,7 +151,7 @@ def get_top_songs(
                         crud_songs.insert_song(song=Song.model_validate(song_info))
 
                     # insert song into user's top songs
-                    crud_songs.insert_song_user(
+                    crud_songs.insert_top_song_user(
                         song_id=current_song_id,
                         user_id=user_id,
                     )

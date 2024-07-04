@@ -239,6 +239,70 @@ def get_random_related_artists_name(
     return random_artist_ids
 
 
+def get_top_artists_ids(user_id: str) -> List[str]:
+    """Get the top artists' IDs for a given user.
+
+    This method is only used for test purposes
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
+
+    Returns
+    -------
+    list
+        The top artists' IDs for the given user.
+    """
+    query = sql.SQL("SELECT artist_id FROM top_artists WHERE user_id = %(user_id)s;")
+    variables = {
+        "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        top_artists_ids = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+        )
+    top_artists_ids = [artist["artist_id"] for artist in top_artists_ids]
+    return top_artists_ids
+
+
+def get_related_artists_ids(artist_id: str) -> List[str]:
+    """Get the related artists' IDs for a given artist.
+
+    This method is only used for test purposes
+
+    Parameters
+    ----------
+    artist_id : str
+        The artist's ID.
+
+    Returns
+    -------
+    list
+        The related artists' IDs for the given artist.
+    """
+    query = sql.SQL(
+        "SELECT related_artist_id "
+        "FROM related_artists "
+        "WHERE artist_id = %(artist_id)s;"
+    )
+    variables = {
+        "artist_id": artist_id,
+    }
+    with QueryExecutor() as executor:
+        related_artists_ids = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+        )
+    related_artists_ids = [
+        artist["related_artist_id"] for artist in related_artists_ids
+    ]
+    return related_artists_ids
+
+
 def insert_artist(
     artist: Artist,
 ):
