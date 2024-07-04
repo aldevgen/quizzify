@@ -72,3 +72,28 @@ class TestCrudSong(unittest.TestCase):
         self.assertIn(song.id, result)
         self.assertEqual(result, expected_result)
         self.assertEqual(len(result), 2)
+
+    def test_insert_top_song_user(self):
+        # Given
+        song_id = "1vwEgKpkdY63nX0jrrYj9X"
+        user_id = "abc123def456"
+
+        # Before the insert, check if the song is not in the top songs
+        result = crud_songs.get_top_songs_ids(user_id=user_id)
+        expected_result = ["5aWhs651KYM26HYM16kRdk"]
+        self.assertEqual(result, expected_result)
+        self.assertEqual(len(result), 1)
+
+        # When - insert a new song as top song for the user
+        crud_songs.insert_top_song_user(song_id, user_id)
+
+        # Then - check if the song was inserted
+        result = crud_songs.get_top_songs_ids(user_id=user_id)
+        expected_result = [
+            "5aWhs651KYM26HYM16kRdk",
+            "1vwEgKpkdY63nX0jrrYj9X",
+        ]
+
+        self.assertIn(song_id, result)
+        self.assertEqual(result, expected_result)
+        self.assertEqual(len(result), 2)

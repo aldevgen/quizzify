@@ -8,13 +8,12 @@ from quizzify.question.question_types import AlbumQuestionType
 class TestQuestionAlbumArtist(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
-        self.album_id = "album123"
-        self.album_name = "Test Album"
-        self.artist_id = "artist123"
-        self.artist_name = "Test Artist"
-        self.song_id = "song123"
-        self.song_name = "Test Song"
-        self.answer = "Correct Answer"
+        self.album_id = "72ZfMxLCPG8mlWC0TXfZQi"
+        self.album_name = "Wonderful Wonderful"
+        self.artist_id = "0C0XlULifJtAgn6ZNCW2eu"
+        self.artist_name = "The Killers"
+        self.song_id = "5aWhs651KYM26HYM16kRdk"
+        self.song_name = "The Man"
 
         self.question = QuestionAlbumArtist(
             album_id=self.album_id,
@@ -23,7 +22,7 @@ class TestQuestionAlbumArtist(unittest.TestCase):
             artist_name=self.artist_name,
             song_id=self.song_id,
             song_name=self.song_name,
-            answer=self.answer,
+            answer=self.artist_name,
         )
 
     def test_initialization(self):
@@ -34,7 +33,7 @@ class TestQuestionAlbumArtist(unittest.TestCase):
         self.assertEqual(self.question.artist_name, self.artist_name)
         self.assertEqual(self.question.song_id, self.song_id)
         self.assertEqual(self.question.song_name, self.song_name)
-        self.assertEqual(self.question.correct_answer, self.answer)
+        self.assertEqual(self.question.correct_answer, self.artist_name)
         self.assertEqual(self.question.question_type, AlbumQuestionType.ALBUM_ARTIST)
 
     def test_display_question(self):
