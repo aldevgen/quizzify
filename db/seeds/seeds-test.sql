@@ -103,6 +103,14 @@ INSERT INTO artists (
   '{"alternative rock","dance rock","modern rock","permanent wave",rock}',
   7314419,
   'https://i.scdn.co/image/ab6761610000e5eb207b21f3ed0ee96adce3166a'
+),
+(
+  '7Ln80lUS6He07XvHI8qqHH',
+  'Arctic Monkeys',
+  84,
+  '{"garage rock","modern rock","permanent wave",rock,"sheffield indie"}',
+  25077988,
+  'https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f'
 );
 
 ----------------------------------------------------------------------------------------
@@ -126,6 +134,14 @@ INSERT INTO albums_artists (artist_id, album_id) VALUES (
 ),
 (
   '0C0XlULifJtAgn6ZNCW2eu', '72ZfMxLCPG8mlWC0TXfZQi'
+);
+
+----------------------------------------------------------------------------------------
+----------------------------------- ARTIST'S SONGS -------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO related_artists (artist_id, related_artist_id) VALUES (
+  '0lAWpj5szCSwM4rUMHYmrr', '7Ln80lUS6He07XvHI8qqHH'
 );
 
 ----------------------------------------------------------------------------------------
