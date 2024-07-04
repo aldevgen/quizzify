@@ -45,7 +45,7 @@ class TestCrudUsers(unittest.TestCase):
         self.assertEqual(result[0]["spotify_id"], spotify_id)
         self.assertEqual(len(result), 1)
 
-    def test_get_user_by_email(self):
+    def test_get_user_email(self):
         # Given
         email = "jane@doe.ie"
 
@@ -77,3 +77,30 @@ class TestCrudUsers(unittest.TestCase):
         # Then
         self.assertEqual(result[0]["username"], username)
         self.assertEqual(len(result), 1)
+
+    def test_get_user_by_email_exist(self):
+        # Given
+        name = "janedoe"
+        email = "jane@doe.ie"
+
+        # When
+        result_name, result_email, result_hashed_pwd = crud_users.get_user_by_email(
+            email=email
+        )
+
+        # Then
+        self.assertEqual(result_name, name)
+        self.assertEqual(result_email, email)
+
+    def test_get_user_by_email_not_exist(self):
+        # Given
+        email = "alice@brown.me"
+
+        # When
+        result_name, result_email, result_hashed_pwd = crud_users.get_user_by_email(
+            email=email
+        )
+
+        # Then
+        self.assertIsNone(result_name)
+        self.assertIsNone(result_email)
