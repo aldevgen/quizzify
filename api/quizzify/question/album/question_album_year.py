@@ -10,7 +10,6 @@ class QuestionAlbumYear(AbstractQuestion):
         self,
         album_name,
         artist_name,
-        song_name,
         answer,
     ) -> None:
         """Album question constructor."""
@@ -18,7 +17,6 @@ class QuestionAlbumYear(AbstractQuestion):
         self.incorrect_answers = []
         self.album_name = album_name
         self.artist_name = artist_name
-        self.song_name = song_name
         self.correct_answer = answer
         self.question_type = AlbumQuestionType.ALBUM_YEAR
 

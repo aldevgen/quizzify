@@ -1,6 +1,6 @@
 import random
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 
 
 class AbstractQuestion(ABC):
@@ -8,7 +8,7 @@ class AbstractQuestion(ABC):
 
     def __init__(self) -> None:
         """Abstract question constructor."""
-        self.correct_answer: str
+        self.correct_answer: Optional[str] = None
         self.incorrect_answers: List[str] = []
 
     @abstractmethod
