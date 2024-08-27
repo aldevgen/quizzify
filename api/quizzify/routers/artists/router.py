@@ -3,6 +3,7 @@ from typing import Dict, List
 from fastapi import APIRouter
 
 from quizzify.routers.artists import service
+from quizzify.spotify.spotify_requests import spotify_get_user_id
 from quizzify.utils.schemas import TimeRange
 
 # define router for artists endpoints
@@ -60,5 +61,6 @@ async def get_random_artist():
     list
         A list of random artists.
     """
-    random_artist = service.get_random_artist()
+    user_id = spotify_get_user_id()
+    random_artist = service.get_random_artist(user_id=user_id)
     return random_artist

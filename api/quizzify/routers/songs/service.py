@@ -12,6 +12,7 @@ from quizzify.spotify.spotify_headers import spotify_headers
 from quizzify.spotify.spotify_requests import (
     spotify_get_album,
     spotify_get_artist,
+    spotify_get_related_artists,
     spotify_get_user_id,
 )
 from quizzify.utils.schemas import Album, Artist, Song, TimeRange
@@ -56,7 +57,7 @@ def get_top_songs(
         raw_top_songs = response.json()["items"]
         top_songs = []
 
-        # get artists and songs IDs from the database
+        # get albums, artists and songs IDs from the database
         albums_ids = crud_albums.get_albums_ids()
         artists_ids = crud_artists.get_artists_ids()
         song_ids = crud_songs.get_songs_ids()
@@ -64,30 +65,53 @@ def get_top_songs(
         # get user's Spotify ID
         user_id = spotify_get_user_id()
 
-        for song in range(len(raw_top_songs)):
-            for artist in range(len(raw_top_songs[song]["artists"])):
+        for song in raw_top_songs:
+            for artist in song["artists"]:
                 # insert artist into database
-                current_artist_id = raw_top_songs[song]["artists"][artist]["id"]
+                current_artist_id = artist["id"]
                 if current_artist_id not in artists_ids:
                     # add artist ID to the list of artists already known
                     artists_ids.append(current_artist_id)
+
+                    # get artist info and insert it into artists table
                     artist_info = spotify_get_artist(current_artist_id)
                     crud_artists.insert_artist(
                         artist=Artist.model_validate(artist_info),
                     )
-                crud_artists.insert_artist_user(
-                    artist_id=current_artist_id,
-                    user_id=user_id,
-                )
+                    # insert artist into user's top artists
+                    crud_artists.insert_top_artist_user(
+                        artist_id=current_artist_id,
+                        user_id=user_id,
+                    )
+
+                    # fetch related artists from Spotify
+                    related_artists = spotify_get_related_artists(
+                        artist_id=current_artist_id,
+                    )
+
+                    for related_artist in related_artists:
+                        # check if related artist is already in the database
+                        related_artist_id = related_artist["id"]
+                        if related_artist_id not in artists_ids:
+                            # add related artist to the list of artists in the database
+                            artists_ids.append(related_artist_id)
+                            crud_artists.insert_artist(
+                                artist=Artist.model_validate(related_artist),
+                            )
+                            # insert artist as top artist for the user
+                            crud_artists.insert_related_artist_user(
+                                related_artist_id=related_artist_id,
+                                artist_id=current_artist_id,
+                            )
 
                 # get artist details
                 artists_info = [
                     {"id": artist["id"], "name": artist["name"]}
-                    for artist in raw_top_songs[song]["artists"]
+                    for artist in song["artists"]
                 ]
 
                 # get album details
-                current_album_id = raw_top_songs[song]["album"]["id"]
+                current_album_id = song["album"]["id"]
                 # insert album into database if it is not already there
                 if current_album_id not in albums_ids:
                     albums_ids.append(current_album_id)
@@ -97,25 +121,29 @@ def get_top_songs(
                     # insert album info
                     crud_albums.insert_album(
                         album=Album.model_validate(album_info),
+                    )
+                    # insert album into artist's albums
+                    crud_albums.insert_album_artist(
+                        album_id=current_album_id,
                         artist_id=current_artist_id,
                     )
-                    crud_albums.insert_album_user(
+                    # insert user
+                    crud_albums.insert_top_album_user(
                         album_id=current_album_id,
                         user_id=user_id,
                     )
 
                     # insert song info into the database if it is not already there
-                    current_song_id = raw_top_songs[song]["id"]
+                    current_song_id = song["id"]
                     # get song details
                     song_info = {
                         "id": current_song_id,
-                        "name": raw_top_songs[song]["name"],
-                        "popularity": raw_top_songs[song]["popularity"],
-                        "duration_ms": raw_top_songs[song]["duration_ms"],
-                        # "preview_url": raw_top_songs[song]["preview_url"],
-                        "track_number": raw_top_songs[song]["track_number"],
-                        "album_id": raw_top_songs[song]["album"]["id"],
-                        "artist_id": raw_top_songs[song]["artists"][artist]["id"],
+                        "name": song["name"],
+                        "popularity": song["popularity"],
+                        "duration_ms": song["duration_ms"],
+                        "track_number": song["track_number"],
+                        "album_id": song["album"]["id"],
+                        "artist_id": artist["id"],
                     }
                     # insert song into database if it is not already there
                     if current_song_id not in song_ids:
@@ -123,7 +151,7 @@ def get_top_songs(
                         crud_songs.insert_song(song=Song.model_validate(song_info))
 
                     # insert song into user's top songs
-                    crud_songs.insert_song_user(
+                    crud_songs.insert_top_song_user(
                         song_id=current_song_id,
                         user_id=user_id,
                     )
@@ -144,7 +172,7 @@ def get_top_songs(
         )
 
 
-def get_random_song():
+def get_random_song(user_id: str):
     """Get random songs from the database.
 
     Returns
@@ -152,5 +180,5 @@ def get_random_song():
     list
         A list of random songs.
     """
-    random_song = crud_songs.get_random_song()
+    random_song = crud_songs.get_random_song(user_id=user_id)
     return random_song

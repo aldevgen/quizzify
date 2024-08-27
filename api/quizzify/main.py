@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(
     title="Quizzify",
-    description="Music Quiz API",
+    description="Spotify Music Quizz API",
     version="0.1.0",
     docs_url="/docs",
 )
@@ -23,7 +23,7 @@ app = FastAPI(
 @app.get("/")
 def index():
     """Return the API name and description."""
-    return {"Quizzify": "Music Quiz API"}
+    return {"Quizzify": "Spotify Music Quizz API"}
 
 
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])

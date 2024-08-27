@@ -1,10 +1,8 @@
-INSERT
-INTO users_spotify (
-  spotify_id,
-  spotify_username,
-  spotify_email,
-  spotify_image_url,
-  spotify_uri
+----------------------------------------------------------------------------------------
+---------------------------------------- USERS -----------------------------------------
+----------------------------------------------------------------------------------------
+INSERT INTO users_spotify (
+  spotify_id, spotify_username, spotify_email, spotify_image_url, spotify_uri
 )
 VALUES (
   'abc123def456',
@@ -14,17 +12,8 @@ VALUES (
   'spotify:user:abc123def456'
 );
 
-INSERT
-INTO users_quizzify
-(
-  user_id,
-  username,
-  email,
-  hashed_pwd,
-  created_at
-)
-VALUES
-(
+INSERT INTO users_quizzify (user_id, username, email, hashed_pwd, created_at)
+VALUES (
   'abc123def456',
   'janedoe',
   'jane@doe.ie',
@@ -32,182 +21,165 @@ VALUES
   '2024-05-31 16:01:32.03385'
 );
 
-INSERT
-INTO artists
+----------------------------------------------------------------------------------------
+---------------------------------------- ALBUMS ----------------------------------------
+----------------------------------------------------------------------------------------
+INSERT INTO albums (
+  id, name, popularity, release_year, release_decade, total_tracks, image_url
+) VALUES (
+  '2kcJ3TxBhSwmki0QWFXUz8',
+  'RUSH! (ARE U COMING?)',
+  73,
+  '2023',
+  '2020',
+  22,
+  'https://i.scdn.co/image/ab67616d0000b27393fcc2231abeb51d7e41ec5d'
+),
 (
-  id,
-  name,
-  popularity,
-  genres,
-  followers,
-  image_url
-)
-VALUES
+  '3wLMnrlPtVSADxalu9kIxK',
+  'RUSH!',
+  63,
+  '2023',
+  '2020',
+  18,
+  'https://i.scdn.co/image/ab67616d0000b273aad7b695784a8dc4342fea8c'
+),
 (
+  '7KF1Ain9mYYlg5M46g0i4A',
+  'Teatro d''ira - Vol. I',
+  77,
+  '2021',
+  '2020',
+  8,
+  'https://i.scdn.co/image/ab67616d0000b2735aa05015cfa7bd2943c29b21'
+),
+(
+  '44a7Wk3Jh2JGVhjcFYWozj',
+  'Il ballo della vita',
+  70,
+  '2018',
+  '2010',
+  12,
+  'https://i.scdn.co/image/ab67616d0000b273dbc892b8194e35ca3524e767'
+),
+(
+  '2qJw6w5XwQO0PQlSWPu7Tw',
+  'Chosen',
+  75,
+  '2017',
+  '2010',
+  7,
+  'https://i.scdn.co/image/ab67616d0000b273fa0ab3a28b5c52d8a5f97045'
+),
+(
+  '72ZfMxLCPG8mlWC0TXfZQi',
+  'Wonderful Wonderful',
+  60,
+  '2017',
+  '2010',
+  10,
+  'https://i.scdn.co/image/ab67616d0000b273f65523eab3152dcca83b6fca'
+
+);
+
+----------------------------------------------------------------------------------------
+--------------------------------------- ARTISTS ----------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO artists (
+  id, name, popularity, genres, followers, image_url
+) VALUES (
   '0lAWpj5szCSwM4rUMHYmrr',
   'Måneskin',
   79,
-  ARRAY['indie rock italiano', 'italian pop'],
-  9133398,
+  '{"indie rock italiano","italian pop"}',
+  9225653,
   'https://i.scdn.co/image/ab6761610000e5eb46d0db8a86fda630ec12401f'
 ),
 (
-  '6XyY86QOPPrYVGvF9ch6wz',
-  'Linkin Park',
-  83,
-  ARRAY['alternative metal', 'nu metal', 'post-grunge', 'rap metal', 'rock'],
-  25451916,
-  'https://i.scdn.co/image/ab6761610000e5eb84a0dd74f21e8acce6a9fd49'
+  '0C0XlULifJtAgn6ZNCW2eu',
+  'The Killers',
+  76,
+  '{"alternative rock","dance rock","modern rock","permanent wave",rock}',
+  7314419,
+  'https://i.scdn.co/image/ab6761610000e5eb207b21f3ed0ee96adce3166a'
 ),
 (
-  '3bmFPbLMiLxtR9tFrTcKcP',
-  'Matthew Wilder',
-  55,
-  ARRAY['new wave pop'],
-  47936,
-  'https://i.scdn.co/image/ab6761610000e5eb5dcabf363571181dba3ecf66'
+  '7Ln80lUS6He07XvHI8qqHH',
+  'Arctic Monkeys',
+  84,
+  '{"garage rock","modern rock","permanent wave",rock,"sheffield indie"}',
+  25077988,
+  'https://i.scdn.co/image/ab6761610000e5eb7da39dea0a72f581535fb11f'
 );
 
-INSERT
-INTO top_artists
-(
-  artist_id,
-  user_id
-)
-VALUES
-(
-  '0lAWpj5szCSwM4rUMHYmrr',
-  'abc123def456'
+----------------------------------------------------------------------------------------
+----------------------------------- ARTIST'S ALBUMS ------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO albums_artists (artist_id, album_id) VALUES (
+  '0lAWpj5szCSwM4rUMHYmrr', '2kcJ3TxBhSwmki0QWFXUz8'
 ),
 (
-  '6XyY86QOPPrYVGvF9ch6wz',
-  'abc123def456'
+  '0lAWpj5szCSwM4rUMHYmrr', '3wLMnrlPtVSADxalu9kIxK'
 ),
 (
-  '3bmFPbLMiLxtR9tFrTcKcP',
-  'abc123def456'
+  '0lAWpj5szCSwM4rUMHYmrr', '7KF1Ain9mYYlg5M46g0i4A'
+),
+(
+  '0lAWpj5szCSwM4rUMHYmrr', '44a7Wk3Jh2JGVhjcFYWozj'
+),
+(
+  '0lAWpj5szCSwM4rUMHYmrr', '2qJw6w5XwQO0PQlSWPu7Tw'
+),
+(
+  '0C0XlULifJtAgn6ZNCW2eu', '72ZfMxLCPG8mlWC0TXfZQi'
 );
 
-INSERT
-INTO albums
-(
-  id,
-  name,
-  popularity,
-  release_year,
-  release_decade,
-  total_tracks,
-  image_url,
-  artist_id
-)
-VALUES
-(
-  '2coqGqbnSCAy740mClWesA',
-  'I Don''t Speak The Language',
-  61,
-  '1983',
-  '1980',
-  9,
-  'https://i.scdn.co/image/ab67616d0000b2739824c6e084b02d24b2e22e94',
-  '3bmFPbLMiLxtR9tFrTcKcP'
-),
-(
-  '0sNOF9WDwhWunNAHPD3Baj',
-  'Hybrid Theory',
-  82,
-  '2000',
-  '2000',
-  12,
-  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
-  '6XyY86QOPPrYVGvF9ch6wz'
-),
-(
-  '2ZUwFxlDV6dP8y2fMs59fN',
-  'Il ballo della vita',
-  79,
-  '2021',
-  '2020',
-  10,
-  'https://i.scdn.co/image/ab67616d0000b273f4e0f8b3b8f1f3f3b3f3b3f3',
-  '0lAWpj5szCSwM4rUMHYmrr'
+----------------------------------------------------------------------------------------
+----------------------------------- ARTIST'S SONGS -------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO related_artists (artist_id, related_artist_id) VALUES (
+  '0lAWpj5szCSwM4rUMHYmrr', '7Ln80lUS6He07XvHI8qqHH'
 );
 
-INSERT
-INTO songs
-(
-  id,
-  name,
-  artist_id,
-  album_id,
-  popularity,
-  duration_ms,
-  track_number
-)
-VALUES
-(
-  '1mCsF9Tw4AkIZOjvZbZZdT',
-  'Break My Stride',
-  '3bmFPbLMiLxtR9tFrTcKcP',
-  '2coqGqbnSCAy740mClWesA',
-  72,
-  184480,
-  1
-),
-(
-  '6hQ5vU4jWvz1bXjXj3t7yT',
-  'In the End',
-  '6XyY86QOPPrYVGvF9ch6wz',
-  '0sNOF9WDwhWunNAHPD3Baj',
-  85,
-  216933,
-  1
-),
-(
-  '2gMXnyrvIjhVBUZwvLZDMP',
-  'Beggin''',
-  '0lAWpj5szCSwM4rUMHYmrr',
-  '2ZUwFxlDV6dP8y2fMs59fN',
-  89,
-  211560,
-  1
+----------------------------------------------------------------------------------------
+---------------------------------------- SONGS -----------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO songs (
+  id, name, popularity, duration_ms, track_number, artist_id, album_id
+) VALUES (
+  '5aWhs651KYM26HYM16kRdk',
+  'The Man',
+  63,
+  250093,
+  2,
+  '0C0XlULifJtAgn6ZNCW2eu',
+  '72ZfMxLCPG8mlWC0TXfZQi'
 );
 
-INSERT
-INTO top_songs
-(
-  song_id,
-  user_id
-)
-VALUES
-(
-  '1mCsF9Tw4AkIZOjvZbZZdT',
-  'abc123def456'
-),
-(
-  '6hQ5vU4jWvz1bXjXj3t7yT',
-  'abc123def456'
-),
-(
-  '2gMXnyrvIjhVBUZwvLZDMP',
-  'abc123def456'
+
+----------------------------------------------------------------------------------------
+------------------------------------- TOP ALBUMS ---------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO top_albums (album_id, user_id) VALUES (
+  '44a7Wk3Jh2JGVhjcFYWozj', 'abc123def456'
+);
+----------------------------------------------------------------------------------------
+------------------------------------- TOP ARTIST ---------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO top_artists (artist_id, user_id) VALUES (
+  '0lAWpj5szCSwM4rUMHYmrr', 'abc123def456'
 );
 
-INSERT
-INTO top_albums
-(
-  album_id,
-  user_id
-)
-VALUES
-(
-  '2coqGqbnSCAy740mClWesA',
-  'abc123def456'
-),
-(
-  '0sNOF9WDwhWunNAHPD3Baj',
-  'abc123def456'
-),
-(
-  '2ZUwFxlDV6dP8y2fMs59fN',
-  'abc123def456'
+----------------------------------------------------------------------------------------
+------------------------------------- TOP SONG ---------------------------------------
+----------------------------------------------------------------------------------------
+
+INSERT INTO top_songs (song_id, user_id) VALUES (
+  '5aWhs651KYM26HYM16kRdk', 'abc123def456'
 );
