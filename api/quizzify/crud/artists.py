@@ -26,6 +26,50 @@ def get_artists_ids() -> List[str]:
     return artists_ids
 
 
+def get_top_artists(
+    user_id: str,
+    limit: int = 10,
+) -> List[Dict]:
+    """Get the user's top artists from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's Spotify ID.
+    limit : int
+        The number of artists to return.
+
+    Returns
+    -------
+    list
+        A list of the user's top artists.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "artists.id, "
+        "artists.name, "
+        "artists.popularity, "
+        "artists.genres, "
+        "artists.image_url "
+        "FROM top_artists "
+        "LEFT JOIN artists "
+        "ON artists.id = top_artists.artist_id "
+        "WHERE top_artists.user_id = %(user_id)s "
+        "LIMIT %(limit)s;"
+    )
+    variables = {
+        "user_id": user_id,
+        "limit": limit,
+    }
+    with QueryExecutor() as executor:
+        top_artists = executor.execute(
+            query,
+            variables=variables,
+            fetch=True,
+        )
+    return top_artists
+
+
 def get_random_artist(user_id: str) -> Dict:
     """Get a random album from the database.
 
