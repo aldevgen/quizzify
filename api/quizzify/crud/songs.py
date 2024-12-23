@@ -122,6 +122,44 @@ def get_top_songs_ids(user_id: str):
     return top_songs_ids
 
 
+def get_top_songs(user_id: str):
+    """Get the user's top songs.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's ID.
+
+    Returns
+    -------
+    list
+        The user's top songs.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "songs.id as song_id, "
+        "songs.name as song_name, "
+        "artists.id as artist_id, "
+        "artists.name as artist_name, "
+        "albums.id as album_id, "
+        "albums.name as album_name, "
+        "songs.popularity "
+        "FROM top_songs "
+        "LEFT JOIN songs "
+        "ON top_songs.song_id = songs.id "
+        "LEFT JOIN artists "
+        "ON songs.artist_id = artists.id "
+        "LEFT JOIN albums ON songs.album_id = albums.id "
+        "WHERE user_id = %(user_id)s;"
+    )
+    variables = {
+        "user_id": user_id,
+    }
+    with QueryExecutor() as executor:
+        top_songs = executor.execute(query, variables=variables, fetch=True)
+    return top_songs
+
+
 def insert_top_song_user(
     song_id: str,
     user_id: str,

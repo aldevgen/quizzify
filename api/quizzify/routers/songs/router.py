@@ -27,7 +27,8 @@ async def get_top_songs():
     list
         A list of the user's top songs.
     """
-    top_songs = service.get_top_songs()
+    user_id = spotify_get_user_id()
+    top_songs = service.get_top_songs(user_id=user_id)
     return top_songs
 
 
