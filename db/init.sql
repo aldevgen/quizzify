@@ -71,6 +71,25 @@ CREATE TABLE artists (
 );
 
 ----------------------------------------------------------------------------------------
+------------------------------- Relation Related Artists -------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name        |     data_type
+----------------------+-------------------
+-- artist_id          | character varying
+-- related_artist_id  | character varying
+
+
+DROP TABLE IF EXISTS related_artists CASCADE;
+
+CREATE TABLE related_artists (
+  artist_id VARCHAR(50),
+  related_artist_id VARCHAR(50),
+  FOREIGN KEY (artist_id) REFERENCES artists (id),
+  FOREIGN KEY (related_artist_id) REFERENCES artists (id)
+);
+
+----------------------------------------------------------------------------------------
 --------------------------------- Relation Top Artists ---------------------------------
 ----------------------------------------------------------------------------------------
 
@@ -96,14 +115,13 @@ CREATE TABLE top_artists (
 
 -- column_name    |     data_type
 ------------------+-------------------
--- id             | character varying
+-- id             | character varying, primary key
 -- name           | character varying
 -- popularity     | integer
 -- release_year   | date
 -- release_decade | date
 -- total_tracks   | integer
 -- image_url      | character varying
--- artist_id      | character varying, foreign key
 
 DROP TABLE IF EXISTS albums CASCADE;
 
@@ -114,9 +132,25 @@ CREATE TABLE albums (
   release_year VARCHAR(4),
   release_decade VARCHAR(4),
   total_tracks INT,
-  image_url VARCHAR(150),
-  artist_id VARCHAR(25),
-  FOREIGN KEY (artist_id) REFERENCES artists (id)
+  image_url VARCHAR(150)
+);
+
+----------------------------------------------------------------------------------------
+------------------------------ Relation Artist's Albums --------------------------------
+----------------------------------------------------------------------------------------
+
+-- column_name |     data_type
+---------------+-------------------
+-- artist_id   | character varying
+-- album_id    | character varying
+
+DROP TABLE IF EXISTS albums_artists CASCADE;
+
+CREATE TABLE albums_artists (
+  artist_id VARCHAR(50),
+  album_id VARCHAR(50),
+  FOREIGN KEY (artist_id) REFERENCES artists (id),
+  FOREIGN KEY (album_id) REFERENCES albums (id)
 );
 
 ----------------------------------------------------------------------------------------

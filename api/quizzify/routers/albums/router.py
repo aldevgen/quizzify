@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from quizzify.routers.albums import service
+from quizzify.spotify.spotify_requests import spotify_get_user_id
 
 router = APIRouter()
 
@@ -19,5 +20,6 @@ async def get_random_album():
     list
         A random album from user's albums.
     """
-    random_album = service.get_random_album()
+    user_id = spotify_get_user_id()
+    random_album = service.get_random_album(user_id=user_id)
     return random_album

@@ -47,6 +47,7 @@ class TestArtistService(unittest.TestCase):
     @patch("quizzify.routers.artists.service.crud.get_random_artist")
     def test_get_random_artist(self, mock_get_random_artist):
         # mock the return value of the database function
+        user_id = "abc123def456"
         mock_get_random_artist.return_value = {
             "id": "artist_id_1",
             "name": "artist_name_1",
@@ -57,7 +58,7 @@ class TestArtistService(unittest.TestCase):
         }
 
         # call the function to test
-        random_artist = service.get_random_artist()
+        random_artist = service.get_random_artist(user_id=user_id)
 
         # check the return value
         self.assertEqual(

@@ -5,7 +5,6 @@
 #         json={"time_range": "short_term", "limit": 5},
 #         headers={"user-id": "example_user_id"},
 #     )
-#     print(response.json())
 #     assert response.json() == 200
 #     assert response.status_code == 200
 #     assert isinstance(response.json(), list)

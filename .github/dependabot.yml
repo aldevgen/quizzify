@@ -3,16 +3,16 @@
 # Please see the documentation for all configuration options:
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
-version: 2
-updates:
-  - package-ecosystem: "pip"
-    directory: "/api"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Paris"
-    open-pull-requests-limit: 10
-    target-branch: "dev"
-    commit-message:
-      prefix: ":seedling: "
+# version: 2
+# updates:
+#   - package-ecosystem: "pip"
+#     directory: "/api"
+#     schedule:
+#       interval: "monthly"
+#       day: "monday"
+#       time: "09:00"
+#       timezone: "Europe/Paris"
+#     open-pull-requests-limit: 10
+#     target-branch: "dev"
+#     commit-message:
+#       prefix: ":seedling: "
