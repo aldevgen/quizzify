@@ -71,6 +71,15 @@ docker-compose down -v
 ````
 You can now access the API at http://localhost:8000.
 
+### Running the tests
+
+To run the tests, you can use the following command:
+
+```bash
+docker-compose -f docker-compose-test.yaml build
+docker-compose -f docker-compose-test.yaml run --rm quizzify-api
+```
+
 ## Architecture
 
 TBD

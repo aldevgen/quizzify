@@ -5,6 +5,18 @@ from quizzify.utils.schemas import Album
 
 
 class TestCrudAlbums(unittest.TestCase):
+    def test_get_top_albums(self):
+        expected_result = "44a7Wk3Jh2JGVhjcFYWozj"
+        # Given
+        user_id = "abc123def456"
+
+        # When
+        result = crud_albums.get_top_albums(user_id=user_id)
+
+        # Then
+        self.assertEqual(result[0]["album_id"], expected_result)
+        self.assertEqual(len(result), 1)
+
     def test_get_albums_ids(self):
         expected_result = [
             "2kcJ3TxBhSwmki0QWFXUz8",
