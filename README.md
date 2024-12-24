@@ -23,9 +23,6 @@ The following instructions will guide you through the setup of the project on yo
 SPOTIFY_CLIENT_ID=<YOUR SPOTIFY CLIENT ID>  # TBD
 SPOTIFY_CLIENT_SECRET=<YOUR SPOTIFY CLIENT SECRET>  # TBD
 SPOTIFY_REDIRECT_URI=<YOUR REDIRECT URI AS DEFINED IN YOUR SPOTIFY DASHBOARD APP> # TBD
-SPOTIFY_AUTH_URL=https://accounts.spotify.com/authorize
-SPOTIFY_TOKEN_URL=https://accounts.spotify.com/api/token
-SPOTIFY_AUTH_SCOPE="LIST OF SCOPES TO DEFINE"  # TBD
 ```
 
 2. Pre-commit hooks:
