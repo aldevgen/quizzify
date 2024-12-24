@@ -9,6 +9,7 @@ from fastapi import HTTPException
 from quizzify.crud import users as crud
 from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
 from quizzify.spotify.spotify_user_info import get_spotify_user_info
+from quizzify.utils.constants import SPOTIFY_AUTH_SCOPE, SPOTIFY_AUTH_URL
 from quizzify.utils.helpers import check_email, generate_random_string
 
 load_dotenv()
@@ -18,9 +19,6 @@ logger = logging.getLogger(__name__)
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 SPOTIFY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
-SPOTIFY_AUTH_URL = os.environ.get("SPOTIFY_AUTH_URL")
-SPOTIFY_AUTH_SCOPE = os.environ.get("SPOTIFY_AUTH_SCOPE")
-SPOTIFY_TOKEN_URL = os.environ.get("SPOTIFY_TOKEN_URL")
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
 POSTGRES_HOST = os.environ.get("POSTGRES_HOST")

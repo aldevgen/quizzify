@@ -5,6 +5,11 @@ from unittest.mock import patch
 import pytest
 
 from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
+from quizzify.utils.constants import (
+    SPOTIFY_AUTH_SCOPE,
+    SPOTIFY_AUTH_URL,
+    SPOTIFY_TOKEN_URL,
+)
 
 
 @pytest.fixture
@@ -15,9 +20,9 @@ def spotify_auth_service():
         {
             "SPOTIFY_CLIENT_ID": os.environ.get("SPOTIFY_CLIENT_ID"),
             "SPOTIFY_CLIENT_SECRET": os.environ.get("SPOTIFY_CLIENT_SECRET"),
-            "SPOTIFY_TOKEN_URL": os.environ.get("SPOTIFY_TOKEN_URL"),
-            "SPOTIFY_AUTH_URL": os.environ.get("SPOTIFY_AUTH_URL"),
-            "SPOTIFY_AUTH_SCOPE": os.environ.get("SPOTIFY_AUTH_SCOPE"),
+            "SPOTIFY_TOKEN_URL": SPOTIFY_TOKEN_URL,
+            "SPOTIFY_AUTH_URL": SPOTIFY_AUTH_URL,
+            "SPOTIFY_AUTH_SCOPE": SPOTIFY_AUTH_SCOPE,
             "SPOTIFY_REDIRECT_URI": os.environ.get("SPOTIFY_REDIRECT_URI"),
             "STATE": "PUepTCduNgbcyH6Y",
         },
