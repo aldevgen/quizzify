@@ -18,6 +18,20 @@ class TestCrudSong(unittest.TestCase):
         self.assertEqual(result, expected_result)
         self.assertEqual(len(result), 1)
 
+    def test_get_top_songs(self):
+        # Given
+        user_id = "abc123def456"
+        expected_result = [
+            "5aWhs651KYM26HYM16kRdk",
+        ]
+
+        # When
+        result = crud_songs.get_top_songs(user_id=user_id)
+
+        # Then
+        self.assertIn(result[0]["song_id"], expected_result)
+        self.assertEqual(len(result), 1)
+
     def test_get_random_song(self):
         # Given
         user_id = "abc123def456"

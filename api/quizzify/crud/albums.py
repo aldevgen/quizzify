@@ -25,6 +25,52 @@ def get_albums_ids():
     return albums_ids
 
 
+def get_top_albums(
+    user_id: str,
+    limit: int = 10,
+):
+    """Get top albums from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's Spotify ID.
+    limit : int, optional
+        The number of albums to return, by default 10.
+
+    Returns
+    -------
+    list
+        Top albums from the user's albums.
+    """
+    query = sql.SQL(
+        "SELECT "
+        "artists.id as artist_id, "
+        "artists.name as artist_name, "
+        "albums.id as album_id, "
+        "albums.name as album_name, "
+        "albums.popularity, "
+        "albums.release_year, "
+        "albums.release_decade, "
+        "albums.total_tracks, "
+        "albums.image_url "
+        "FROM top_albums "
+        "LEFT JOIN albums "
+        "ON albums.id = top_albums.album_id "
+        "LEFT JOIN albums_artists ON albums_artists.album_id = albums.id "
+        "LEFT JOIN artists ON albums_artists.artist_id = artists.id "
+        "WHERE top_albums.user_id = %(user_id)s "
+        "LIMIT %(limit)s;"
+    )
+    variables = {
+        "user_id": user_id,
+        "limit": limit,
+    }
+    with QueryExecutor() as executor:
+        top_albums = executor.execute(query, variables=variables, fetch=True)
+    return top_albums
+
+
 def get_top_albums_id(album_id: str):
     """Get the top albums' IDs from the database.
 

@@ -26,6 +26,24 @@ logger = logging.getLogger(__name__)
 
 
 def get_top_songs(
+    user_id: str,
+):
+    """Get the user's top songs from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's Spotify ID.
+
+    Returns
+    -------
+    list
+        A list of the user's top songs.
+    """
+    return crud_songs.get_top_songs(user_id=user_id)
+
+
+def insert_top_songs(
     time_range: TimeRange,
     limit: int,
 ):

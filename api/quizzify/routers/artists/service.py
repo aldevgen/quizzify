@@ -15,7 +15,23 @@ from quizzify.utils.schemas import Album, Artist, TimeRange
 load_dotenv()
 
 
-def get_top_artists(
+def get_top_artists(user_id: str):
+    """Get the user's top artists from the database.
+
+    Parameters
+    ----------
+    user_id : str
+        The user's Spotify ID.
+
+    Returns
+    -------
+    list
+        A list of the user's top artists.
+    """
+    return crud.get_top_artists(user_id=user_id)
+
+
+def insert_top_artists(
     time_range: TimeRange,
     limit: int,
 ):
@@ -25,9 +41,10 @@ def get_top_artists(
     ----------
     time_range : str
         The time range for the top artists (short_term, medium_term, long_term).
-        Valid values: long_term (calculated from several years of data and including all
-        new data as it becomes available), medium_term (approximately last 6 months),
-        short_term (approximately last 4 weeks).
+            - long_term (calculated from several years of data and including all
+                new data as it becomes available),
+            - medium_term (approximately last 6 months),
+            - short_term (approximately last 4 weeks).
     limit
         The number of artists to return.
 

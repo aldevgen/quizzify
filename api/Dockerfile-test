@@ -1,7 +1,7 @@
 # Basic Python image with FastAPI and Uvicorn
 FROM python:3.11
 
-# Set the working directory to /quizzify
+# Set the working directory to /api
 ENV WORKDIR=/api
 WORKDIR $WORKDIR
 
@@ -19,4 +19,4 @@ COPY quizzify/ quizzify/
 COPY tests/ tests/
 
 # Run quizzify.py when the container launches
-CMD pytest --cov=quizzify --cov-report=term-missing -vvv $WORKDIR/tests
+CMD pytest --maxfail=1 --cov=quizzify --cov-report=term-missing -vvv $WORKDIR/tests/

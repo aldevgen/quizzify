@@ -7,7 +7,7 @@ from quizzify.utils.schemas import TimeRange
 
 # write tests for the artist service functions with the mocks for the database functions
 class TestArtistService(unittest.TestCase):
-    @patch("quizzify.routers.artists.service.get_top_artists")
+    @patch("quizzify.routers.artists.service.insert_top_artists")
     def test_get_top_artists(self, mock_get_top_artists):
         # mock the return value of the database function
         mock_get_top_artists.return_value = {
@@ -20,7 +20,7 @@ class TestArtistService(unittest.TestCase):
         }
 
         # call the function to test
-        top_artists = service.get_top_artists(
+        top_artists = service.insert_top_artists(
             time_range=TimeRange.SHORT_TERM,
             limit=1,
         )

@@ -22,6 +22,21 @@ class TestCrudArtists(unittest.TestCase):
         self.assertEqual(result, expected_result)
         self.assertEqual(len(result), 3)
 
+    def test_get_top_artists(self):
+        # Given
+        user_id = "abc123def456"
+        expected_result = [
+            "0lAWpj5szCSwM4rUMHYmrr",
+            "0C0XlULifJtAgn6ZNCW2eu",
+        ]
+
+        # When
+        result = crud_artists.get_top_artists(user_id=user_id)
+
+        # Then
+        self.assertIn(result[0]["id"], expected_result)
+        self.assertEqual(len(result), 1)
+
     def test_get_random_artist(self):
         # Given
         user_id = "abc123def456"
