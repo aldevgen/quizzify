@@ -15,7 +15,7 @@ docker-compose exec -T db bash -c "ls -l /tmp/latest-seeds.sql"
 if [ $? -eq 0 ]; then
     echo "Data export successful. Copying the file to local machine..."
     # Copy the file from the Docker container to the local machine
-    docker cp $(docker-compose ps -q db):/tmp/latest-seeds.sql ./db/latest-seeds.sql
+    docker cp $(docker-compose ps -q db):/tmp/latest-seeds.sql ./db/seeds/latest-seeds.sql
     if [ $? -eq 0 ]; then
         echo "File copied successfully. Proceeding to teardown."
     else
