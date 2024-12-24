@@ -1,5 +1,4 @@
 import logging
-import os
 
 import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
@@ -15,12 +14,11 @@ from quizzify.spotify.spotify_requests import (
     spotify_get_related_artists,
     spotify_get_user_id,
 )
+from quizzify.utils.constants import SPOTIFY_BASE_URL
 from quizzify.utils.schemas import Album, Artist, Song, TimeRange
 
 # load environment variables
 load_dotenv()
-# define base URL for Spotify API
-SPOTIFY_BASE_URL = os.environ.get("SPOTIFY_BASE_URL")
 
 logger = logging.getLogger(__name__)
 
