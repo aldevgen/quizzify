@@ -4,6 +4,11 @@ from datetime import datetime, timedelta
 import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 
+from quizzify.utils.constants import (
+    SPOTIFY_AUTH_SCOPE,
+    SPOTIFY_AUTH_URL,
+    SPOTIFY_TOKEN_URL,
+)
 from quizzify.utils.helpers import encode_str_to_base64
 from quizzify.utils.singleton import Singleton
 
@@ -48,10 +53,10 @@ class SpotifyTokenManager(metaclass=Singleton):
 
     client_id = os.environ.get("SPOTIFY_CLIENT_ID")
     client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
-    token_url = str(os.environ.get("SPOTIFY_TOKEN_URL"))
-    auth_url = str(os.environ.get("SPOTIFY_AUTH_URL"))
-    auth_scope = os.environ.get("SPOTIFY_AUTH_SCOPE")
     redirect_uri = os.environ.get("SPOTIFY_REDIRECT_URI")
+    token_url = SPOTIFY_TOKEN_URL
+    auth_url = SPOTIFY_AUTH_URL
+    auth_scope = SPOTIFY_AUTH_SCOPE
 
     # Singleton instance
     # _instance = None

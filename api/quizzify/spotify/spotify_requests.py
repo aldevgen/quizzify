@@ -1,17 +1,14 @@
-import os
-
 import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
 from quizzify.spotify.spotify_headers import spotify_headers
+from quizzify.utils.constants import SPOTIFY_BASE_URL
 from quizzify.utils.helpers import get_highest_resolution_image
 from quizzify.utils.schemas import TimeRange
 
 # load environment variables
 load_dotenv()
-# define base URL for Spotify API
-SPOTIFY_BASE_URL = os.environ.get("SPOTIFY_BASE_URL")
 
 
 def spotify_get_user_top_artists(

@@ -104,7 +104,7 @@ repos:
     hooks:
       - id: bandit
         name: Security checker
-        args: ['--exclude', 'tests/*', '-s', 'B311']
+        args: ['--exclude', 'api/tests/*', '-s', 'B311']
 
   # commitizen
   - repo: https://github.com/commitizen-tools/commitizen
