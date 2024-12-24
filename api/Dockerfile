@@ -14,8 +14,12 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 # Copy the entire source code to the container
 COPY quizzify/ quizzify/
 
+# Copy the entrypoint script to the container
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
-# Run quizzify.py when the container launches
-CMD uvicorn quizzify.main:app --host 0.0.0.0 --port 8000 --log-config quizzify/logging.conf
+# Run entrypoint.sh when the container launches
+CMD ["./entrypoint.sh"]
