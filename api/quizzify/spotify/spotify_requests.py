@@ -21,9 +21,10 @@ def spotify_get_user_top_artists(
     ----------
     time_range : str
         The time range for the top artists (short_term, medium_term, long_term).
-        Valid values: long_term (calculated from several years of data and including all
-        new data as it becomes available), medium_term (approximately last 6 months),
-        short_term (approximately last 4 weeks).
+            - long_term (calculated from several years of data and including all
+                new data as it becomes available),
+            - medium_term (approximately last 6 months),
+            - short_term (approximately last 4 weeks).
     limit
         The number of artists to return.
 
@@ -64,6 +65,73 @@ def spotify_get_user_top_artists(
         raise HTTPException(
             status_code=response.status_code,
             detail="Failed to retrieve top artists",
+        )
+
+
+def spotify_get_user_top_tracks(
+    time_range: TimeRange,
+    limit: int,
+):
+    """Get the user's top tracks from Spotify.
+
+    Parameters
+    ----------
+    time_range : str
+        The time range for the top tracks (short_term, medium_term, long_term).
+            - long_term (calculated from several years of data and including all
+                new data as it becomes available),
+            - medium_term (approximately last 6 months),
+            - short_term (approximately last 4 weeks).
+    limit : int
+        The number of tracks to return.
+
+    Returns
+    -------
+    list
+        A list of the user's top tracks.
+    """
+    headers = spotify_headers()
+    api_url = (
+        f"{SPOTIFY_BASE_URL}/me/top/tracks?time_range={time_range.value}&limit={limit}"
+    )
+    response = requests.get(
+        api_url,
+        headers=headers,
+        timeout=120,
+    )
+
+    if response.status_code == 200:
+        raw_top_songs = response.json()["items"]
+        top_songs = []
+
+        for raw_song in raw_top_songs:
+            best_image = get_highest_resolution_image(
+                images=raw_song["album"]["images"]
+            )
+            current_song = {
+                "id": raw_song["id"],
+                "name": raw_song["name"],
+                "popularity": raw_song["popularity"],
+                "artists": [
+                    {"id": artist["id"], "name": artist["name"]}
+                    for artist in raw_song["artists"]
+                ],
+                "album": {
+                    "id": raw_song["album"]["id"],
+                    "name": raw_song["album"]["name"],
+                },
+                "duration_ms": raw_song["duration_ms"],
+                "track_number": raw_song["track_number"],
+                "release_date": raw_song["album"]["release_date"],
+                "album_url": best_image["url"] if best_image else None,
+            }
+            top_songs.append(current_song)
+
+        return top_songs
+    else:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail="Failed to retrieve top tracks",
         )
 
 
