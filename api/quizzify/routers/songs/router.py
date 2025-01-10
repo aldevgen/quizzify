@@ -43,7 +43,7 @@ async def get_top_songs():
 )
 async def post_top_songs(
     time_range: TimeRange,
-    limit: int,
+    limit: int = 10,
 ):
     """Return the user's top songs from Spotify.
 
