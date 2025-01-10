@@ -116,7 +116,12 @@ def spotify_get_user_top_tracks(
                     {"id": artist["id"], "name": artist["name"]}
                     for artist in raw_song["artists"]
                 ],
-                "album": raw_song["album"]["name"],
+                "album": {
+                    "id": raw_song["album"]["id"],
+                    "name": raw_song["album"]["name"],
+                },
+                "duration_ms": raw_song["duration_ms"],
+                "track_number": raw_song["track_number"],
                 "release_date": raw_song["album"]["release_date"],
                 "album_url": best_image["url"] if best_image else None,
             }
