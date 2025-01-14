@@ -25,7 +25,10 @@ BASE_URL = "https://ws.audioscrobbler.com/2.0/"
 USER_AGENT = "quizzify"
 
 
-def lastfm_get_similar_artists(artist_name):
+def lastfm_get_similar_artists(
+    artist_name: str,
+    limit: int = 5,
+):
     """Get similar artists from LastFM.
 
     Parameters
@@ -40,12 +43,13 @@ def lastfm_get_similar_artists(artist_name):
     """
     headers = {"user-agent": USER_AGENT}
     url = BASE_URL
-    artist_name = artist_name.replace(" ", "+")
 
     # Add API key and format to the payload
     payload = {
         "method": "artist.getsimilar",
         "artist": artist_name,
+        "autocorrect": 1,
+        "limit": limit,
         "api_key": API_KEY,
         "format": "json",
     }
@@ -54,6 +58,7 @@ def lastfm_get_similar_artists(artist_name):
     if raw_response.status_code == 200:
         response = raw_response.json()
         related_artists = []
-        for artist in response["similarartists"]["artist"]:
+        lastfm_similar_artists = response["similarartists"]["artist"]
+        for artist in lastfm_similar_artists:
             related_artists.append(artist["name"])
         return related_artists
