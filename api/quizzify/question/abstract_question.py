@@ -43,6 +43,7 @@ class AbstractQuestion(ABC):
         """Get a song question."""
         return {
             "question": self.display_question(),
+            "question_type": self.question_type,
             "correct_answer": self.get_correct_answer(),
             "incorrect_answers": self.get_incorrect_answers(),
             "all_answers": self.get_all_answers(),
