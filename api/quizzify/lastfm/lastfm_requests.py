@@ -3,11 +3,11 @@ import os
 import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 
+from quizzify.utils.constants import LASTFM_BASE_URL, LASTFM_USER_AGENT
+
 load_dotenv()
 
 API_KEY = os.environ.get("LASTFM_API_KEY")
-BASE_URL = "https://ws.audioscrobbler.com/2.0/"
-USER_AGENT = "quizzify"
 
 
 def lastfm_get_similar_artists(
@@ -28,8 +28,7 @@ def lastfm_get_similar_artists(
     list
         A list of similar artists.
     """
-    headers = {"user-agent": USER_AGENT}
-    url = BASE_URL
+    headers = {"user-agent": LASTFM_USER_AGENT}
 
     # Add API key and format to the payload
     payload = {
@@ -41,7 +40,12 @@ def lastfm_get_similar_artists(
         "format": "json",
     }
 
-    raw_response = requests.get(url, headers=headers, params=payload, timeout=120)
+    raw_response = requests.get(
+        LASTFM_BASE_URL,
+        headers=headers,
+        params=payload,
+        timeout=120,
+    )
     if raw_response.status_code == 200:
         response = raw_response.json()
         related_artists = []
