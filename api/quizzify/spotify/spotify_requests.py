@@ -290,6 +290,52 @@ def spotify_get_artist_albums_ids(artist_id: str):
         )
 
 
+def spotify_get_artist_info_from_name(artist_name: str):
+    """Get the artist's information from Spotify using the artist's name.
+
+    Parameters
+    ----------
+    artist_name : str
+        The name of the artist.
+
+    Returns
+    -------
+    dict
+        The artist's information from Spotify.
+    """
+    headers = spotify_headers()
+    api_url = f"{SPOTIFY_BASE_URL}/search"
+    payload = {
+        "q": artist_name,
+        "type": "artist",
+        "limit": 1,
+    }
+    response = requests.get(
+        api_url,
+        headers=headers,
+        params=payload,
+        timeout=120,
+    )
+
+    if response.status_code == 200:
+        raw_artist_info = response.json()["artists"]["items"][0]
+        best_image = get_highest_resolution_image(images=raw_artist_info["images"])
+        artist_info = {
+            "id": raw_artist_info["id"],
+            "name": raw_artist_info["name"],
+            "popularity": raw_artist_info["popularity"],
+            "genres": raw_artist_info["genres"],
+            "followers": raw_artist_info["followers"]["total"],
+            "image_url": best_image["url"] if best_image else None,
+        }
+        return artist_info
+    else:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail="Failed to retrieve artist information",
+        )
+
+
 def spotify_get_related_artists(artist_id: str):
     """Get the related artists for an artist from Spotify.
 
