@@ -1,18 +1,3 @@
-# cf https://www.last.fm/api/authentication
-
-# 1. Request authorization from the user
-# http://www.last.fm/api/auth/?api_key=xxx
-# 2. Redirect the user back to your site
-# http://www.yourwebsite.com/auth?token=xxx
-# 3. Authentication Tokens
-# api_key: (Required) Your API key.
-# token: (Required) The authentication token received from step 1.
-# api_sig: (Required) A 32-character hexadecimal md5 hash of the token+shared secret.
-# 4. Session Key
-# api_key: (Required) Your API key.
-# token: (Required) A 32-character ASCII hexadecimal MD5 hash of the last.fm password.
-# username: (Required) The last.fm username.
-
 import os
 
 import requests  # type: ignore[import-untyped]
@@ -35,6 +20,8 @@ def lastfm_get_similar_artists(
     ----------
     artist_name : str
         The name of the artist to get similar artists for.
+    limit : int, optional
+        The number of similar artists to fetch.
 
     Returns
     -------
