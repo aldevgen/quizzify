@@ -2,7 +2,7 @@ import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
-from quizzify.spotify.spotify_headers import spotify_headers
+from quizzify.api.spotify.spotify_headers import spotify_headers
 from quizzify.utils.constants import SPOTIFY_BASE_URL
 from quizzify.utils.helpers import get_highest_resolution_image
 from quizzify.utils.schemas import TimeRange
@@ -290,44 +290,47 @@ def spotify_get_artist_albums_ids(artist_id: str):
         )
 
 
-def spotify_get_related_artists(artist_id: str):
-    """Get the related artists for an artist from Spotify.
+def spotify_get_artist_info_from_name(artist_name: str):
+    """Get the artist's information from Spotify using the artist's name.
 
     Parameters
     ----------
-    artist_id : str
-        The Spotify ID for the artist.
+    artist_name : str
+        The name of the artist.
 
     Returns
     -------
-    list
-        A list of the related artists.
+    dict
+        The artist's information from Spotify.
     """
     headers = spotify_headers()
-    api_url = f"{SPOTIFY_BASE_URL}/artists/{artist_id}/related-artists"
+    api_url = f"{SPOTIFY_BASE_URL}/search"
+    payload = {
+        "q": artist_name,
+        "type": "artist",
+        "limit": 1,
+    }
     response = requests.get(
         api_url,
         headers=headers,
+        params=payload,
         timeout=120,
     )
 
     if response.status_code == 200:
-        raw_related_artists = response.json()["artists"]
-        related_artists = []
-        for raw_artist in raw_related_artists:
-            best_image = get_highest_resolution_image(images=raw_artist["images"])
-            current_artist = {
-                "id": raw_artist["id"],
-                "name": raw_artist["name"],
-                "popularity": raw_artist["popularity"],
-                "genres": raw_artist["genres"],
-                "followers": raw_artist["followers"]["total"],
-                "image_url": best_image["url"] if best_image else None,
-            }
-            related_artists.append(current_artist)
-        return related_artists
+        raw_artist_info = response.json()["artists"]["items"][0]
+        best_image = get_highest_resolution_image(images=raw_artist_info["images"])
+        artist_info = {
+            "id": raw_artist_info["id"],
+            "name": raw_artist_info["name"],
+            "popularity": raw_artist_info["popularity"],
+            "genres": raw_artist_info["genres"],
+            "followers": raw_artist_info["followers"]["total"],
+            "image_url": best_image["url"] if best_image else None,
+        }
+        return artist_info
     else:
         raise HTTPException(
             status_code=response.status_code,
-            detail=f"Failed to retrieve related artists for '{artist_id}'",
+            detail=f"Failed to retrieve artist information for '{artist_name}'.",
         )

@@ -33,6 +33,7 @@ class TestAbstractQuestion(unittest.TestCase):
             self.question.get_question(),
             {
                 "question": None,
+                "question_type": None,
                 "correct_answer": None,
                 "incorrect_answers": [],
                 "all_answers": [None],

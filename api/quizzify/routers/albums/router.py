@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
+from quizzify.api.spotify.spotify_requests import spotify_get_user_id
 from quizzify.routers.albums import service
-from quizzify.spotify.spotify_requests import spotify_get_user_id
 
 router = APIRouter()
 

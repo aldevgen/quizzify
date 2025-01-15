@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
+from quizzify.api.spotify.spotify_token_manager import SpotifyTokenManager
 from quizzify.utils.constants import (
     SPOTIFY_AUTH_SCOPE,
     SPOTIFY_AUTH_URL,

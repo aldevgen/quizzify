@@ -4,7 +4,7 @@ import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 from fastapi import HTTPException, status
 
-from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
+from quizzify.api.spotify.spotify_token_manager import SpotifyTokenManager
 from quizzify.utils.constants import SPOTIFY_BASE_URL
 
 # load environment variables

@@ -1,12 +1,12 @@
 import logging
 import random
 
+from quizzify.api.spotify.spotify_requests import spotify_get_user_id
 from quizzify.crud import albums as crud_albums
 from quizzify.crud import artists as crud_artists
 from quizzify.crud import songs as crud_songs
 from quizzify.question.factory.question_factory import QuestionFactory
 from quizzify.question.question_types import QuestionType
-from quizzify.spotify.spotify_requests import spotify_get_user_id
 
 logger = logging.getLogger(__name__)
 

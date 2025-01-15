@@ -1,10 +1,11 @@
 import logging
 import random
 
+from quizzify.api.lastfm.lastfm_requests import lastfm_get_similar_artists
+from quizzify.api.spotify.spotify_requests import spotify_get_artist_info_from_name
 from quizzify.crud import artists as crud_artists
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.question_types import SongQuestionType
-from quizzify.spotify.spotify_requests import spotify_get_related_artists
 from quizzify.utils.schemas import Artist
 
 logger = logging.getLogger(__name__)
@@ -54,20 +55,23 @@ class QuestionSongArtist(AbstractQuestion):
                 f"fetching {self.artist_name}'s related artists from Spotify API."
             )
             # fetch related artists from Spotify
-            related_artists = spotify_get_related_artists(
-                artist_id=self.artist_id,
+            related_artists = lastfm_get_similar_artists(
+                artist_name=self.artist_name,
             )
 
             artists_ids = crud_artists.get_artists_ids()
             # insert data in the database if not present
             for related_artist in related_artists:
                 # check if related artist is already in the database
-                related_artist_id = related_artist["id"]
+                related_artist_info = spotify_get_artist_info_from_name(
+                    artist_name=related_artist,
+                )
+                related_artist_id = related_artist_info["id"]
                 if related_artist_id not in artists_ids:
                     # add related artist to the list of artists in the database
                     artists_ids.append(related_artist_id)
                     crud_artists.insert_artist(
-                        artist=Artist.model_validate(related_artist),
+                        artist=Artist.model_validate(related_artist_info),
                     )
                     # insert artist as top artist for the user
                     crud_artists.insert_related_artist_user(
@@ -75,6 +79,4 @@ class QuestionSongArtist(AbstractQuestion):
                         artist_id=self.artist_id,
                     )
 
-            related_artists = random.sample(related_artists, k=3)
-            related_artist_names = [artist["name"] for artist in related_artists]
-            self.incorrect_answers = related_artist_names
+            self.incorrect_answers = random.sample(related_artists, k=3)

@@ -2,6 +2,12 @@ import random
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
+from quizzify.question.question_types import (
+    AlbumQuestionType,
+    ArtistQuestionType,
+    SongQuestionType,
+)
+
 
 class AbstractQuestion(ABC):
     """Abstract class for questions."""
@@ -10,6 +16,9 @@ class AbstractQuestion(ABC):
         """Abstract question constructor."""
         self.correct_answer: Optional[str] = None
         self.incorrect_answers: List[str] = []
+        self.question_type: Optional[
+            AlbumQuestionType | ArtistQuestionType | SongQuestionType
+        ] = None
 
     @abstractmethod
     def display_question(self):
@@ -43,6 +52,7 @@ class AbstractQuestion(ABC):
         """Get a song question."""
         return {
             "question": self.display_question(),
+            "question_type": self.question_type,
             "correct_answer": self.get_correct_answer(),
             "incorrect_answers": self.get_incorrect_answers(),
             "all_answers": self.get_all_answers(),
