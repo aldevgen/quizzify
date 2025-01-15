@@ -105,6 +105,8 @@ DROP TABLE IF EXISTS top_artists CASCADE;
 CREATE TABLE top_artists (
   artist_id VARCHAR(50),
   user_id VARCHAR(50),
+  time_range VARCHAR(20),
+  time_date DATE,
   FOREIGN KEY (artist_id) REFERENCES artists (id),
   FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
 );
@@ -167,10 +169,11 @@ DROP TABLE IF EXISTS top_albums CASCADE;
 CREATE TABLE top_albums (
   album_id VARCHAR(50),
   user_id VARCHAR(50),
+  time_range VARCHAR(20),
+  time_date DATE,
   FOREIGN KEY (album_id) REFERENCES albums (id),
   FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
 );
-
 
 ----------------------------------------------------------------------------------------
 ------------------------------------ Relation Songs ------------------------------------
@@ -214,6 +217,8 @@ DROP TABLE IF EXISTS top_songs;
 CREATE TABLE top_songs (
   song_id VARCHAR(50),
   user_id VARCHAR(50),
+  time_range VARCHAR(20),
+  time_date DATE,
   FOREIGN KEY (song_id) REFERENCES songs (id),
   FOREIGN KEY (user_id) REFERENCES users_quizzify (user_id)
 );

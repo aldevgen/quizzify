@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from psycopg2 import sql
 
 from quizzify.db.query_executor import QueryExecutor
-from quizzify.utils.schemas import Song
+from quizzify.utils.schemas import Song, TimeRange
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -170,6 +170,7 @@ def get_top_songs_ids(user_id: str):
 def insert_top_song_user(
     song_id: str,
     user_id: str,
+    time_range: TimeRange,
 ):
     """Insert user as having listened to a song.
 
@@ -182,13 +183,14 @@ def insert_top_song_user(
     """
     query = sql.SQL(
         "INSERT INTO top_songs "
-        "(song_id, user_id) "
+        "(song_id, user_id, time_range, time_date) "
         "VALUES "
-        "(%(song_id)s, %(user_id)s);"
+        "(%(song_id)s, %(user_id)s, %(time_range)s, CURRENT_DATE);"
     )
     variables = {
         "song_id": song_id,
         "user_id": user_id,
+        "time_range": time_range,
     }
     with QueryExecutor() as executor:
         executor.execute(query, variables)
