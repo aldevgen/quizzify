@@ -71,7 +71,7 @@ class QuestionSongArtist(AbstractQuestion):
                     # add related artist to the list of artists in the database
                     artists_ids.append(related_artist_id)
                     crud_artists.insert_artist(
-                        artist=Artist.model_validate(related_artist),
+                        artist=Artist.model_validate(related_artist_info),
                     )
                     # insert artist as top artist for the user
                     crud_artists.insert_related_artist_user(
@@ -79,6 +79,4 @@ class QuestionSongArtist(AbstractQuestion):
                         artist_id=self.artist_id,
                     )
 
-            related_artists = random.sample(related_artists, k=3)
-            related_artist_names = [artist["name"] for artist in related_artists]
-            self.incorrect_answers = related_artist_names
+            self.incorrect_answers = random.sample(related_artists, k=3)

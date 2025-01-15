@@ -332,5 +332,5 @@ def spotify_get_artist_info_from_name(artist_name: str):
     else:
         raise HTTPException(
             status_code=response.status_code,
-            detail="Failed to retrieve artist information",
+            detail=f"Failed to retrieve artist information for '{artist_name}'.",
         )

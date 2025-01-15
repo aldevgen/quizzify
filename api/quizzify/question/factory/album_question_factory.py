@@ -42,7 +42,6 @@ class AlbumQuestionFactory(QuestionFactoryInterface):
             question = QuestionAlbumYear(
                 album_name=kwargs.get("album_name"),
                 artist_name=kwargs.get("artist_name"),
-                song_name=kwargs.get("song_name"),
                 answer=kwargs.get("album_year"),
             )
         elif chosen_question == AlbumQuestionType.ALBUM_ARTIST.value:

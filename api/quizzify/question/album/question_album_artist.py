@@ -81,5 +81,4 @@ class QuestionAlbumArtist(AbstractQuestion):
                         artist_id=self.artist_id,
                     )
 
-            related_artists = random.sample(related_artists, k=3)
-            self.incorrect_answers = related_artists
+            self.incorrect_answers = random.sample(related_artists, k=3)

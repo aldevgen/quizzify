@@ -104,6 +104,12 @@ def insert_top_songs(
                     artist_id=current_artist_id,
                 )
 
+                # insert album into user's top albums
+                crud_albums.insert_top_album_user(
+                    album_id=current_album_id,
+                    user_id=user_id,
+                )
+
                 # insert song info into the database if it is not already there
                 current_song_id = song["id"]
                 # get song details
