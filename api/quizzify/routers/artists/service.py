@@ -1,15 +1,15 @@
 from dotenv import load_dotenv
 
-from quizzify.crud import albums as crud_albums
-from quizzify.crud import artists as crud
-from quizzify.lastfm.lastfm_requests import lastfm_get_similar_artists
-from quizzify.spotify.spotify_requests import (
+from quizzify.api.lastfm.lastfm_requests import lastfm_get_similar_artists
+from quizzify.api.spotify.spotify_requests import (
     spotify_get_album,
     spotify_get_artist_albums_ids,
     spotify_get_artist_info_from_name,
     spotify_get_user_id,
     spotify_get_user_top_artists,
 )
+from quizzify.crud import albums as crud_albums
+from quizzify.crud import artists as crud
 from quizzify.utils.schemas import Album, Artist, TimeRange
 
 # load environment variables

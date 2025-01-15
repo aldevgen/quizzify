@@ -1,15 +1,15 @@
 import logging
 
-from quizzify.crud import albums as crud_albums
-from quizzify.crud import artists as crud_artists
-from quizzify.lastfm.lastfm_requests import lastfm_get_similar_artists
-from quizzify.question.abstract_question import AbstractQuestion
-from quizzify.question.question_types import ArtistQuestionType
-from quizzify.spotify.spotify_requests import (
+from quizzify.api.lastfm.lastfm_requests import lastfm_get_similar_artists
+from quizzify.api.spotify.spotify_requests import (
     spotify_get_album,
     spotify_get_artist_albums_ids,
     spotify_get_artist_info_from_name,
 )
+from quizzify.crud import albums as crud_albums
+from quizzify.crud import artists as crud_artists
+from quizzify.question.abstract_question import AbstractQuestion
+from quizzify.question.question_types import ArtistQuestionType
 from quizzify.utils.schemas import Album, Artist
 
 logger = logging.getLogger(__name__)

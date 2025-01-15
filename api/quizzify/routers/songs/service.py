@@ -2,16 +2,15 @@ import logging
 
 from dotenv import load_dotenv
 
-from quizzify.crud import albums as crud_albums
-from quizzify.crud import artists as crud_artists
-from quizzify.crud import songs as crud_songs
-from quizzify.spotify.spotify_requests import (
+from quizzify.api.spotify.spotify_requests import (
     spotify_get_album,
     spotify_get_artist,
     spotify_get_user_id,
     spotify_get_user_top_tracks,
 )
-from quizzify.utils.constants import SPOTIFY_BASE_URL
+from quizzify.crud import albums as crud_albums
+from quizzify.crud import artists as crud_artists
+from quizzify.crud import songs as crud_songs
 from quizzify.utils.schemas import Album, Artist, Song, TimeRange
 
 # load environment variables

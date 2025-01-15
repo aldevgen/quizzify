@@ -1,13 +1,13 @@
 import logging
 
+from quizzify.api.spotify.spotify_requests import (
+    spotify_get_album,
+    spotify_get_artist_albums_ids,
+)
 from quizzify.crud import albums as crud_albums
 from quizzify.crud import artists as crud_artists
 from quizzify.question.abstract_question import AbstractQuestion
 from quizzify.question.question_types import SongQuestionType
-from quizzify.spotify.spotify_requests import (
-    spotify_get_album,
-    spotify_get_artist_albums_ids,
-)
 from quizzify.utils.schemas import Album
 
 logger = logging.getLogger(__name__)
