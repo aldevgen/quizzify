@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
 
-from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
+from quizzify.api.spotify.spotify_token_manager import SpotifyTokenManager
 
 # instantiate token manager for Spotify access token
 spotify_auth = SpotifyTokenManager()

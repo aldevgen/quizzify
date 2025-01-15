@@ -6,9 +6,9 @@ import bcrypt
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
+from quizzify.api.spotify.spotify_token_manager import SpotifyTokenManager
+from quizzify.api.spotify.spotify_user_info import get_spotify_user_info
 from quizzify.crud import users as crud
-from quizzify.spotify.spotify_token_manager import SpotifyTokenManager
-from quizzify.spotify.spotify_user_info import get_spotify_user_info
 from quizzify.utils.constants import SPOTIFY_AUTH_SCOPE, SPOTIFY_AUTH_URL
 from quizzify.utils.helpers import check_email, generate_random_string
 

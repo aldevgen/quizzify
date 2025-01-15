@@ -2,6 +2,8 @@ import random
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
+from quizzify.question.question_types import QuestionType
+
 
 class AbstractQuestion(ABC):
     """Abstract class for questions."""
@@ -10,6 +12,7 @@ class AbstractQuestion(ABC):
         """Abstract question constructor."""
         self.correct_answer: Optional[str] = None
         self.incorrect_answers: List[str] = []
+        self.question_type: Optional[QuestionType] = None
 
     @abstractmethod
     def display_question(self):

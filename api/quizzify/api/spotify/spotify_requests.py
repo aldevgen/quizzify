@@ -2,7 +2,7 @@ import requests  # type: ignore[import-untyped]
 from dotenv import load_dotenv
 from fastapi import HTTPException
 
-from quizzify.spotify.spotify_headers import spotify_headers
+from quizzify.api.spotify.spotify_headers import spotify_headers
 from quizzify.utils.constants import SPOTIFY_BASE_URL
 from quizzify.utils.helpers import get_highest_resolution_image
 from quizzify.utils.schemas import TimeRange
