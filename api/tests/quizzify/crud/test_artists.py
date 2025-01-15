@@ -193,7 +193,11 @@ class TestCrudArtists(unittest.TestCase):
         self.assertEqual(len(result), 1)
 
         # When - insert a new artist as top artist for the user
-        crud_artists.insert_top_artist_user(artist_id, user_id)
+        crud_artists.insert_top_artist_user(
+            artist_id=artist_id,
+            user_id=user_id,
+            time_range="short_term",
+        )
 
         # Then - check if the artist was inserted
         result = crud_artists.get_top_artists_ids(user_id=user_id)

@@ -99,7 +99,11 @@ class TestCrudSong(unittest.TestCase):
         self.assertEqual(len(result), 1)
 
         # When - insert a new song as top song for the user
-        crud_songs.insert_top_song_user(song_id, user_id)
+        crud_songs.insert_top_song_user(
+            song_id=song_id,
+            user_id=user_id,
+            time_range="short_term",
+        )
 
         # Then - check if the song was inserted
         result = crud_songs.get_top_songs_ids(user_id=user_id)
