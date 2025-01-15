@@ -7,7 +7,7 @@ from quizzify.utils.constants import LASTFM_BASE_URL, LASTFM_USER_AGENT
 
 load_dotenv()
 
-API_KEY = os.environ.get("LASTFM_API_KEY")
+LASTFM_API_KEY = os.environ.get("LASTFM_API_KEY")
 
 
 def lastfm_get_similar_artists(
@@ -36,7 +36,7 @@ def lastfm_get_similar_artists(
         "artist": artist_name,
         "autocorrect": 1,
         "limit": limit,
-        "api_key": API_KEY,
+        "api_key": LASTFM_API_KEY,
         "format": "json",
     }
 
