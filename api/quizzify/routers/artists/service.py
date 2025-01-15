@@ -100,6 +100,7 @@ def insert_top_artists(
         crud.insert_top_artist_user(
             artist_id=current_artist_id,
             user_id=user_id,
+            time_range=time_range,
         )
 
         # fetch related artists from LastFM

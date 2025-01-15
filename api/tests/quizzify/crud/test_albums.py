@@ -226,7 +226,11 @@ class TestCrudAlbums(unittest.TestCase):
         album_id = "1uROBP2G4MP0O4w1v5Cpbg"
 
         # When
-        crud_albums.insert_top_album_user(user_id=user_id, album_id=album_id)
+        crud_albums.insert_top_album_user(
+            user_id=user_id,
+            album_id=album_id,
+            time_range="short_term",
+        )
 
         # Then - check if the album was inserted
         result = crud_albums.get_top_albums_id(album_id=album_id)

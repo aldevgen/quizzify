@@ -108,6 +108,7 @@ def insert_top_songs(
                 crud_albums.insert_top_album_user(
                     album_id=current_album_id,
                     user_id=user_id,
+                    time_range=time_range,
                 )
 
                 # insert song info into the database if it is not already there
@@ -131,6 +132,7 @@ def insert_top_songs(
                 crud_songs.insert_top_song_user(
                     song_id=current_song_id,
                     user_id=user_id,
+                    time_range=time_range,
                 )
 
                 # create a dictionary with the song, artist and album details
