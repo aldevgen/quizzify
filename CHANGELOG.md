@@ -14,3 +14,4 @@
     * Configuration of services via `docker-compose` (API and database).
     * Management of volumes to persist PostgreSQL data. 
     * Creation of a `shutdown.sh` script to manage container shutdown and data export.
+    * Creation of a `.dockerignore` file in API module.
