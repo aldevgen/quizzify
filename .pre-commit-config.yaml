@@ -106,6 +106,13 @@ repos:
         name: Security checker
         args: ['--exclude', 'api/tests/*', '-s', 'B311']
 
+  # gitleaks
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.27.2
+    hooks:
+      - id: gitleaks
+        name: Gitleaks
+
   # commitizen
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.13.0
