@@ -53,7 +53,7 @@ async def login_redirect_url():
                 "response_type": "code",
                 "scope": SPOTIFY_AUTH_SCOPE,
                 "state": state,
-                "show_dialog": False,  # ask user to reauthorize if already authorized
+                "show_dialog": True,  # ask user to reauthorize if already authorized
             }
         )
     )

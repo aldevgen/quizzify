@@ -12,4 +12,5 @@ router = APIRouter()
     description=("Create a question based on the user's top artists from Spotify."),
 )
 async def create_question():
+    """Call the question service to create a random question."""
     return service.create_question()
