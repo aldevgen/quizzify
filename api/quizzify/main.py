@@ -8,7 +8,11 @@ from quizzify.routers.auth.router import router as auth_router
 from quizzify.routers.questions.router import router as questions_router
 from quizzify.routers.songs.router import router as songs_router
 
-# get root logger
+# Define the API version prefix
+API_VERSION = "/v1"
+API_LATEST = "/latest"
+
+# Get root logger
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -26,8 +30,11 @@ def index():
     return {"Quizzify": "Spotify Music Quizz API"}
 
 
-app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
-app.include_router(albums_router, prefix="/albums", tags=["Albums"])
-app.include_router(artists_router, prefix="/artists", tags=["Artists"])
-app.include_router(questions_router, prefix="/questions", tags=["Questions"])
-app.include_router(songs_router, prefix="/songs", tags=["Songs"])
+for prefix in [API_VERSION, API_LATEST]:
+    app.include_router(auth_router, prefix=f"{prefix}/auth", tags=["Authentication"])
+    app.include_router(albums_router, prefix=f"{prefix}/albums", tags=["Albums"])
+    app.include_router(artists_router, prefix=f"{prefix}/artists", tags=["Artists"])
+    app.include_router(
+        questions_router, prefix=f"{prefix}/questions", tags=["Questions"]
+    )
+    app.include_router(songs_router, prefix=f"{prefix}/songs", tags=["Songs"])
