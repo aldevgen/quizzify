@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import patch
 
-from quizzify.routers.artists import service
+from quizzify.routers.v1.artists import service
 from quizzify.utils.schemas import TimeRange
 
 
 # write tests for the artist service functions with the mocks for the database functions
 class TestArtistService(unittest.TestCase):
-    @patch("quizzify.routers.artists.service.insert_top_artists")
+    @patch("quizzify.routers.v1.artists.service.insert_top_artists")
     def test_get_top_artists(self, mock_get_top_artists):
         # mock the return value of the database function
         mock_get_top_artists.return_value = {
@@ -44,7 +44,7 @@ class TestArtistService(unittest.TestCase):
             limit=1,
         )
 
-    @patch("quizzify.routers.artists.service.crud.get_random_artist")
+    @patch("quizzify.routers.v1.artists.service.crud.get_random_artist")
     def test_get_random_artist(self, mock_get_random_artist):
         # mock the return value of the database function
         user_id = "abc123def456"
