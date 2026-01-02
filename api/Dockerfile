@@ -1,5 +1,6 @@
 # Basic Python image with FastAPI and Uvicorn
-FROM python:3.11
+FROM python:3.12
+COPY --from=ghcr.io/astral-sh/uv:0.9.21 /uv /uvx /bin/
 
 # Set the working directory to /api
 ENV WORKDIR=/api
@@ -9,7 +10,10 @@ WORKDIR $WORKDIR
 COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN uv venv
+# hadolint ignore=SC1091
+RUN source .venv/bin/activate & \
+    uv pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Copy the entire source code to the container
 COPY quizzify/ quizzify/
