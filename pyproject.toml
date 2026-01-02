@@ -1,12 +1,13 @@
-[tool.poetry]
+[project]
 name = "quizzify"
 version = "0.1.0"
-description = "Simple quizz."
+description = "Music quizz."
 authors = [
     "Alanna DEVLIN GENIN <alannadevlingenin@gmail.com>"
 ]
 readme = "README.md"
 license = "Apache-2.0"
+requires-python = ">=3.12"
 packages = [{include = "src"}]
 
 [tool.pre_commit]
