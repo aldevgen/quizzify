@@ -2,13 +2,9 @@
 name = "quizzify"
 version = "0.1.0"
 description = "Music quizz."
-authors = [
-    "Alanna DEVLIN GENIN <alannadevlingenin@gmail.com>"
-]
+authors = [{ name = "Alanna DEVLIN GENIN", email = "alannadevlingenin@gmail.com" }]
 readme = "README.md"
 license = "Apache-2.0"
-requires-python = ">=3.12"
-packages = [{include = "src"}]
 
 [tool.pre_commit]
 hooks = [
@@ -24,6 +20,12 @@ hooks = [
 
 [tool.pydocstyle]
 convention = "numpy"
+
+[tool.hatch.build.targets.sdist]
+include = ["src"]
+
+[tool.hatch.build.targets.wheel]
+include = ["src"]
 
 [tool.black]
 line-length = 88
@@ -61,5 +63,5 @@ skips = ["B311"]
 exclude = ["tests/*"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
