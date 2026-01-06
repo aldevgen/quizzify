@@ -9,7 +9,7 @@ Are you a music expert? Quizzify will challenge your musical knowledge. Quizzify
 To install the project, you need to clone the repository. It is recommended to create a virtual environment.
 
 ```bash
-git clone git@github.com:alannadevgen/quizzify.git
+git clone git@github.com:aldevgen/quizzify.git
 cd quizzify
 ```
 
@@ -38,14 +38,14 @@ pre-commit install
 
 3. Build & run the docker image for the API.
 
-a. Build & run the docker image using Docker.
+a. Build & run the docker image using Docker (API only).
 
 ````bash
-docker build -t quizzify .
+docker build -t quizzify api/
 docker run -it --rm --name quizzify -p 8000:8000 quizzify
 ````
 
-b. Build & run the docker image using Docker compose.
+b. Build & run the docker images using Docker compose.
 
 The following commands build the images and then run the containers.
 
@@ -63,10 +63,9 @@ docker-compose up quizzify-api --build
 To stop the containers, you can use the following commands. The tag `-v` removes the volumes that are associated with the containers.
 
 ````bash
-docker-compose down
 docker-compose down -v
 ````
-You can now access the API at http://localhost:8000.
+You can now access the API at http://127.0.0.1:8000.
 
 ### Running the tests
 
